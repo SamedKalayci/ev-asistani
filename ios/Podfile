@@ -1,6 +1,9 @@
 # Set platform to iOS 13.0
 platform :ios, '13.0'
 
+# Force CocoaPods integration for all plugins to fix SPM conflict (google_mobile_ads vs webview_flutter)
+ENV['FLUTTER_SUPPORTS_SWIFT_PACKAGE_MANAGER'] = 'false'
+
 # CocoaPods analytics sends network stats which speed up pod repo updates.
 # allow_message_in_analytics
 
