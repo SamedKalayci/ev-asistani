@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── YARDIMCI FONKSİYONLAR (HELPER FUNCTIONS) ─────────────────────────────
+
+    // 1. Kullanıcının oturum açıp açmadığını doğrular
+    function signedIn() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    // 2. İşlemi yapan kullanıcının verilen userId ile eşleştiğini doğrular
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    // 3. Kullanıcının belirtilen ailenin üyesi olup olmadığını dışarıdan kontrol eder
+    function isFamilyMember(familyId) {
+      return signedIn() && 
+             exists(/databases/$(database)/documents/families/$(familyId)) &&
+             (request.auth.uid in get(/databases/$(database)/documents/families/$(familyId)).data.get('memberUids', []));
+    }
+
+    // 4. İşlem yapılan mevcut dokümanın (resource) üyelerinden biri olup olmadığını kontrol eder
+    function isMemberOfCurrentResource() {
+      return signedIn() && resource != null && (request.auth.uid in resource.data.get('memberUids', []));
+    }
+
+    // ── KULLANICILAR KOLEKSİYONU (`users/{userId}`) ──────────────────────────
+    match /users/{userId} {
+      // Yalnızca kişinin kendisi VEYA aynı ailede bulunduğu kişiler profil detaylarını okuyabilir
+      allow read: if isOwner(userId) || (
+        signedIn() && 
+        resource != null && 
+        resource.data.get('familyId', null) != null &&
+        isFamilyMember(resource.data.familyId)
+      );
+      
+      // Sadece kişi kendi profilini oluşturabilir
+      allow create: if isOwner(userId);
+      
+      // Kullanıcı kendi profilini güncelleyebilir.
+      // EĞER familyId alanı güncelleniyorsa (aile değiştiriliyorsa), 
+      // yeni hedeflenen ailenin 'memberUids' listesinde halihazırda var olduğu doğrulanmalıdır.
+      allow update: if isOwner(userId) && (
+        (request.resource.data.get('familyId', null) == resource.data.get('familyId', null)) // Aile değişmiyorsa
+        || 
+        (
+          request.resource.data.get('familyId', null) != null && 
+          isFamilyMember(request.resource.data.familyId) // Yeni ailenin üyesi olduğu doğrulanmalı
+        )
+        ||
+        (request.resource.data.get('familyId', null) == null) // Aileden çıkılıyorsa
+      );
+
+      // Profil silinmesine izin verilmiyor
+      allow delete: if false;
+    }
+
+    // ── AİLELER KOLEKSİYONU (`families/{familyId}`) ──────────────────────────
+    match /families/{familyId} {
+      // YALNIZCA ilgili ailenin mevcut üyeleri aileyi okuyabilir ve listeleyebilir.
+      // Anonim veya dışarıdan kullanıcıların listeleme ve okuma yetkisi tamamen kapatıldı.
+      allow read: if isMemberOfCurrentResource();
+      
+      // Her oturum açmış kullanıcı yeni bir aile oluşturabilir (kendi UID'sini memberUids'e ekleyerek)
+      allow create: if signedIn() && (request.auth.uid in request.resource.data.get('memberUids', []));
+      
+      // Aile Güncelleme Kuralları (Kritik Katılım Mantığı)
+      allow update: if signedIn() && (
+        // Durum A: İşlemi yapan kişi ZATEN ailenin mevcut bir üyesidir
+        isMemberOfCurrentResource()
+        ||
+        // Durum B: Kullanıcı davet koduyla aileye İLK DEFA katılıyordur
+        (
+          !(request.auth.uid in resource.data.get('memberUids', [])) && // Henüz üye değilse
+          // Sadece kendi UID'sini memberUids listesine eklemesine izin ver (mevcut üyeler silinemez)
+          request.resource.data.get('memberUids', []).hasAll(resource.data.get('memberUids', [])) &&
+          request.resource.data.get('memberUids', []).size() == resource.data.get('memberUids', []).size() + 1 &&
+          (request.auth.uid in request.resource.data.get('memberUids', [])) &&
+          // Gönderilen davet kodu mevcut davet kodu ile eşleşiyor olmalı
+          request.resource.data.get('inviteCode', '') == resource.data.get('inviteCode', '')
+        )
+      );
+      
+      // Sadece mevcut aile üyeleri aileyi silebilir
+      allow delete: if isMemberOfCurrentResource();
+
+      // ── AİLE ALT KOLEKSİYONLARI (`finances`, `vault`, `shoppingItems`, vb.) ─
+      match /{subcollection}/{docId} {
+        // Alt koleksiyonlardaki (finans, kasa vb.) tüm okuma ve yazma işlemleri için 
+        // ailenin (üst dokümanın) yetkili üyesi olmak ZORUNLUDUR. (Tam veri izolasyonu)
+        allow read, write: if isFamilyMember(familyId);
+      }
+    }
+  }
+}

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ev Asistanı - Ana Sayfa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9fe",
+                        "tertiary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#004493",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#00531c",
+                        "primary-fixed": "#72fe88",
+                        "inverse-surface": "#2e3034",
+                        "tertiary-container": "#85aeff",
+                        "surface": "#f9f9fe",
+                        "secondary-fixed": "#e4e2e4",
+                        "secondary": "#5f5e60",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "surface-variant": "#e2e2e7",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "background": "#f9f9fe",
+                        "inverse-on-surface": "#f0f0f5",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#003f8a",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#002107",
+                        "surface-container-highest": "#e2e2e7",
+                        "primary": "#006e28",
+                        "surface-tint": "#006e28",
+                        "on-primary-container": "#004d1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d9dade",
+                        "on-background": "#1a1c1f",
+                        "on-secondary-fixed-variant": "#474649",
+                        "outline-variant": "#bccbb8",
+                        "on-surface-variant": "#3d4a3c",
+                        "primary-container": "#34c759",
+                        "surface-container-high": "#e8e8ed",
+                        "on-secondary-container": "#636264",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#ededf2",
+                        "secondary-container": "#e2dfe1",
+                        "outline": "#6d7b6b",
+                        "surface-container-low": "#f3f3f8",
+                        "error": "#ba1a1a",
+                        "tertiary": "#005bc1",
+                        "inverse-primary": "#53e16f",
+                        "on-tertiary-fixed": "#001a41",
+                        "primary-fixed-dim": "#53e16f",
+                        "on-surface": "#1a1c1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "container-margin": "20px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; } /* Pure white background */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(229, 229, 234, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface pb-32">
+<!-- TopAppBar (Web) -->
+<header class="hidden md:flex justify-between items-center px-container-margin py-md w-full bg-surface/80 dark:bg-surface-dim/80 docked full-width top-0 sticky backdrop-blur-md transition-colors duration-200 z-40">
+<div class="flex items-center gap-md">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm" data-alt="A professional headshot of a smiling young man in his late 20s. He is wearing a clean, modern white t-shirt and has short dark hair. The background is a soft, out-of-focus light gray. The lighting is bright and evenly distributed, creating a welcoming and trustworthy impression suitable for a modern startup app profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUma2z-hkAYPPOalp0BMqwuUxB5oYaBrVmDsTV_6grCz3MDwjXod2YSukPoHBVMzqKhRWw3vtkNI50i51wE0rik4EBrKQ0MCKPxe5PGmAvNStppCTMHJipnuHOODQUepSN7pdOg0mKMIvhq1ajEZa8-O3gxKBXLhEji6CnUJGKgIAjjhlwdsl2U6VYvmzpuBIQxiRg_gfbBD7oxufxxjAtpKB9RQ3uq2dipvm0fCttEiA4vQmHjNBJXQ"/>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed">Ev Asistanı</h1>
+</div>
+<nav class="flex gap-lg">
+<a class="font-title-md text-title-md text-primary dark:text-primary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 px-4 py-2 rounded-lg transition-colors duration-200" href="#">Ana Sayfa</a>
+<a class="font-title-md text-title-md text-secondary dark:text-secondary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 px-4 py-2 rounded-lg transition-colors duration-200" href="#">Envanter</a>
+<a class="font-title-md text-title-md text-secondary dark:text-secondary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 px-4 py-2 rounded-lg transition-colors duration-200" href="#">Alışveriş</a>
+<a class="font-title-md text-title-md text-secondary dark:text-secondary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 px-4 py-2 rounded-lg transition-colors duration-200" href="#">Hatırlatma</a>
+<a class="font-title-md text-title-md text-secondary dark:text-secondary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 px-4 py-2 rounded-lg transition-colors duration-200" href="#">Profil</a>
+</nav>
+<button class="p-2 rounded-full hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 transition-colors duration-200">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">notifications</span>
+</button>
+</header>
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden flex justify-between items-center px-container-margin py-md w-full bg-surface/80 dark:bg-surface-dim/80 docked full-width top-0 sticky backdrop-blur-md transition-colors duration-200 z-40">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm" data-alt="A professional headshot of a smiling young man in his late 20s. He is wearing a clean, modern white t-shirt and has short dark hair. The background is a soft, out-of-focus light gray. The lighting is bright and evenly distributed, creating a welcoming and trustworthy impression suitable for a modern startup app profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9p-KtjgXIi7XGBYC-ehZYht_jzXnw2vetn6JE-NQHixD1p813xiVablvA5ajsSxJhRbmq08OuRSUfaETEFeJjua-kcDF7ttdbRdHUmS2uTzE_8dQwoDj5hTc_ysa5yn3SXCqfZgeuZLCPGFaUahvMH5edVCzjqSWqf6oIXHWqXUwdQf2Pn-hY_7_UVvLu1_JhE6-FcDDpcjxCyO1Ff9YpF4EPAyKL0Pyhc9dJX3uAOiTDwKV8K-kuBg"/>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed">Ev Asistanı</h1>
+<button class="p-2 rounded-full hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 transition-colors duration-200">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">notifications</span>
+</button>
+</header>
+<main class="max-w-[1440px] mx-auto px-container-margin md:px-lg py-lg space-y-xl">
+<!-- Greeting -->
+<section>
+<h2 class="font-display-lg text-display-lg text-on-surface">Günaydın, Ahmet 👋</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Evindeki her şey yolunda görünüyor.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-lg">
+<!-- Bugünkü Hatırlatmalar (Card with 2-3 items) -->
+<div class="col-span-1 md:col-span-7 glass-card rounded-lg p-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+                            Bugünkü Hatırlatmalar
+                        </h3>
+<button class="text-primary font-label-md text-label-md hover:underline">Tümü</button>
+</div>
+<ul class="space-y-4">
+<li class="flex items-start gap-md p-sm rounded-lg hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-error-container">water_drop</span>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">Salon Bitkilerini Sula</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Bugün, 10:00</p>
+</div>
+</li>
+<li class="flex items-start gap-md p-sm rounded-lg hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-tertiary-container">shopping_bag</span>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">Market Alışverişi</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Süt ve yumurta bitti</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<!-- Evdeki Toplam Ürün (Large numeric stat card) -->
+<div class="col-span-1 md:col-span-5 bg-primary-container text-on-primary-container rounded-lg p-lg flex flex-col justify-center items-center text-center relative overflow-hidden shadow-sm">
+<!-- Abstract background element -->
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-primary opacity-10 rounded-full blur-2xl"></div>
+<span class="material-symbols-outlined text-5xl mb-sm" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<p class="font-title-md text-title-md opacity-90">Evdeki Toplam Ürün</p>
+<p class="font-display-lg text-display-lg font-bold mt-2">142</p>
+</div>
+<!-- Yaklaşan Son Kullanma Tarihleri (Horizontal scroll or list) -->
+<div class="col-span-1 md:col-span-12 glass-card rounded-lg p-lg">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-error">event_busy</span>
+                        Yaklaşan Son Kullanma Tarihleri
+                    </h3>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar gap-md pb-xs">
+<!-- Item 1 -->
+<div class="min-w-[160px] bg-surface-container-low border border-outline-variant/30 rounded-DEFAULT p-md flex flex-col items-center text-center shrink-0">
+<img class="w-16 h-16 object-contain mb-sm" data-alt="A realistic digital illustration of a carton of milk on a clean white background. Soft studio lighting. Modern and minimal aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6-CLD6DnbIzWIuygC_W3_nqxbOvr9QistrwnBc5L5r08kFY26AA0ScZlsvXVyQ2rTM7RShaJaRYYkXodYcegzzMFu1iDwzjMzvd1A1ZLB80LAcXHcM1yKctrKXKn5d0TrhmYsuXXEGNvZoyaKtFt5AhnLVy28xU0UipEUtHw-Gc3mJS4X31Mv8L3KTXgLzUYLl7mAqFYTCiJxulkSNvrlqpLjKoupVEr6W6p3-LjdF6-NxZEtsp-ACg"/>
+<h4 class="font-body-md text-body-md text-on-surface font-medium">Yarım Yağlı Süt</h4>
+<p class="font-label-md text-label-md text-error font-bold mt-1">2 gün kaldı</p>
+</div>
+<!-- Item 2 -->
+<div class="min-w-[160px] bg-surface-container-low border border-outline-variant/30 rounded-DEFAULT p-md flex flex-col items-center text-center shrink-0">
+<img class="w-16 h-16 object-contain mb-sm" data-alt="A realistic digital illustration of a bottle of ketchup on a clean white background. Soft studio lighting. Modern and minimal aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA44bP2hrxcIIbRWgRfF5LbT_sCBPdEuINIe5agXMu9_Og3HF_9dR6F95lX-JgHmVlDTKrBT51ig7zAAbeDLW_t_WgZQzVQfHKDLZC2d8CAkOmyTejouZ2U1Q3IMOZbFtNwylLvJqplP7bUodmpUmGcwc8H9h_2i5OJqafdxtrtd2DkUF3ebUH_B3SXuFxHwArQYfJj644LumG5MHs9gG2Q0tso65xfMbyteYUTiWiNCjkceJc3nstpWg"/>
+<h4 class="font-body-md text-body-md text-on-surface font-medium">Ketçap</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">5 gün kaldı</p>
+</div>
+<!-- Item 3 -->
+<div class="min-w-[160px] bg-surface-container-low border border-outline-variant/30 rounded-DEFAULT p-md flex flex-col items-center text-center shrink-0">
+<img class="w-16 h-16 object-contain mb-sm" data-alt="A realistic digital illustration of a loaf of sliced bread in clear packaging on a clean white background. Soft studio lighting. Modern and minimal aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRSh1hHDO3yXkIyWAnkpWSRoK9U22eDqwZsGeD9JWobySH6tu6L_j5AQTc64NXbLBe_ojNYaeK2MN7D0__LKuAj_Y2TztRNGeMnuCUlBjYAe_5F94gy996yBkUH9HHdb5D15o6__Z2yUTeW5yJ77axQ75NYxvUlAHWOGbuUajHw9QOHHqsCdW_FkgFJCZZ8aWe5jjhs-ylCtW09yjmP_zk4RV0RgT0CYKf18ZGjOsoFMceST7Ymrj69Q"/>
+<h4 class="font-body-md text-body-md text-on-surface font-medium">Dilimli Ekmek</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">1 hafta kaldı</p>
+</div>
+</div>
+</div>
+<!-- Yaklaşan Abonelik Ödemeleri -->
+<div class="col-span-1 md:col-span-12 glass-card rounded-lg p-lg">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2 mb-md">
+<span class="material-symbols-outlined text-tertiary">credit_card</span>
+                    Yaklaşan Abonelik Ödemeleri
+                </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
+<div class="flex items-center justify-between p-md border border-outline-variant/30 rounded-DEFAULT bg-surface-container-low">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white font-bold text-xl">N</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-medium text-on-surface">Netflix</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Yarın</p>
+</div>
+</div>
+<p class="font-title-md text-title-md font-bold text-on-surface">149.99 ₺</p>
+</div>
+<div class="flex items-center justify-between p-md border border-outline-variant/30 rounded-DEFAULT bg-surface-container-low">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-[#1DB954] rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">headphones</span>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-medium text-on-surface">Spotify</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">15 Ekim</p>
+</div>
+</div>
+<p class="font-title-md text-title-md font-bold text-on-surface">59.99 ₺</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Large Green FAB -->
+<div class="fixed bottom-24 right-container-margin z-50 md:bottom-12 md:right-12">
+<button class="bg-primary hover:bg-primary-container text-on-primary hover:text-on-primary-container rounded-full px-6 py-4 flex items-center gap-2 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95 group">
+<span class="material-symbols-outlined transition-transform group-hover:rotate-90">add</span>
+<span class="font-title-md text-title-md font-medium">Hızlı Ekle</span>
+</button>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-xs bg-surface/90 dark:bg-surface-dim/90 docked full-width rounded-t-lg bg-surface dark:bg-surface-dim shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] shadow-lg backdrop-blur-md">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md mt-1">Ana Sayfa</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 px-4 py-1" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md mt-1">Envanter</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 px-4 py-1" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md text-label-md mt-1">Alışveriş</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 px-4 py-1" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="font-label-md text-label-md mt-1">Hatırlatma</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 px-4 py-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md mt-1">Profil</span>
+</a>
+</nav>
+</body></html>

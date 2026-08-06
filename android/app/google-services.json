@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "687057369612",
+    "project_id": "ev-asistani-1",
+    "storage_bucket": "ev-asistani-1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687057369612:android:9a761ba69e159258f30c29",
+        "android_client_info": {
+          "package_name": "com.evasisstani.ev_asistani"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687057369612-lfnhm40okn34ncvthp8vcbs7hg4ifsus.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.evasisstani.ev_asistani",
+            "certificate_hash": "c11ade3bab3e2592a16f63b36f6f79283576efd9"
+          }
+        },
+        {
+          "client_id": "687057369612-an0ugpjis5hc1k14ke28tttrqqt3d224.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNwdpCdvovZ__2EisBqBNty__P-1kfIus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687057369612-an0ugpjis5hc1k14ke28tttrqqt3d224.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "687057369612-4bljhci5up2bnaqdmmf5b2tq9p1o4or9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.evasisstani.evAsistani"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

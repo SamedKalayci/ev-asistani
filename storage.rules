@@ -1,0 +1,51 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── YARDIMCI FONKSİYONLAR (HELPER FUNCTIONS) ─────────────────────────────
+
+    // Kullanıcının oturum açıp açmadığını doğrular
+    function signedIn() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    // İşlemi yapan kullanıcının verilen userId ile eşleştiğini doğrular
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    // Kullanıcının belirtilen ailenin üyesi olup olmadığını Firestore üzerinden doğrular
+    function isFamilyMember(familyId) {
+      return signedIn() && 
+             firestore.exists(/databases/(default)/documents/families/$(familyId)) &&
+             (request.auth.uid in firestore.get(/databases/(default)/documents/families/$(familyId)).data.memberUids);
+    }
+
+    // Dosya boyutunun maksimum 10MB olup olmadığını doğrular (Silme işlemlerini engellememek için null kontrolü)
+    function isValidFileSize() {
+      return request.resource == null || request.resource.size < 10 * 1024 * 1024;
+    }
+
+    // Dosyanın görsel (image) formatında olup olmadığını doğrular
+    function isImage() {
+      return request.resource == null || request.resource.contentType.matches('image/.*');
+    }
+
+    // ── PROFİL FOTOĞRAFLARI (`users/{userId}/...`) ───────────────────────────
+    match /users/{userId}/{allPaths=**} {
+      // Okuma: Oturum açmış her kullanıcı profil fotoğraflarını okuyabilir
+      allow read: if signedIn();
+      
+      // Yazma (Yükleme/Güncelleme/Silme): Yalnızca dosya sahibi yapabilir
+      // Ayrıca dosya boyutu max 10MB olmalı ve sadece resim (image/*) dosyalarına izin verilmeli
+      allow write: if isOwner(userId) && isValidFileSize() && isImage();
+    }
+
+    // ── AİLE KASA BELGELERİ & DOSYALARI (`families/{familyId}/...`) ──────────
+    match /families/{familyId}/{allPaths=**} {
+      // Okuma ve Yazma: Yalnızca Firestore'daki ailenin `memberUids` listesindeki üyeler işlem yapabilir
+      // Ayrıca yüklenen her dosya için max 10MB boyut limiti uygulanır
+      allow read, write: if isFamilyMember(familyId) && isValidFileSize();
+    }
+  }
+}

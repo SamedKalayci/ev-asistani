@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Garanti Takibi - Ev Asistanı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9fe",
+                        "tertiary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#004493",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#00531c",
+                        "primary-fixed": "#72fe88",
+                        "inverse-surface": "#2e3034",
+                        "tertiary-container": "#85aeff",
+                        "surface": "#f9f9fe",
+                        "secondary-fixed": "#e4e2e4",
+                        "secondary": "#5f5e60",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "surface-variant": "#e2e2e7",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "background": "#f9f9fe",
+                        "inverse-on-surface": "#f0f0f5",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#003f8a",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#002107",
+                        "surface-container-highest": "#e2e2e7",
+                        "primary": "#006e28",
+                        "surface-tint": "#006e28",
+                        "on-primary-container": "#004d1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d9dade",
+                        "on-background": "#1a1c1f",
+                        "on-secondary-fixed-variant": "#474649",
+                        "outline-variant": "#bccbb8",
+                        "on-surface-variant": "#3d4a3c",
+                        "primary-container": "#34c759",
+                        "surface-container-high": "#e8e8ed",
+                        "on-secondary-container": "#636264",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#ededf2",
+                        "secondary-container": "#e2dfe1",
+                        "outline": "#6d7b6b",
+                        "surface-container-low": "#f3f3f8",
+                        "error": "#ba1a1a",
+                        "tertiary": "#005bc1",
+                        "inverse-primary": "#53e16f",
+                        "on-tertiary-fixed": "#001a41",
+                        "primary-fixed-dim": "#53e16f",
+                        "on-surface": "#1a1c1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "container-margin": "20px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 docked full-width top-0 sticky backdrop-blur-md flex justify-between items-center px-container-margin py-md w-full z-40">
+<div class="flex items-center gap-sm">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A small circular profile photo of a user in a well-lit, modern home environment. The aesthetic is clean and professional, matching the light-mode UI style with soft whites and natural tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYgfBAYvGTH4TyqgQdhB1pu4oMErJIE0gZWSD1sHESeFrDCbtowktdydUYJrv9ih_Kj_yXbKQkVAjTYnSgS9tTQNRvmLANhN9YJBYwN4yKZ1k7V0StvqkmogbvGvrK7gthXEI9v9NUnFq7iYafD-TmRe7xjif1Dy9B-X9Vi3fnceoRfixjTHi88G-GMGRv29mIpToIVm1Jk-69f-gbmYHbwAUfVyzPT_GW8ndWmDckpzNR1KFMUzC8xA"/>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed">Ev Asistanı</span>
+</div>
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 transition-colors duration-200 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-container-margin py-xl w-full max-w-[1440px] mx-auto md:px-lg lg:px-xl">
+<div class="flex flex-col gap-sm mb-lg">
+<h1 class="font-title-md text-title-md text-on-surface">Garanti Takibi</h1>
+<p class="font-body-md text-body-md text-secondary">Cihazlarınızın ve eşyalarınızın garanti sürelerini takip edin.</p>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-sm overflow-x-auto pb-sm mb-lg hide-scrollbar">
+<button class="bg-primary text-on-primary rounded-full px-4 py-2 font-label-md text-label-md flex-shrink-0">Tümü</button>
+<button class="bg-surface-container text-on-surface rounded-full px-4 py-2 font-label-md text-label-md flex-shrink-0 hover:bg-surface-container-high transition-colors">Aktif</button>
+<button class="bg-surface-container text-on-surface rounded-full px-4 py-2 font-label-md text-label-md flex-shrink-0 hover:bg-surface-container-high transition-colors">Süresi Dolanlar</button>
+<button class="bg-surface-container text-on-surface rounded-full px-4 py-2 font-label-md text-label-md flex-shrink-0 hover:bg-surface-container-high transition-colors">Yaklaşanlar</button>
+</div>
+<!-- List/Cards -->
+<div class="flex flex-col gap-md">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-md flex flex-col md:flex-row gap-md shadow-[0_4px_20px_0_rgba(0,0,0,0.04)]">
+<div class="w-full md:w-32 h-32 md:h-full shrink-0">
+<img class="w-full h-full object-cover rounded-md" data-alt="A sleek, modern smart refrigerator in a bright, contemporary kitchen setting. The image is clean, well-lit, and fits a minimalist light-mode aesthetic, showcasing the appliance clearly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATW9MQPPkc5gvJOR1-LjdGTHXVcum0QGKPqnk_uAd9LSL0a7lVB3Kvyh80R0EEInMke_8MTRnWfUiCxkp2JEmYIyJmwxQL9zjCSuZEo6MKh4GvGPQcFgfX4h8ElOm7EB6-pQFBgVIZxPQOHMB6FMdA5yKk005iM4VXunct-8JKS4a3lVaWfo412MQctMmNuYqgsxgWxhTt5RG-4CDgpMeHf-1khOTiIaf7KlsDlxiUNF2uginkXw0Qkg"/>
+</div>
+<div class="flex flex-col flex-1 gap-xs justify-center">
+<div class="flex justify-between items-start">
+<h3 class="font-title-md text-title-md text-on-surface">Akıllı Buzdolabı (Samsung)</h3>
+<span class="bg-primary-container text-on-primary-container px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Aktif
+                        </span>
+</div>
+<p class="font-body-sm text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">storefront</span> Amazon</p>
+<div class="flex flex-col mt-sm gap-1">
+<div class="flex justify-between font-body-sm text-secondary">
+<span>Alış Tarihi:</span>
+<span class="text-on-surface">15 Mayıs 2023</span>
+</div>
+<div class="flex justify-between font-body-sm text-secondary">
+<span>Garanti Bitiş:</span>
+<span class="font-medium text-on-surface">15 Mayıs 2025</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-1.5 mt-2 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 45%"></div>
+</div>
+<span class="text-xs text-secondary text-right mt-1">1 Yıl, 4 Ay Kaldı</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-md flex flex-col md:flex-row gap-md shadow-[0_4px_20px_0_rgba(0,0,0,0.04)]">
+<div class="w-full md:w-32 h-32 md:h-full shrink-0">
+<img class="w-full h-full object-cover rounded-md" data-alt="A high-end robot vacuum cleaner sitting on a light wood floor in a modern, brightly lit living room. The style is pristine and fits a minimalist light-mode design language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDflEiNX81ZlffbXRLbNtRxO4iXyfPczJ_5r7HLhdCOgRdUC48_5I0Mk2QjxdCr2Gc6F43ZgriVc2b_fFiHbgG32P_o8-QZ5LPVS_zMsr0PE_QE8zT7hzN94o84s8CcVYuAP3c23rbWqSQMVeubVg_k1adUYtOpaX0IMu2c7VtePZu261eLYRoNqGwFptLOV3PBUm_zEq1RKT3qhB8kLSeHVBMsizhymF9tESSoi2Kmj8aAKl0u48jEKw"/>
+</div>
+<div class="flex flex-col flex-1 gap-xs justify-center">
+<div class="flex justify-between items-start">
+<h3 class="font-title-md text-title-md text-on-surface">Robot Süpürge (Roborock)</h3>
+<span class="bg-error-container text-on-error-container px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Süresi Doldu
+                        </span>
+</div>
+<p class="font-body-sm text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">storefront</span> Trendyol</p>
+<div class="flex flex-col mt-sm gap-1">
+<div class="flex justify-between font-body-sm text-secondary">
+<span>Alış Tarihi:</span>
+<span class="text-on-surface">10 Ocak 2021</span>
+</div>
+<div class="flex justify-between font-body-sm text-secondary">
+<span>Garanti Bitiş:</span>
+<span class="font-medium text-error">10 Ocak 2023</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-1.5 mt-2 overflow-hidden">
+<div class="bg-error h-1.5 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-lg p-md flex flex-col md:flex-row gap-md shadow-[0_4px_20px_0_rgba(0,0,0,0.04)]">
+<div class="w-full md:w-32 h-32 md:h-full shrink-0">
+<img class="w-full h-full object-cover rounded-md" data-alt="A modern OLED television mounted on a clean white wall in a minimalist, bright living space. The aesthetic aligns with a premium, light-mode startup UI design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf_-aRcDfbDYiGHfQBWyefU6qTuIH-Af8_sU1iEALEIXJuVYe3PlTbH_r0G18_wYdpjU8f7gEhIpWMqgcsLFoEq2cDQWMh0h9tfdBwhaIBN4N2T3njKz8RCgpf2X48P0MUHTMZIDVLNhtxbLXamTIUfDB7ezNhly0nF3JHzhqRseE3DrBOx4bNUfLuF6ymgm5wIhwSUT6H31WbJFEB5OJUoUgnIhE1OuzoQzbnb7al_J8eMHuycSe8JQ"/>
+</div>
+<div class="flex flex-col flex-1 gap-xs justify-center">
+<div class="flex justify-between items-start">
+<h3 class="font-title-md text-title-md text-on-surface">OLED TV (LG)</h3>
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Yaklaşıyor
+                        </span>
+</div>
+<p class="font-body-sm text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">storefront</span> Vatan Bilgisayar</p>
+<div class="flex flex-col mt-sm gap-1">
+<div class="flex justify-between font-body-sm text-secondary">
+<span>Alış Tarihi:</span>
+<span class="text-on-surface">20 Kasım 2022</span>
+</div>
+<div class="flex justify-between font-body-sm text-secondary">
+<span>Garanti Bitiş:</span>
+<span class="font-medium text-on-surface">20 Kasım 2024</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant rounded-full h-1.5 mt-2 overflow-hidden">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 85%"></div>
+</div>
+<span class="text-xs text-secondary text-right mt-1">2 Ay Kaldı</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface/90 dark:bg-surface-dim/90 docked full-width bottom-0 rounded-t-lg bg-surface dark:bg-surface-dim shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] shadow-lg fixed bottom-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-xs md:hidden backdrop-blur-md pb-4">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Ana Sayfa</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined filled" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Envanter</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Alışveriş</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-label-md text-label-md">Hatırlatma</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profil</span>
+</button>
+</nav>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

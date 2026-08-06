@@ -1,0 +1,99 @@
+name: ev_asistani
+description: "Ev içerisindeki önemli bilgileri takip etmenizi sağlayan Türkçe mobil asistan."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.3.5
+
+  # Localization & Date Formatting
+  intl: ^0.19.0
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Firebase
+  firebase_core: ^3.8.1
+  cloud_firestore: ^5.6.5
+  firebase_auth: ^5.4.1
+  firebase_storage: ^12.4.4
+  google_sign_in: ^6.2.2
+
+  # Database (local fallback)
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+
+  # Notifications
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+  flutter_timezone: ^5.0.0
+
+  # Ads & Monetization
+  google_mobile_ads: ^5.1.0
+  app_tracking_transparency: ^2.0.6
+  purchases_flutter: ^8.0.0
+
+  # Storage & Preferences
+  shared_preferences: ^2.3.2
+
+  # Icons
+  cupertino_icons: ^1.0.8
+
+  # PDF & Report
+  pdf: ^3.11.1
+  printing: ^5.13.2
+
+  # URL & Phone Launcher
+  url_launcher: ^6.3.1
+
+  # Media & File Picker
+  image_picker: ^1.1.2
+  file_picker: ^8.1.4
+
+  # Configuration / Environment
+  flutter_dotenv: ^5.1.0
+  permission_handler: ^11.3.1
+
+  # Native Share
+  share_plus: ^10.1.4
+  sign_in_with_apple: ^8.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  riverpod_generator: ^2.4.3
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_logo.png"
+  adaptive_icon_background: "#11235A"
+  adaptive_icon_foreground: "assets/icon/app_logo.png"
+  min_sdk_android: 21
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#FFFFFF"
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#FFFFFF"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icon/
+    - .env

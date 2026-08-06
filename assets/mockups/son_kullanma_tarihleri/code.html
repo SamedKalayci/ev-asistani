@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Son Kullanma Tarihleri</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "on-primary": "#ffffff",
+                            "surface-bright": "#f9f9fe",
+                            "tertiary-fixed": "#d8e2ff",
+                            "on-tertiary-fixed-variant": "#004493",
+                            "on-error-container": "#93000a",
+                            "on-primary-fixed-variant": "#00531c",
+                            "primary-fixed": "#72fe88",
+                            "inverse-surface": "#2e3034",
+                            "tertiary-container": "#85aeff",
+                            "surface": "#f9f9fe",
+                            "secondary-fixed": "#e4e2e4",
+                            "secondary": "#5f5e60",
+                            "on-secondary": "#ffffff",
+                            "on-error": "#ffffff",
+                            "on-secondary-fixed": "#1b1b1d",
+                            "surface-variant": "#e2e2e7",
+                            "secondary-fixed-dim": "#c8c6c8",
+                            "background": "#f9f9fe",
+                            "inverse-on-surface": "#f0f0f5",
+                            "on-tertiary": "#ffffff",
+                            "on-tertiary-container": "#003f8a",
+                            "tertiary-fixed-dim": "#adc6ff",
+                            "on-primary-fixed": "#002107",
+                            "surface-container-highest": "#e2e2e7",
+                            "primary": "#006e28",
+                            "surface-tint": "#006e28",
+                            "on-primary-container": "#004d1a",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-dim": "#d9dade",
+                            "on-background": "#1a1c1f",
+                            "on-secondary-fixed-variant": "#474649",
+                            "outline-variant": "#bccbb8",
+                            "on-surface-variant": "#3d4a3c",
+                            "primary-container": "#34c759",
+                            "surface-container-high": "#e8e8ed",
+                            "on-secondary-container": "#636264",
+                            "error-container": "#ffdad6",
+                            "surface-container": "#ededf2",
+                            "secondary-container": "#e2dfe1",
+                            "outline": "#6d7b6b",
+                            "surface-container-low": "#f3f3f8",
+                            "error": "#ba1a1a",
+                            "tertiary": "#005bc1",
+                            "inverse-primary": "#53e16f",
+                            "on-tertiary-fixed": "#001a41",
+                            "primary-fixed-dim": "#53e16f",
+                            "on-surface": "#1a1c1f",
+                            // Adding specific status colors for this screen while maintaining theme constraints
+                            "status-safe": "#34c759", // Using primary-container
+                            "status-warning": "#ff9500", // Soft orange
+                            "status-danger": "#ff3b30",  // Soft red
+                            "status-safe-bg": "#e6f8ea",
+                            "status-warning-bg": "#fff4e5",
+                            "status-danger-bg": "#ffeceb"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "1rem",
+                            "lg": "2rem",
+                            "xl": "3rem",
+                            "full": "9999px",
+                            "card": "24px" // Custom for dashboard cards
+                    },
+                    "spacing": {
+                            "md": "16px",
+                            "xl": "32px",
+                            "base": "8px",
+                            "sm": "12px",
+                            "xs": "4px",
+                            "gutter": "16px",
+                            "container-margin": "20px",
+                            "lg": "24px",
+                            "safe": "max(24px, env(safe-area-inset-bottom))"
+                    },
+                    "fontFamily": {
+                            "body-lg": ["Inter"],
+                            "body-md": ["Inter"],
+                            "display-lg": ["Inter"],
+                            "headline-lg": ["Inter"],
+                            "headline-lg-mobile": ["Inter"],
+                            "label-md": ["Inter"],
+                            "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                            "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    },
+                    boxShadow: {
+                        'z1': '0 4px 20px -4px rgba(0, 0, 0, 0.04)',
+                        'z2': '0 12px 40px -12px rgba(0, 0, 0, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface/80 dark:bg-surface-dim/80 docked full-width top-0 sticky backdrop-blur-md flat no shadows transition-colors duration-200 flex justify-between items-center px-container-margin py-md w-full z-40">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant border border-outline-variant/30 flex-shrink-0">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A clean, professional headshot of a person looking forward, bathed in soft, natural light against a neutral background. The lighting emphasizes a modern, approachable aesthetic suitable for a high-end smart home app profile picture. The color palette is subtle, with warm skin tones and crisp whites, conveying a sense of order and trust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAq5sXX80BsBCdXSqkS3bMVjfNWHnupAhHtaQlNF0BE06RUFVvuus4KUtLOkqQSgBlFmy7px7YW1yAK0SxqYvgwjPfL-39b8pXKIrYH8IK_c32iLgWcjfsd47E-1biC_O5XDLVAHTf_gmWpTo2EQA9fTYKF8Bi9czx60wf_Vsk4WNTnB9RWEF2n1tJO_Kflci1MdARhhiCzd4vCY6eDsrQnT4a4sRBGIDRaGy_rfmzjlXOzMq8SzvyZg"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed tracking-tight">Ev Asistanı</h1>
+</div>
+<button aria-label="Notifications" class="w-10 h-10 rounded-full flex items-center justify-center text-primary dark:text-primary-fixed hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-container-margin py-md max-w-7xl mx-auto md:px-lg md:py-xl flex flex-col gap-xl">
+<!-- Header Section -->
+<section class="flex flex-col gap-xs">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">Son Kullanma Tarihleri</h2>
+<p class="font-body-md text-body-md text-secondary">Envanterinizdeki ürünlerin tazelik durumunu takip edin.</p>
+</section>
+<!-- Filters (Chips) -->
+<section class="flex gap-sm overflow-x-auto hide-scrollbar pb-xs">
+<button class="px-md py-2 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md flex-shrink-0 transition-colors">Tümü (12)</button>
+<button class="px-md py-2 rounded-full bg-surface-variant text-on-surface-variant font-label-md text-label-md flex-shrink-0 transition-colors hover:bg-surface-container-highest">Kritik (2)</button>
+<button class="px-md py-2 rounded-full bg-surface-variant text-on-surface-variant font-label-md text-label-md flex-shrink-0 transition-colors hover:bg-surface-container-highest">Yaklaşan (3)</button>
+<button class="px-md py-2 rounded-full bg-surface-variant text-on-surface-variant font-label-md text-label-md flex-shrink-0 transition-colors hover:bg-surface-container-highest">Güvenli (7)</button>
+</section>
+<!-- Product Grid (Bento/Card Style) -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-md md:gap-lg">
+<!-- Card 1: Expired (Red) -->
+<article class="bg-surface-container-lowest rounded-card p-md shadow-z1 border border-surface-variant flex flex-col gap-md relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+<div class="absolute top-0 left-0 w-full h-1 bg-status-danger"></div>
+<div class="flex gap-md items-start">
+<div class="w-16 h-16 rounded-xl bg-surface-variant overflow-hidden flex-shrink-0 border border-outline-variant/20">
+<img alt="Süt" class="w-full h-full object-cover" data-alt="A stylized, high-quality, top-down view of fresh milk in a clear glass bottle, placed on a pristine white marble countertop. Soft, diffused lighting creates a bright, hygienic atmosphere typical of modern premium food photography. The color palette is minimal, focusing on bright whites and soft grays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJvQ0SbyPOICOBHelyRdon64ow7_CzMeXRFIyrAlI4L2oQeYyu4_mWrG3VHxKCcWzo6IzGBRO7CBbM7_btp3sHAGIY3ZXQztnAYgvbACg9PHdayYiqWzSjfSCBCpM6xgvBc_oHWJIa6NcFNa7O-ztNfGl13WWUtnzH7w9-ZQ8tZ9PPe6mfUClaKbGmX-FQUw2_QLm1SnZZpdhiQ8hmWYW9mKn6MsPKqCWEisAGfiAn4UFou-NbppI8pw"/>
+</div>
+<div class="flex flex-col flex-grow">
+<h3 class="font-title-md text-title-md text-on-surface">Süt</h3>
+<p class="font-body-md text-body-md text-secondary">Buzdolabı</p>
+</div>
+<span class="material-symbols-outlined text-status-danger" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-sm border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary uppercase">Son Kullanma</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">12 Eki 2023</span>
+</div>
+<div class="bg-status-danger-bg px-sm py-1 rounded-lg border border-status-danger/20">
+<span class="font-label-md text-label-md text-status-danger font-bold">Süresi Doldu</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Warning (Orange) -->
+<article class="bg-surface-container-lowest rounded-card p-md shadow-z1 border border-surface-variant flex flex-col gap-md relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+<div class="absolute top-0 left-0 w-full h-1 bg-status-warning"></div>
+<div class="flex gap-md items-start">
+<div class="w-16 h-16 rounded-xl bg-surface-variant overflow-hidden flex-shrink-0 border border-outline-variant/20">
+<img alt="Yumurta" class="w-full h-full object-cover" data-alt="A clean, minimalist composition showing half a dozen fresh brown eggs resting in a modern, matte ceramic carton. The setting is a clean, bright kitchen environment with natural sunlight filtering through, casting soft, inviting shadows. The color scheme features warm earth tones against a crisp white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp6YgU75XbCLHgNhznkG1C1xP0gvaS9MSyJBHh4S-5lBidBP63YmjAUCP8vOTK8K4VQfeto-BbsE0rK_gTpxN4tRTEoXRNKmfvYdNSIx6hc5fsP5y06NmafiazK0HLFx-6sJL1kZrkCHUOugZR2pjtAH-9yVhVUflBNkbPzI9urxx0Wc9x3rs94qn4C-qbo_CwbHtKp33Q9vtUq5eVqFPkjhSVyxzHXFOmqJoAGYoQBBkifm74Pfbq7g"/>
+</div>
+<div class="flex flex-col flex-grow">
+<h3 class="font-title-md text-title-md text-on-surface">Yumurta</h3>
+<p class="font-body-md text-body-md text-secondary">Kiler</p>
+</div>
+<span class="material-symbols-outlined text-status-warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-sm border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary uppercase">Son Kullanma</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">15 Eki 2023</span>
+</div>
+<div class="bg-status-warning-bg px-sm py-1 rounded-lg border border-status-warning/20">
+<span class="font-label-md text-label-md text-status-warning font-bold">2 Gün Kaldı</span>
+</div>
+</div>
+</article>
+<!-- Card 3: Safe (Green) -->
+<article class="bg-surface-container-lowest rounded-card p-md shadow-z1 border border-surface-variant flex flex-col gap-md relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+<div class="absolute top-0 left-0 w-full h-1 bg-status-safe"></div>
+<div class="flex gap-md items-start">
+<div class="w-16 h-16 rounded-xl bg-surface-variant overflow-hidden flex-shrink-0 border border-outline-variant/20">
+<img alt="Ispanak" class="w-full h-full object-cover" data-alt="A vibrant, high-definition shot of fresh, green spinach leaves piled elegantly in a shallow, modern slate bowl. The lighting is crisp and bright, highlighting the deep green hues and the delicate texture of the leaves, set against a pristine, light-mode suitable white background. The aesthetic is healthy, fresh, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi5Q24oMhXBY0pblJhOfrW9h9xqHoqO7oFCyumyc3vvfIl_vcbALQYw34a5XPaoWovh9DbovgdQFvepJH8LnDnD2vT-FUqd8-21ey7jeqWW8k2ZlxEqRfAOZvIDq_gYyxUP1KU80jGU_S6d5SomzTiLAHmFcQXWt2l_e4ZCkwuplSHbOl69HQahJ_GD53SK2ryWsMNqo0YeFaBfRseeXGvXWI5QNgo4GTmH9OQHBm03wznU8Q-YyQVBA"/>
+</div>
+<div class="flex flex-col flex-grow">
+<h3 class="font-title-md text-title-md text-on-surface">Ispanak</h3>
+<p class="font-body-md text-body-md text-secondary">Buzdolabı Sebzelik</p>
+</div>
+<span class="material-symbols-outlined text-status-safe" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-sm border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary uppercase">Son Kullanma</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">20 Eki 2023</span>
+</div>
+<div class="bg-status-safe-bg px-sm py-1 rounded-lg border border-status-safe/20">
+<span class="font-label-md text-label-md text-status-safe font-bold">7 Gün Kaldı</span>
+</div>
+</div>
+</article>
+<!-- Card 4: Safe (Green) -->
+<article class="bg-surface-container-lowest rounded-card p-md shadow-z1 border border-surface-variant flex flex-col gap-md relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+<div class="absolute top-0 left-0 w-full h-1 bg-status-safe"></div>
+<div class="flex gap-md items-start">
+<div class="w-16 h-16 rounded-xl bg-surface-variant overflow-hidden flex-shrink-0 border border-outline-variant/20">
+<img alt="Ekmek" class="w-full h-full object-cover" data-alt="A minimalist photograph of a loaf of artisan sourdough bread sitting on a light oak cutting board. The bread has a perfect, crusty exterior and is dusted lightly with flour. The background is a soft, out-of-focus white kitchen setting, creating a warm, airy, and high-end culinary atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGrQ4hobSrXsGOiPmrJZ-ne28o5fILjl6PoIDppOmNPnkFPDSeanuVCzl8btaik6eQOiuKT1UFYMqKL8pXri-4ECXXMfj3sJwP5cwQ7i42WOqaHc5p9RWhcfRiIjQmD3wLHQrF54YXWBTrqsUWBZrY6jF31Bu9AdVuqMakVwLKh-ve3Yd9UOkfj2Z6AEONvC2A8OcTqWYu2_sRlNjO60kkkIQGLX2HCuXA1HKvXE9WOH3e6xiJ3fFtWA"/>
+</div>
+<div class="flex flex-col flex-grow">
+<h3 class="font-title-md text-title-md text-on-surface">Tam Buğday Ekmek</h3>
+<p class="font-body-md text-body-md text-secondary">Mutfak Tezgahı</p>
+</div>
+<span class="material-symbols-outlined text-status-safe" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-sm border-t border-surface-variant/50">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary uppercase">Son Kullanma</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">22 Eki 2023</span>
+</div>
+<div class="bg-status-safe-bg px-sm py-1 rounded-lg border border-status-safe/20">
+<span class="font-label-md text-label-md text-status-safe font-bold">9 Gün Kaldı</span>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-surface/90 dark:bg-surface-dim/90 docked full-width bottom-0 rounded-t-lg bg-surface dark:bg-surface-dim shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] shadow-lg fixed bottom-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-xs backdrop-blur-md">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md mt-1 group-hover:text-primary">Ana Sayfa</span>
+</a>
+<!-- Inventory (Active since we are looking at Expiration Dates / Inventory) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-md text-label-md mt-1 text-on-primary-container">Envanter</span>
+</a>
+<!-- Shopping -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span class="font-label-md text-label-md mt-1 group-hover:text-primary">Alışveriş</span>
+</a>
+<!-- Reminders -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" style="font-variation-settings: 'FILL' 0;">notifications_active</span>
+<span class="font-label-md text-label-md mt-1 group-hover:text-primary">Hatırlatma</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed active:scale-95 transition-all duration-200 w-16 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md mt-1 group-hover:text-primary">Profil</span>
+</a>
+</nav>
+<!-- Side Nav for Desktop (Hidden on Mobile) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 bg-surface shadow-z1 z-30 pt-24 px-md gap-sm">
+<a class="flex items-center gap-sm px-4 py-3 rounded-xl text-secondary hover:bg-surface-variant/50 transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-md text-body-md font-medium">Ana Sayfa</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 rounded-xl bg-primary-container text-on-primary-container font-medium transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-body-md text-body-md font-medium">Envanter</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 rounded-xl text-secondary hover:bg-surface-variant/50 transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-body-md text-body-md font-medium">Alışveriş</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 rounded-xl text-secondary hover:bg-surface-variant/50 transition-colors" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="font-body-md text-body-md font-medium">Hatırlatma</span>
+</a>
+</aside>
+<!-- Adjust main content margin for desktop sidenav -->
+<style>
+        @media (min-width: 768px) {
+            main {
+                margin-left: 16rem; /* 256px to match aside w-64 */
+                max-width: calc(100% - 16rem);
+            }
+        }
+    </style>
+</body></html>

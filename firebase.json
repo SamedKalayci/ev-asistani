@@ -1,0 +1,26 @@
+{
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "ev-asistani-1",
+          "appId": "1:687057369612:android:9a761ba69e159258f30c29",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "ev-asistani-1",
+          "configurations": {
+            "android": "1:687057369612:android:9a761ba69e159258f30c29",
+            "ios": "1:687057369612:ios:52db05bea7d40ddbf30c29",
+            "web": "1:687057369612:web:1bff23ddf99ada4ef30c29"
+          }
+        }
+      }
+    }
+  }
+}
