@@ -10,6 +10,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/primary_button.dart';
+import '../../../core/services/notification_service.dart';
 import '../models/vault_item_model.dart';
 import '../providers/vault_provider.dart';
 
@@ -112,6 +113,8 @@ class VaultMaintenanceScreen extends ConsumerWidget {
                             await ref
                                 .read(vaultRepositoryProvider)
                                 .addVaultItem(familyId, item);
+                            await NotificationService.instance
+                                .scheduleMaintenanceNotifications(item);
                             if (ctx.mounted) Navigator.pop(ctx);
                           }
                         },

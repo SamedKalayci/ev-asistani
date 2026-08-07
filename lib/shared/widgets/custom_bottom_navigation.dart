@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
+import '../../features/inventory/screens/inventory_screen.dart';
 import '../../router/app_router.dart';
 
 /// 5 sekmeli alt navigasyon (CustomBottomNavigation) bileşeni.
 /// StatefulNavigationShell desteği ve initialLocation: true ile sekme sıfırlama mekanizması içerir.
-class CustomBottomNavigation extends StatelessWidget {
+class CustomBottomNavigation extends ConsumerWidget {
   /// GoRouter StatefulNavigationShell referansı
   final StatefulNavigationShell? navigationShell;
 
@@ -60,7 +62,7 @@ class CustomBottomNavigation extends StatelessWidget {
     return 0;
   }
 
-  void _handleDestinationSelected(BuildContext context, int index) {
+  void _handleDestinationSelected(BuildContext context, WidgetRef ref, int index) {
     // 1. Root navigator üzerindeki tüm imperative push sayfalarını (örn. VaultDetails, Formlar) kapat
     try {
       final rootNav = Navigator.of(context, rootNavigator: true);
@@ -68,6 +70,11 @@ class CustomBottomNavigation extends StatelessWidget {
         rootNav.popUntil((route) => route.isFirst);
       }
     } catch (_) {}
+
+    // Envanter sekmesine tıklanmışsa üst sekmeleri "Son Kullanma" (0) ekranına sıfırla
+    if (index == 1) {
+      ref.read(inventoryTabProvider.notifier).state = 0;
+    }
 
     // 2. StatefulNavigationShell varsa goBranch(index, initialLocation: true) ile sekme köküne sıfırla
     if (navigationShell != null) {
@@ -103,7 +110,7 @@ class CustomBottomNavigation extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final effectiveIndex = _getEffectiveIndex(context);
@@ -142,7 +149,7 @@ class CustomBottomNavigation extends StatelessWidget {
       ),
       child: NavigationBar(
         selectedIndex: effectiveIndex,
-        onDestinationSelected: (index) => _handleDestinationSelected(context, index),
+        onDestinationSelected: (index) => _handleDestinationSelected(context, ref, index),
         backgroundColor: effectiveBgColor,
         elevation: 0,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,

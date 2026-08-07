@@ -11,6 +11,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../router/app_router.dart';
 import '../../../shared/widgets/app_header.dart';
+import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/no_family_empty_state.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../shared/widgets/pro_blur_overlay.dart';
@@ -21,10 +22,11 @@ import '../../profile/providers/family_provider.dart';
 import '../../shopping/providers/shopping_provider.dart';
 import '../../warranty/models/warranty_model.dart';
 import '../../warranty/providers/warranty_provider.dart';
-import '../../warranty/screens/warranty_form_screen.dart';
 import '../../finance/widgets/quick_add_expense_bottom_sheet.dart';
 import '../../finance/providers/finance_provider.dart';
 import '../../finance/models/payment_schedule_model.dart';
+import '../../vault/providers/vault_provider.dart';
+import '../../vault/models/vault_item_model.dart';
 
 /// Ana Sayfa ekranı — Freemium kısıtları, Serbest Bütçe Banner'ı ve Hızlı Ekle FAB entegreli.
 class HomeScreen extends ConsumerWidget {
@@ -66,6 +68,7 @@ class HomeScreen extends ConsumerWidget {
     final warAsync = ref.watch(warrantyItemsProvider);
     final shopAsync = ref.watch(shoppingItemsProvider);
     final schedulesAsync = ref.watch(paymentSchedulesProvider);
+    final vaultAsync = ref.watch(vaultItemsProvider);
 
     final user = userAsync.valueOrNull;
     final family = familyAsync.valueOrNull;
@@ -73,6 +76,12 @@ class HomeScreen extends ConsumerWidget {
     final warItems = warAsync.valueOrNull ?? [];
     final shopItems = shopAsync.valueOrNull ?? [];
     final schedules = schedulesAsync.valueOrNull ?? [];
+    final vaultItems = vaultAsync.valueOrNull ?? [];
+
+    final maintenanceItems = vaultItems
+        .where((i) => i.category == 'maintenance' && !i.isCompleted && i.dueDate != null)
+        .toList();
+    maintenanceItems.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
 
     final userName = (user?.displayName.isNotEmpty == true)
         ? user!.displayName.split(' ').first
@@ -109,7 +118,7 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: colorScheme.surface,
       appBar: const AppHeader(title: 'Ev Asistanı'),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showQuickAddBottomSheet(context),
+        onPressed: () => _showQuickAddBottomSheet(context, ref),
         elevation: 4,
         highlightElevation: 8,
         backgroundColor: AppColors.primary,
@@ -174,6 +183,11 @@ class HomeScreen extends ConsumerWidget {
               ),
 
               const SizedBox(height: AppSpacing.xxl),
+
+              // ── Yaklaşan Periyodik Bakımlar ──────────────────────────────
+              _buildUpcomingMaintenanceSection(context, colorScheme, maintenanceItems),
+
+              if (maintenanceItems.isNotEmpty) const SizedBox(height: AppSpacing.xxl),
 
               // ── Yaklaşan Ödemeler Mini Kartı ──────────────────────────────
               _buildUpcomingPaymentsSection(context, colorScheme, schedules),
@@ -1032,7 +1046,109 @@ class HomeScreen extends ConsumerWidget {
 
   // ── 7. Hızlı Ekle Bottom Sheet ──────────────────────────────────────────────
 
-  void _showQuickAddBottomSheet(BuildContext context) {
+  Widget _buildUpcomingMaintenanceSection(
+    BuildContext context,
+    ColorScheme colorScheme,
+    List<VaultItemModel> maintenanceItems,
+  ) {
+    if (maintenanceItems.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.build_circle_outlined, size: 20, color: Color(0xFF2563EB)),
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  'Yaklaşan Periyodik Bakımlar',
+                  style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            Text(
+              '${maintenanceItems.length} Görev',
+              style: AppTypography.labelSmall.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: maintenanceItems.take(3).length,
+          separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+          itemBuilder: (context, index) {
+            final item = maintenanceItems[index];
+            return Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFF6FF),
+                borderRadius: AppRadius.borderLg,
+                border: Border.all(color: const Color(0xFFBFDBFE)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFDBEAFE),
+                      borderRadius: AppRadius.borderMd,
+                    ),
+                    child: const Icon(Icons.build_rounded, size: 20, color: Color(0xFF2563EB)),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.title,
+                          style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (item.description.isNotEmpty)
+                          Text(
+                            item.description,
+                            style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: AppRadius.borderFull,
+                      border: Border.all(color: const Color(0xFF93C5FD)),
+                    ),
+                    child: Text(
+                      item.remainingDaysText,
+                      style: AppTypography.labelSmall.copyWith(
+                        color: const Color(0xFF1E40AF),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  void _showQuickAddBottomSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1098,18 +1214,16 @@ class HomeScreen extends ConsumerWidget {
                     color: Color(0xFFE3F2FD),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.shield_outlined, color: Color(0xFF1E88E5)),
+                  child: const Icon(Icons.shopping_bag_outlined, color: Color(0xFF1E88E5)),
                 ),
                 title: Text(
-                  'Garanti Belgesi',
+                  'Alışveriş Listesine Ürün Ekle',
                   style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
-                subtitle: const Text('Elektronik veya ev eşyası garantisi'),
+                subtitle: const Text('Eksilen gıda, temizlik ve ev ihtiyaçları'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const WarrantyFormScreen()),
-                  );
+                  _showShoppingQuickAddBottomSheet(context, ref);
                 },
               ),
               const Divider(),
@@ -1121,19 +1235,87 @@ class HomeScreen extends ConsumerWidget {
                     color: Color(0xFFDCFCE7),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.add_card_rounded, color: AppColors.primary),
+                  child: const Icon(Icons.flash_on_rounded, color: AppColors.primary),
                 ),
                 title: Text(
-                  'Sabit Gider / Ödeme (PRO)',
+                  'Hızlı Harcama Ekle',
                   style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
-                subtitle: const Text('Kira, fatura veya üyelik takibi'),
+                subtitle: const Text('Ev cüzdanına hızlı harcama kaydı'),
                 onTap: () {
                   Navigator.pop(context);
-                  context.go(AppRoutes.finance);
+                  QuickAddExpenseBottomSheet.show(context);
                 },
               ),
               const SizedBox(height: AppSpacing.md),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showShoppingQuickAddBottomSheet(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        final bottomInset = MediaQuery.of(ctx).viewInsets.bottom;
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).colorScheme.surfaceContainerLowest,
+            borderRadius: AppRadius.borderTopXl,
+          ),
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.xl,
+            AppSpacing.lg,
+            AppSpacing.xl,
+            AppSpacing.xl + bottomInset,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(ctx).colorScheme.outlineVariant,
+                    borderRadius: AppRadius.borderFull,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                '🛒 Alışveriş Listesine Ürün Ekle',
+                style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              AppTextField(
+                controller: controller,
+                label: 'Ürün Adı',
+                hintText: 'Örn: Süt, Ekmek, Yumurta...',
+                autofocus: true,
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              PrimaryButton(
+                text: 'Listeye Ekle',
+                icon: Icons.add_shopping_cart_rounded,
+                onPressed: () async {
+                  final text = controller.text.trim();
+                  if (text.isEmpty) return;
+                  Navigator.pop(ctx);
+                  await ref.read(shoppingNotifierProvider.notifier).addItem(name: text);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('"$text" alışveriş listesine eklendi! 🛒')),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         );

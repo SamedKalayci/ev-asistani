@@ -74,6 +74,7 @@ class ExpirationModel {
     required this.expirationDate,
     required this.icon,
     required this.createdBy,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
     this.notes,
@@ -89,6 +90,7 @@ class ExpirationModel {
   final IconData icon;
 
   final String createdBy;
+  final String? imageUrl;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -130,6 +132,7 @@ class ExpirationModel {
         fontFamily: 'MaterialIcons',
       ),
       createdBy: (map['createdBy'] as String?) ?? '',
+      imageUrl: map['imageUrl'] as String?,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate(),
       notes: map['notes'] as String?,
@@ -144,6 +147,7 @@ class ExpirationModel {
       'expirationDate': Timestamp.fromDate(expirationDate),
       'iconCodePoint': icon.codePoint,
       'createdBy': createdBy,
+      'imageUrl': imageUrl,
       'createdAt': createdAt != null
           ? Timestamp.fromDate(createdAt!)
           : FieldValue.serverTimestamp(),
@@ -162,6 +166,7 @@ class ExpirationModel {
     DateTime? expirationDate,
     IconData? icon,
     String? createdBy,
+    String? imageUrl,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? notes,
@@ -174,6 +179,7 @@ class ExpirationModel {
       expirationDate: expirationDate ?? this.expirationDate,
       icon: icon ?? this.icon,
       createdBy: createdBy ?? this.createdBy,
+      imageUrl: imageUrl ?? this.imageUrl,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       notes: notes ?? this.notes,

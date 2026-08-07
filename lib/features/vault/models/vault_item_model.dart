@@ -138,4 +138,40 @@ class VaultItemModel {
           : FieldValue.serverTimestamp(),
     };
   }
+
+  VaultItemModel copyWith({
+    String? id,
+    String? familyId,
+    String? category,
+    String? subCategory,
+    String? title,
+    String? description,
+    String? fileUrl,
+    String? phoneNumber,
+    DateTime? dueDate,
+    bool? isCompleted,
+    String? wifiName,
+    String? wifiPassword,
+    int? iconCode,
+    String? createdBy,
+    DateTime? createdAt,
+  }) {
+    return VaultItemModel(
+      id: id ?? this.id,
+      familyId: familyId ?? this.familyId,
+      category: category ?? this.category,
+      subCategory: subCategory ?? this.subCategory,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      fileUrl: fileUrl ?? this.fileUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      dueDate: dueDate ?? this.dueDate,
+      isCompleted: isCompleted ?? this.isCompleted,
+      wifiName: wifiName ?? this.wifiName,
+      wifiPassword: wifiPassword ?? this.wifiPassword,
+      iconCode: iconCode ?? this.iconCode,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

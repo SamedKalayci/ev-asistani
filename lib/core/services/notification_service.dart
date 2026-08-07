@@ -5,11 +5,12 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../features/expiration/models/expiration_model.dart';
+import '../../features/vault/models/vault_item_model.dart';
 import '../../features/warranty/models/warranty_model.dart';
 
 /// Cihaz içi yerel bildirimleri (Local Notifications) yöneten singleton servis.
 ///
-/// SKT (Son Kullanma Tarihi) ve Garanti süresi bitişleri için otomatik
+/// SKT (Son Kullanma Tarihi), Garanti ve Periyodik Bakım bitişleri için otomatik
 /// zamanlanmış bildirimler kurar ve temizler.
 class NotificationService {
   NotificationService._();
@@ -31,12 +32,20 @@ class NotificationService {
   static const String _warrantyChannelDesc =
       'Garanti süresi dolmak üzere olan ürünler için zamanlanmış uyarılar.';
 
+  static const String _maintenanceChannelId = 'maintenance_channel';
+  static const String _maintenanceChannelName = 'Periyodik Bakım Uyarıları';
+  static const String _maintenanceChannelDesc =
+      'Yaklaşan periyodik bakımlar için zamanlanmış uyarılar.';
+
   // ── Gün Offset Kuralları ──────────────────────────────────────────────────
   /// SKT Bildirim Kuralları: 7, 5, 3, 2, 1 ve 0. gün (SKT Dolduğu Gün)
   static const List<int> expirationNotificationOffsets = [7, 5, 3, 2, 1, 0];
 
   /// Garanti Bildirim Kuralları: 30, 15, 7 ve 0. gün (Garanti Bittiği Gün)
   static const List<int> warrantyNotificationOffsets = [30, 15, 7, 0];
+
+  /// Periyodik Bakım Bildirim Kuralları: 7, 3, 1 ve 0. gün
+  static const List<int> maintenanceNotificationOffsets = [7, 3, 1, 0];
 
   // ── Initialisation ────────────────────────────────────────────────────────
 
@@ -96,6 +105,14 @@ class NotificationService {
           _warrantyChannelId,
           _warrantyChannelName,
           description: _warrantyChannelDesc,
+          importance: Importance.high,
+        ),
+      );
+      await androidPlugin.createNotificationChannel(
+        const AndroidNotificationChannel(
+          _maintenanceChannelId,
+          _maintenanceChannelName,
+          description: _maintenanceChannelDesc,
           importance: Importance.high,
         ),
       );
@@ -221,6 +238,46 @@ class NotificationService {
     if (itemId.isEmpty) return;
     for (final offset in warrantyNotificationOffsets) {
       final notificationId = generateNotificationId(itemId, offset);
+      await _notificationsPlugin.cancel(notificationId);
+    }
+  }
+
+  // ── Periyodik Bakım Bildirimleri ─────────────────────────────────────────
+
+  /// Bir [VaultItemModel] periyodik bakım ögesi için zamanlanmış bildirimleri kurar.
+  Future<void> scheduleMaintenanceNotifications(VaultItemModel item) async {
+    if (item.dueDate == null) return;
+
+    // Önceki zamanlanmış bildirimleri temizle
+    await cancelMaintenanceNotifications(item.id);
+
+    for (final offset in maintenanceNotificationOffsets) {
+      final scheduledDate = _calculateScheduledDate(item.dueDate!, offset);
+
+      if (scheduledDate != null) {
+        final notificationId = generateNotificationId('maint_${item.id}', offset);
+        final bodyText = offset == 0
+            ? '${item.title} için bakım günü bugün!'
+            : '${item.title} periyodik bakıma $offset gün kaldı.';
+
+        await _scheduleNotification(
+          id: notificationId,
+          title: '🛠️ Periyodik Bakım Hatırlatıcısı',
+          body: bodyText,
+          scheduledDate: scheduledDate,
+          channelId: _maintenanceChannelId,
+          channelName: _maintenanceChannelName,
+          channelDescription: _maintenanceChannelDesc,
+          payload: 'maintenance:${item.id}',
+        );
+      }
+    }
+  }
+
+  /// Belirtilen periyodik bakım ögesinin tüm zamanlanmış bildirimlerini iptal eder.
+  Future<void> cancelMaintenanceNotifications(String itemId) async {
+    for (final offset in maintenanceNotificationOffsets) {
+      final notificationId = generateNotificationId('maint_$itemId', offset);
       await _notificationsPlugin.cancel(notificationId);
     }
   }

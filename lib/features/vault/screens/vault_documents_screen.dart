@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
@@ -18,6 +19,62 @@ import '../widgets/vault_document_form_bottom_sheet.dart';
 /// 📄 Belgeler & Garantiler Detay Ekranı.
 class VaultDocumentsScreen extends ConsumerWidget {
   const VaultDocumentsScreen({super.key});
+
+  /// Belge açma / görüntüleme işlevi.
+  Future<void> _handleOpenDocument(BuildContext context, VaultItemModel item) async {
+    final fileUrl = item.fileUrl;
+    if (fileUrl == null || fileUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bu belgeye ait ekli bir dosya bulunmuyor.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    try {
+      if (fileUrl.startsWith('http')) {
+        final Uri uri = Uri.parse(fileUrl);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } else {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Belge bağlantısı açılamadı.'),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+        }
+      } else {
+        final file = File(fileUrl);
+        if (await file.exists()) {
+          final Uri fileUri = Uri.file(file.path);
+          await launchUrl(fileUri);
+        } else {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cihazdaki dosya bulunamadı veya silinmiş.'),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Belge açılırken hata oluştu: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
 
   /// Belge paylaşma / indirme işlevi.
   Future<void> _handleShare(BuildContext context, VaultItemModel item) async {
@@ -228,6 +285,15 @@ class VaultDocumentsScreen extends ConsumerWidget {
                 ],
               ),
             ),
+
+            // Aç / Görüntüle Butonu
+            if (fileUrl != null && fileUrl.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.open_in_new_rounded, size: 20),
+                tooltip: 'Aç / Görüntüle',
+                color: colorScheme.primary,
+                onPressed: () => _handleOpenDocument(context, item),
+              ),
 
             // Paylaş / İndir Butonu
             IconButton(

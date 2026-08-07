@@ -397,6 +397,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
         statusText: item.statusText,
         statusColor: item.statusColor,
         icon: item.icon,
+        imageUrl: item.imageUrl,
         showStatusLine: true,
         onTap: () => _openEditForm(item),
         bottomAction: item.status == ExpirationStatus.expired

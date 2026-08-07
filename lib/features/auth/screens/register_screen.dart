@@ -26,7 +26,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _isObscure = true;
+  bool _isPasswordObscure = true;
+  bool _isConfirmPasswordObscure = true;
   bool _isLoading = false;
 
   @override
@@ -56,12 +57,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Hesabınız başarıyla oluşturuldu! 🎉'),
+            content: Text(
+              'Hesabınız başarıyla oluşturuldu! Doğrulama e-postası gönderildi. 📧',
+            ),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
         );
-        context.go(AppRoutes.home);
+        context.go(AppRoutes.emailVerification);
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
@@ -187,7 +190,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         if (v == null || v.trim().isEmpty) {
                           return 'E-posta adresi zorunludur.';
                         }
-                        if (!v.contains('@') || !v.contains('.')) {
+                        final emailRegex = RegExp(
+                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                        if (!emailRegex.hasMatch(v.trim())) {
                           return 'Geçerli bir e-posta adresi girin.';
                         }
                         return null;
@@ -201,17 +206,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       label: 'Şifre',
                       hintText: 'En az 6 karakter',
                       controller: _passwordController,
-                      obscureText: _isObscure,
+                      obscureText: _isPasswordObscure,
                       textInputAction: TextInputAction.next,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isObscure
+                          _isPasswordObscure
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
                           color: colorScheme.onSurfaceVariant,
                         ),
-                        onPressed: () =>
-                            setState(() => _isObscure = !_isObscure),
+                        onPressed: () => setState(
+                            () => _isPasswordObscure = !_isPasswordObscure),
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
@@ -231,9 +236,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       label: 'Şifre Tekrarı',
                       hintText: 'Şifrenizi doğrulayın',
                       controller: _confirmPasswordController,
-                      obscureText: _isObscure,
+                      obscureText: _isConfirmPasswordObscure,
                       textInputAction: TextInputAction.done,
                       onSubmitted: (_) => _register(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isConfirmPasswordObscure
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        onPressed: () => setState(() =>
+                            _isConfirmPasswordObscure =
+                                !_isConfirmPasswordObscure),
+                      ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
                           return 'Şifre tekrarı zorunludur.';

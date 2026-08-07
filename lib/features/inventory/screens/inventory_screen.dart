@@ -11,6 +11,9 @@ import '../../expiration/screens/expiration_screen.dart';
 import '../../vault/screens/vault_screen.dart';
 import '../../warranty/screens/warranty_screen.dart';
 
+/// Envanter sekmelerinin (0: Son Kullanma, 1: Garantiler, 2: Kasası) durumunu yöneten provider.
+final inventoryTabProvider = StateProvider<int>((ref) => 0);
+
 /// Envanter Ana Ekranı — 3'lü Top TabBar ile Son Kullanma, Garantiler ve Ev Kasası'nı tek ekranda birleştirir.
 class InventoryScreen extends ConsumerStatefulWidget {
   /// Başlangıç sekme indeksi (0: Son Kullanma, 1: Garantiler, 2: Kasası)
@@ -32,12 +35,16 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   @override
   void initState() {
     super.initState();
+    final initial = ref.read(inventoryTabProvider);
     _tabController = TabController(
       length: 3,
       vsync: this,
-      initialIndex: widget.initialTabIndex.clamp(0, 2),
+      initialIndex: initial.clamp(0, 2),
     );
     _tabController.addListener(() {
+      if (mounted && _tabController.indexIsChanging) {
+        ref.read(inventoryTabProvider.notifier).state = _tabController.index;
+      }
       if (mounted) setState(() {});
     });
   }
@@ -53,6 +60,11 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final hasFamily = ref.watch(hasRealFamilyProvider);
+    final currentTab = ref.watch(inventoryTabProvider);
+
+    if (_tabController.index != currentTab) {
+      _tabController.animateTo(currentTab.clamp(0, 2));
+    }
 
     if (!hasFamily) {
       return Scaffold(

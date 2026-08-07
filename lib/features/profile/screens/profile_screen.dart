@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/providers/ad_provider.dart';
+import '../../../core/providers/purchase_provider.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
@@ -105,30 +105,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       try {
         final user = ref.read(firebaseAuthProvider).currentUser;
         if (user != null) {
-          final firestoreService = ref.read(firestoreServiceProvider);
-          // Remove from family if exists
           final currentFamily = ref.read(currentFamilyProvider).valueOrNull;
-          if (currentFamily != null) {
-            await firestoreService.updateFamily(currentFamily.id, {
-              'memberUids': FieldValue.arrayRemove([user.uid]),
-            });
-          }
-          
-          // Delete users/userId document
-          await firestoreService.usersRef.doc(user.uid).delete();
-          
-          // Delete Firebase Auth User
-          await user.delete();
-          
-          // Sign out state clear
-          await ref.read(authRepositoryProvider).signOut();
+          await ref.read(authRepositoryProvider).deleteAccount(
+                uid: user.uid,
+                currentFamily: currentFamily,
+              );
         }
       } catch (e) {
         if (e.toString().contains('requires-recent-login')) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Güvenlik nedeniyle hesabınızı silmek için lütfen çıkış yapıp tekrar giriş yapın.'),
+                content: Text(
+                  'Güvenlik nedeniyle hesabınızı silmek için lütfen çıkış yapıp tekrar giriş yapın.',
+                ),
                 backgroundColor: AppColors.error,
                 duration: Duration(seconds: 5),
               ),
@@ -239,42 +229,53 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       final familyName = result['name']!;
       final familyRole = result['role']!;
 
-      // Ödüllü Reklam İzletme Akışı
+      final isPro = ref.read(isProUserProvider);
+
+      Future<void> executeCreate() async {
+        if (!mounted) return;
+        await ref
+            .read(familyNotifierProvider.notifier)
+            .createFamily(familyName);
+            
+        // Rolü güncelle
+        final user = ref.read(userProvider).valueOrNull;
+        if (user != null) {
+          await ref.read(firestoreServiceProvider).updateUserProfile(user.uid, {'familyRole': familyRole});
+        }
+
+        final state = ref.read(familyNotifierProvider);
+        if (state.hasError && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Hata: ${state.error}'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
+
+      // Pro üye ise reklamı atla ve doğrudan aileyi oluştur
+      if (isPro) {
+        await executeCreate();
+        return;
+      }
+
+      // Ücretsiz üye için Ödüllü Reklam zorunlu akışı
       await ref.read(adServiceProvider).showRewardedAd(
         onRewardEarned: () async {
-          if (!mounted) return;
-          await ref
-              .read(familyNotifierProvider.notifier)
-              .createFamily(familyName);
-              
-          // Rolü güncelle
-          final user = ref.read(userProvider).valueOrNull;
-          if (user != null) {
-            await ref.read(firestoreServiceProvider).updateUserProfile(user.uid, {'familyRole': familyRole});
-          }
-
-          final state = ref.read(familyNotifierProvider);
-          if (state.hasError && mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Hata: ${state.error}'),
-                backgroundColor: AppColors.error,
-              ),
-            );
-          }
+          await executeCreate();
         },
-        onAdFailed: () async {
-          // Reklam yüklenemese dahi kullanıcıyı mağdur etmemek için işlemi tamamla
+        onAdFailed: () {
           if (!mounted) return;
-          await ref
-              .read(familyNotifierProvider.notifier)
-              .createFamily(familyName);
-              
-          // Rolü güncelle
-          final user = ref.read(userProvider).valueOrNull;
-          if (user != null) {
-            await ref.read(firestoreServiceProvider).updateUserProfile(user.uid, {'familyRole': familyRole});
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Reklam tamamlanamadı veya yüklenemedi. Aile oluşturabilmek için reklamı sonuna kadar izlemeniz gerekmektedir.',
+              ),
+              backgroundColor: AppColors.error,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
         },
       );
     }
@@ -534,12 +535,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 subtitle: 'Hesabınızdan güvenli bir şekilde çıkış yapın',
                 iconColor: AppColors.error,
                 onTap: () async {
+                  final isAnonymous =
+                      ref.read(firebaseAuthProvider).currentUser?.isAnonymous ==
+                          true;
                   final confirmed = await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text('Çıkış Yap'),
-                      content: const Text(
-                        'Hesabınızdan çıkış yapmak istediğinize emin misiniz?',
+                      title: Text(
+                        isAnonymous
+                            ? 'Anonim Hesaptan Çıkış Yap'
+                            : 'Çıkış Yap',
+                      ),
+                      content: Text(
+                        isAnonymous
+                            ? 'Tüm verileriniz ve aile erişiminiz kaybolacaktır. Hesabınızdan çıkış yapmak istediğinize emin misiniz?'
+                            : 'Hesabınızdan çıkış yapmak istediğinize emin misiniz?',
                       ),
                       actions: [
                         TextButton(

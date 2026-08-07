@@ -29,6 +29,7 @@ enum FinanceType {
 
 /// Finans kategorisi: 6 Ana Ev Cüzdanı Kategorisi + Genel Bakış Kategorileri.
 enum FinanceCategory {
+  diningOut,
   kitchenGrocery,
   homeBills,
   shoppingPersonal,
@@ -51,6 +52,7 @@ enum FinanceCategory {
   walletTotal;
 
   static const List<FinanceCategory> walletCategories = [
+    diningOut,
     kitchenGrocery,
     homeBills,
     shoppingPersonal,
@@ -61,6 +63,8 @@ enum FinanceCategory {
 
   String get label {
     switch (this) {
+      case FinanceCategory.diningOut:
+        return 'Yeme / İçme';
       case FinanceCategory.kitchenGrocery:
       case FinanceCategory.food:
       case FinanceCategory.grocery:
@@ -91,6 +95,8 @@ enum FinanceCategory {
 
   IconData get icon {
     switch (this) {
+      case FinanceCategory.diningOut:
+        return Icons.flatware_rounded;
       case FinanceCategory.kitchenGrocery:
       case FinanceCategory.food:
       case FinanceCategory.grocery:
@@ -122,6 +128,9 @@ enum FinanceCategory {
   static FinanceCategory fromString(String? value) {
     if (value == null) return FinanceCategory.other;
     switch (value.toLowerCase()) {
+      case 'diningout':
+      case 'dining':
+        return FinanceCategory.diningOut;
       case 'kitchengrocery':
       case 'food':
       case 'grocery':

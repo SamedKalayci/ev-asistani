@@ -8,7 +8,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../router/app_router.dart';
@@ -41,6 +40,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   // ── E-posta ile Giriş Yap ───────────────────────────────────────────────
 
+  // ── E-posta ile Giriş Yap ───────────────────────────────────────────────
+
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -48,10 +49,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     try {
       final authRepo = ref.read(authRepositoryProvider);
-      await authRepo.signInWithEmailAndPassword(
+      final credential = await authRepo.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+
+      final user = credential.user;
+      if (user != null && !user.emailVerified) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'E-posta adresiniz henüz doğrulanmamış. Lütfen e-postanıza gelen doğrulama bağlantısını onaylayın.',
+              ),
+              backgroundColor: AppColors.tertiary,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+          context.go(AppRoutes.emailVerification);
+        }
+        return;
+      }
 
       if (mounted) {
         context.go(AppRoutes.home);
@@ -138,7 +156,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final authRepo = ref.read(authRepositoryProvider);
       final credential = await authRepo.signInWithGoogle();
 
-      if (credential != null && mounted) {
+      if (credential == null) {
+        // Kullanıcı seçimi iptal etti veya çıkış yaptı
+        return;
+      }
+
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Google hesabınızla giriş yapıldı. 👋'),
@@ -160,9 +183,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final message = e.toString().toLowerCase();
+        if (message.contains('cancel') || message.contains('12501')) {
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Hata: $e'),
+            content: Text('Google girişi sırasında bir hata oluştu: $e'),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
           ),
@@ -367,8 +394,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         if (v == null || v.trim().isEmpty) {
                           return 'E-posta adresi zorunludur.';
                         }
-                        if (!v.contains('@') || !v.contains('.')) {
-                          return 'Lütfen geçerli bir e-posta girin.';
+                        final emailRegex = RegExp(
+                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                        if (!emailRegex.hasMatch(v.trim())) {
+                          return 'Lütfen geçerli bir e-posta adresi girin.';
                         }
                         return null;
                       },

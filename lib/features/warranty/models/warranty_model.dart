@@ -101,6 +101,7 @@ class WarrantyModel {
     required this.createdBy,
     this.hasInvoice = false,
     this.invoiceNumber,
+    this.invoiceUrl,
     this.notes,
     this.createdAt,
     this.updatedAt,
@@ -117,6 +118,7 @@ class WarrantyModel {
   final String createdBy;
   final bool hasInvoice;
   final String? invoiceNumber;
+  final String? invoiceUrl;
   final String? notes;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -165,6 +167,7 @@ class WarrantyModel {
       createdBy: (map['createdBy'] as String?) ?? '',
       hasInvoice: (map['hasInvoice'] as bool?) ?? false,
       invoiceNumber: map['invoiceNumber'] as String?,
+      invoiceUrl: map['invoiceUrl'] as String?,
       notes: map['notes'] as String?,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate(),
@@ -183,6 +186,7 @@ class WarrantyModel {
       'createdBy': createdBy,
       'hasInvoice': hasInvoice,
       'invoiceNumber': invoiceNumber,
+      'invoiceUrl': invoiceUrl,
       'notes': notes,
       'createdAt': createdAt != null
           ? Timestamp.fromDate(createdAt!)
@@ -205,6 +209,7 @@ class WarrantyModel {
     String? createdBy,
     bool? hasInvoice,
     String? invoiceNumber,
+    String? invoiceUrl,
     String? notes,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -221,6 +226,7 @@ class WarrantyModel {
       createdBy: createdBy ?? this.createdBy,
       hasInvoice: hasInvoice ?? this.hasInvoice,
       invoiceNumber: invoiceNumber ?? this.invoiceNumber,
+      invoiceUrl: invoiceUrl ?? this.invoiceUrl,
       notes: notes ?? this.notes,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/providers/user_provider.dart';
+import '../features/auth/screens/email_verification_screen.dart';
 import '../features/auth/screens/login_screen.dart';
 import '../features/auth/screens/register_screen.dart';
 import '../features/expiration/screens/expiration_form_screen.dart';
@@ -62,13 +63,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       final user = authState.valueOrNull;
       final isLoggedIn = user != null;
+      final isEmailVerificationRoute =
+          state.matchedLocation == AppRoutes.emailVerification;
       final isAuthRoute = state.matchedLocation == AppRoutes.login ||
-          state.matchedLocation == AppRoutes.register;
+          state.matchedLocation == AppRoutes.register ||
+          isEmailVerificationRoute;
       final isSplashRoute = state.matchedLocation == AppRoutes.splash;
 
       // Splash bitti ve giriş yapılmamışsa ve auth rotasında değilse -> /giris
       if (!isLoggedIn && !isAuthRoute) {
         return AppRoutes.login;
+      }
+
+      // Splash bitti ve giriş yapılmışsa, email verification rotasındaysa orada kal
+      if (isLoggedIn && isEmailVerificationRoute) {
+        return null;
       }
 
       // Splash bitti ve giriş yapılmışsa, auth veya splash rotasındaysa -> /
@@ -90,6 +99,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.register,
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.emailVerification,
+        builder: (context, state) => const EmailVerificationScreen(),
       ),
 
       // ── StatefulShellRoute: Her sekmenin kendi bağımsız geçmişini yönetir ──
@@ -210,6 +223,7 @@ class AppRoutes {
   static const String splash = '/splash';
   static const String login = '/giris';
   static const String register = '/kayit';
+  static const String emailVerification = '/email-dogrulama';
   static const String home = '/';
   static const String inventory = '/envanter';
   static const String expiration = '/son-kullanma';

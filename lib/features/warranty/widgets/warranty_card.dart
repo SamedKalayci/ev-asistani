@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
@@ -195,6 +196,38 @@ class WarrantyCard extends StatelessWidget {
                           'No: ${item.invoiceNumber}',
                           style: AppTypography.labelSmall.copyWith(
                             color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                      if (item.invoiceUrl != null && item.invoiceUrl!.isNotEmpty) ...[
+                        const Spacer(),
+                        InkWell(
+                          onTap: () async {
+                            final Uri uri = Uri.parse(item.invoiceUrl!);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryContainer.withValues(alpha: 0.4),
+                              borderRadius: AppRadius.borderXs,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.open_in_new_rounded, size: 12, color: AppColors.primary),
+                                const SizedBox(width: 3),
+                                Text(
+                                  'Faturayı Aç',
+                                  style: AppTypography.labelSmall.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

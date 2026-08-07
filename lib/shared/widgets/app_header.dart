@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/providers/user_provider.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
-import '../../features/profile/widgets/profile_edit_bottom_sheet.dart';
-import '../models/user_model.dart';
+import '../../router/app_router.dart';
 
 /// Her ekranda kullanılacak ortak üst başlık (AppHeader) bileşeni.
 /// Minimalist tasarım dili, dairesel profil avatarı ve bildirim zili/badge desteğine sahip.
@@ -100,7 +99,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
       );
     } else if (effectiveLeading == null && showUserAvatar) {
       effectiveLeading = GestureDetector(
-        onTap: onAvatarTap ?? () => ProfileEditBottomSheet.show(context),
+        onTap: onAvatarTap ?? () => context.go(AppRoutes.home),
         child: Container(
           decoration: const BoxDecoration(
             shape: BoxShape.circle,

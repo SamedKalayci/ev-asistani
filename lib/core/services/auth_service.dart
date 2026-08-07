@@ -84,24 +84,36 @@ class AuthService {
     final user = _auth.currentUser;
     if (user == null) return null;
 
-    if (kIsWeb) {
-      final googleProvider = GoogleAuthProvider();
-      googleProvider.setCustomParameters({
-        'prompt': 'select_account',
-      });
-      return user.linkWithPopup(googleProvider);
-    } else {
-      final googleSignIn = GoogleSignIn();
-      await googleSignIn.signOut();
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return null;
+    try {
+      if (kIsWeb) {
+        final googleProvider = GoogleAuthProvider();
+        googleProvider.setCustomParameters({
+          'prompt': 'select_account',
+        });
+        return await user.linkWithPopup(googleProvider);
+      } else {
+        final googleSignIn = GoogleSignIn();
+        try {
+          await googleSignIn.signOut();
+        } catch (_) {}
+        final googleUser = await googleSignIn.signIn();
+        if (googleUser == null) return null;
 
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      return user.linkWithCredential(credential);
+        final googleAuth = await googleUser.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        return await user.linkWithCredential(credential);
+      }
+    } catch (e) {
+      final message = e.toString().toLowerCase();
+      if (message.contains('cancel') ||
+          message.contains('12501') ||
+          message.contains('popup_closed')) {
+        return null;
+      }
+      rethrow;
     }
   }
 
@@ -111,24 +123,36 @@ class AuthService {
   ///
   /// Web (`kIsWeb`) için `signInWithPopup`, Mobil için `GoogleSignIn` credential ile `signInWithCredential` kullanır.
   Future<UserCredential?> signInWithGoogle() async {
-    if (kIsWeb) {
-      final googleProvider = GoogleAuthProvider();
-      googleProvider.setCustomParameters({
-        'prompt': 'select_account',
-      });
-      return _auth.signInWithPopup(googleProvider);
-    } else {
-      final googleSignIn = GoogleSignIn();
-      await googleSignIn.signOut();
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return null;
+    try {
+      if (kIsWeb) {
+        final googleProvider = GoogleAuthProvider();
+        googleProvider.setCustomParameters({
+          'prompt': 'select_account',
+        });
+        return await _auth.signInWithPopup(googleProvider);
+      } else {
+        final googleSignIn = GoogleSignIn();
+        try {
+          await googleSignIn.signOut();
+        } catch (_) {}
+        final googleUser = await googleSignIn.signIn();
+        if (googleUser == null) return null;
 
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      return _auth.signInWithCredential(credential);
+        final googleAuth = await googleUser.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        return await _auth.signInWithCredential(credential);
+      }
+    } catch (e) {
+      final message = e.toString().toLowerCase();
+      if (message.contains('cancel') ||
+          message.contains('12501') ||
+          message.contains('popup_closed')) {
+        return null;
+      }
+      rethrow;
     }
   }
 

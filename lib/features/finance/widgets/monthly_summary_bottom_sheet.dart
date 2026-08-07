@@ -75,14 +75,34 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
           .where((i) => i.dueDate == null || (i.dueDate!.year == selectedMonth.year && i.dueDate!.month == selectedMonth.month))
           .toList();
     } else if (_selectedPeriodIndex == 2) {
-      // Haftalık (Son 7 gün)
-      final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-      filteredSchedules = schedules.where((s) => s.date.isAfter(startOfWeek)).toList();
-      filteredWalletExpenses = walletItems.where((i) => i.dueDate != null && i.dueDate!.isAfter(startOfWeek)).toList();
+      // Haftalık (Sadece Bu Hafta: Pazartesi - Pazar)
+      final today = DateTime(now.year, now.month, now.day);
+      final startOfWeek = today.subtract(Duration(days: today.weekday - 1));
+      final endOfWeek = startOfWeek.add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
+
+      filteredSchedules = schedules.where((s) {
+        final sDate = DateTime(s.date.year, s.date.month, s.date.day);
+        return !sDate.isBefore(startOfWeek) && !sDate.isAfter(endOfWeek);
+      }).toList();
+
+      filteredWalletExpenses = walletItems.where((i) {
+        if (i.dueDate == null) return false;
+        final iDate = DateTime(i.dueDate!.year, i.dueDate!.month, i.dueDate!.day);
+        return !iDate.isBefore(startOfWeek) && !iDate.isAfter(endOfWeek);
+      }).toList();
     } else {
       // Günlük (Bugün)
-      filteredSchedules = schedules.where((s) => s.date.year == now.year && s.date.month == now.month && s.date.day == now.day).toList();
-      filteredWalletExpenses = walletItems.where((i) => i.dueDate != null && i.dueDate!.year == now.year && i.dueDate!.month == now.month && i.dueDate!.day == now.day).toList();
+      final today = DateTime(now.year, now.month, now.day);
+      filteredSchedules = schedules.where((s) {
+        final sDate = DateTime(s.date.year, s.date.month, s.date.day);
+        return sDate.isAtSameMomentAs(today);
+      }).toList();
+
+      filteredWalletExpenses = walletItems.where((i) {
+        if (i.dueDate == null) return false;
+        final iDate = DateTime(i.dueDate!.year, i.dueDate!.month, i.dueDate!.day);
+        return iDate.isAtSameMomentAs(today);
+      }).toList();
     }
 
     final incomeSchedules = filteredSchedules.where((s) => s.isIncome).toList();
@@ -106,8 +126,8 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
     
     // Sort by date (descending)
     recentTransactions.sort((a, b) {
-      final dateA = (a is PaymentScheduleModel) ? a.date : ((a as FinanceItemModel).dueDate ?? (a as FinanceItemModel).createdAt ?? now);
-      final dateB = (b is PaymentScheduleModel) ? b.date : ((b as FinanceItemModel).dueDate ?? (b as FinanceItemModel).createdAt ?? now);
+      final dateA = (a is PaymentScheduleModel) ? a.date : ((a as dynamic).dueDate ?? (a as dynamic).createdAt ?? now);
+      final dateB = (b is PaymentScheduleModel) ? b.date : ((b as dynamic).dueDate ?? (b as dynamic).createdAt ?? now);
       return dateB.compareTo(dateA); // newest first
     });
 
@@ -120,35 +140,57 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
     if (_selectedPeriodIndex == 3) periodTitle = "Günlük Net Durum";
 
     return Container(
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xl),
+      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.80),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colorScheme.outlineVariant,
-                  borderRadius: AppRadius.borderFull,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Üst Sürükleme Çubuğu & Kapatma (X) Butonu ──
+          Row(
+            children: [
+              const SizedBox(width: 40), // Kapat butonuna simetri sağlamak için
+              Expanded(
+                child: Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: colorScheme.outlineVariant,
+                      borderRadius: AppRadius.borderFull,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: AppSpacing.md),
+              IconButton(
+                icon: const Icon(Icons.close_rounded),
+                onPressed: () => Navigator.pop(context),
+                tooltip: 'Kapat',
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xs),
 
-            Text(
-              '📊 Finansal Durum',
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSpacing.lg),
+          Text(
+            '📊 Finansal Durum',
+            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.md),
+
+          // ── İçerik Alanı (Kendi içinde kaydırılabilir) ──
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
 
             // ── Dönem Filtresi (SegmentedButton) ─────────────────────────
             SegmentedButton<int>(
@@ -367,6 +409,9 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
           ],
         ),
       ),
+    ),
+  ],
+),
     );
   }
 

@@ -90,8 +90,8 @@ class ShoppingNotifier extends AsyncNotifier<void> {
       );
       await _repo.addItem(item);
       
-      // Özellik bazlı geçiş reklamı tetikleyicisi (5. ve 12. eklemelerde)
-      await ref.read(adServiceProvider).handleFeatureAdTrigger('shopping_add_count', [5, 12]);
+      // Oturum bazlı döngüsel geçiş reklamı (her 5 öge eklemede bir, oturumda sıfırlanır)
+      await ref.read(adServiceProvider).handleSessionFeatureAdTrigger('shopping_add_count', 5);
     });
   }
 

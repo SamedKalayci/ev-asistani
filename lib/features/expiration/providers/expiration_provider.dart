@@ -86,6 +86,7 @@ class ExpirationNotifier extends AsyncNotifier<void> {
     required String location,
     required DateTime expirationDate,
     required int iconCodePoint,
+    String? imageUrl,
     String? notes,
   }) async {
     state = const AsyncLoading();
@@ -109,14 +110,15 @@ class ExpirationNotifier extends AsyncNotifier<void> {
         expirationDate: expirationDate,
         icon: _codePointToIcon(iconCodePoint),
         createdBy: uid,
+        imageUrl: imageUrl,
         notes: notes,
       );
       final docId = await _repo.addItem(item);
       final newItem = item.copyWith(id: docId);
       await _notificationService.scheduleExpirationNotifications(newItem);
 
-      // Özellik bazlı geçiş reklamı tetikleyicisi (3. ve 7. eklemelerde)
-      await ref.read(adServiceProvider).handleFeatureAdTrigger('expiration_add_count', [3, 7]);
+      // Oturum bazlı döngüsel geçiş reklamı (her 5 ürün eklemede bir)
+      await ref.read(adServiceProvider).handleSessionFeatureAdTrigger('expiration_add_count', 5);
     });
   }
 

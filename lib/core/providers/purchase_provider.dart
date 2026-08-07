@@ -25,6 +25,9 @@ final isProUserProvider = Provider<bool>((ref) {
       : false;
 
   final firestorePro = ref.watch(isPremiumProvider);
+  final effective = revenueCatPro || firestorePro;
 
-  return revenueCatPro || firestorePro;
+  ref.read(adServiceProvider).setPremium(effective);
+
+  return effective;
 });

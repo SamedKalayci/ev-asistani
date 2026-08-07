@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
@@ -68,6 +69,23 @@ class _VaultDocumentFormBottomSheetState
 
   Future<void> _pickImage(ImageSource source) async {
     try {
+      if (!kIsWeb && source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isDenied || status.isPermanentlyDenied) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Kamera izni verilmedi. Fotoğraf çekebilmek için lütfen kamera iznini onaylayın.',
+                ),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+          return;
+        }
+      }
+
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(
         source: source,
@@ -83,10 +101,13 @@ class _VaultDocumentFormBottomSheetState
           _pickedFileName = pickedFile.name;
         });
       }
-    } catch (_) {
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Görsel seçilemedi.')),
+          SnackBar(
+            content: Text('Görsel seçilirken hata oluştu: $e'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     }
@@ -107,10 +128,13 @@ class _VaultDocumentFormBottomSheetState
           _pickedFileName = picked.name;
         });
       }
-    } catch (_) {
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Dosya seçilemedi.')),
+          SnackBar(
+            content: Text('Dosya seçilirken hata oluştu: $e'),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     }

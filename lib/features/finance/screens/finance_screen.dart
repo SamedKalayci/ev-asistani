@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/providers/ad_provider.dart';
 import '../../../core/providers/purchase_provider.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_radius.dart';
@@ -141,46 +140,53 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
               ),
             ),
 
-            // ── Genel Ay Seçici & "📊 Özet Gör" Butonu Barı ──
+            // ── Genel Ay Seçici & "Özet Gör" Butonu Barı ──
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.chevron_left_rounded),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () {
-                          ref.read(selectedMonthProvider.notifier).state =
-                              DateTime(selectedMonth.year, selectedMonth.month - 1);
-                        },
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.chevron_left_rounded),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () {
+                              ref.read(selectedMonthProvider.notifier).state =
+                                  DateTime(selectedMonth.year, selectedMonth.month - 1);
+                            },
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          Text(
+                            '${_getFullMonthName(selectedMonth.month)} ${selectedMonth.year}',
+                            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          IconButton(
+                            icon: const Icon(Icons.chevron_right_rounded),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () {
+                              ref.read(selectedMonthProvider.notifier).state =
+                                  DateTime(selectedMonth.year, selectedMonth.month + 1);
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: AppSpacing.xs),
-                      Text(
-                        '${_getFullMonthName(selectedMonth.month)} ${selectedMonth.year}',
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: AppSpacing.xs),
-                      IconButton(
-                        icon: const Icon(Icons.chevron_right_rounded),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () {
-                          ref.read(selectedMonthProvider.notifier).state =
-                              DateTime(selectedMonth.year, selectedMonth.month + 1);
-                        },
-                      ),
-                    ],
+                    ),
                   ),
+                  const SizedBox(width: AppSpacing.xs),
                   ActionChip(
                     avatar: const Icon(Icons.bar_chart_rounded, size: 18, color: Colors.indigo),
-                    label: const Text('📊 Özet Gör', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.indigo)),
+                    label: const Text('Özet Gör', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.indigo)),
                     backgroundColor: Colors.indigo.withValues(alpha: 0.1),
                     side: BorderSide(color: Colors.indigo.withValues(alpha: 0.3)),
-                    shape: RoundedRectangleBorder(borderRadius: AppRadius.borderFull),
+                    shape: const RoundedRectangleBorder(borderRadius: AppRadius.borderFull),
                     onPressed: () => MonthlySummaryBottomSheet.show(context),
                   ),
                 ],

@@ -112,6 +112,33 @@ class AdService {
     }
   }
 
+  final Map<String, int> _sessionFeatureCounts = {};
+
+  /// Belirtilen [featureKey] için sayacı hafızada (in-memory / oturum bazlı) 1 artırır.
+  /// Uygulama kapandığında / yeniden başlatıldığında sayaçlar sıfırlanıp başa sarar.
+  /// [interval] değerine ulaşıldığında (veya [triggerFirst] true olup 1. elemana ulaşıldığında)
+  /// Geçiş Reklamını (InterstitialAd) tetikler ve sayacı sıfırlar.
+  Future<void> handleSessionFeatureAdTrigger(
+    String featureKey,
+    int interval, {
+    bool triggerFirst = false,
+  }) async {
+    if (kIsWeb || isPremium) return;
+
+    try {
+      final currentCount = (_sessionFeatureCounts[featureKey] ?? 0) + 1;
+
+      if ((triggerFirst && currentCount == 1) || currentCount >= interval) {
+        _sessionFeatureCounts[featureKey] = 0; // Sayacı sıfırla
+        await _showPreloadedInterstitialAd();
+      } else {
+        _sessionFeatureCounts[featureKey] = currentCount;
+      }
+    } catch (e) {
+      debugPrint('Session ad trigger error: $e');
+    }
+  }
+
   /// Belirtilen [featureKey] (örn: 'expiration_add_count') için reklam eşiklerini kontrol eder.
   /// Her gün ilk işlemde sayaçları sıfırlar. [thresholds] değerlerinden birine ulaşılırsa reklam gösterir.
   Future<void> handleFeatureAdTrigger(String featureKey, List<int> thresholds) async {
@@ -145,6 +172,7 @@ class AdService {
 
   /// Ödüllü reklam yükler ve gösterir.
   /// Reklam izlemesi tamamlandığında [onRewardEarned] callback'i çalışır.
+  /// Reklam izlenmeden erken kapatılırsa veya yüklenemezse [onAdFailed] callback'i tetiklenir.
   /// Web ortamında reklam gösterilemeyeceğinden doğrudan ödül tetiklenir.
   Future<void> showRewardedAd({
     required VoidCallback onRewardEarned,
@@ -157,6 +185,8 @@ class AdService {
     }
 
     try {
+      bool rewardEarned = false;
+
       await RewardedAd.load(
         adUnitId: rewardedAdUnitId,
         request: const AdRequest(),
@@ -165,6 +195,10 @@ class AdService {
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
                 ad.dispose();
+                if (!rewardEarned) {
+                  // Kullanıcı ödül kazanmadan reklamı kapattı
+                  onAdFailed?.call();
+                }
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 ad.dispose();
@@ -175,6 +209,7 @@ class AdService {
             ad.show(
               onUserEarnedReward: (adWithoutView, reward) {
                 debugPrint('Kullanıcı ödüllü reklamı tamamladı: ${reward.amount}');
+                rewardEarned = true;
                 onRewardEarned();
               },
             );

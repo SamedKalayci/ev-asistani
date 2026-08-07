@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -11,9 +16,6 @@ import '../models/expiration_model.dart';
 import '../providers/expiration_provider.dart';
 
 /// Son kullanma ürünü ekleme ve düzenleme formu.
-///
-/// [editItem] null ise → "Ekle" modu.
-/// [editItem] dolu ise → "Düzenle" modu (alanlar önceden dolduruluyor).
 class ExpirationFormScreen extends ConsumerStatefulWidget {
   const ExpirationFormScreen({super.key, this.editItem});
 
@@ -32,6 +34,11 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
 
   DateTime? _selectedDate;
   int _selectedIconCodePoint = Icons.label_rounded.codePoint;
+
+  String? _pickedFilePath;
+  Uint8List? _pickedFileBytes;
+  String? _pickedFileName;
+  bool _isUploading = false;
 
   bool get _isEditMode => widget.editItem != null;
 
@@ -72,6 +79,103 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
     super.dispose();
   }
 
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      if (!kIsWeb && source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isDenied || status.isPermanentlyDenied) {
+          if (mounted) _showError('Kamera izni verilmedi. Ürün fotoğrafı çekebilmek için izin verin.');
+          return;
+        }
+      }
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: source,
+        maxWidth: 2048,
+        maxHeight: 2048,
+        imageQuality: 85,
+      );
+      if (picked != null) {
+        final bytes = await picked.readAsBytes();
+        setState(() {
+          _pickedFileBytes = bytes;
+          _pickedFilePath = picked.path;
+          _pickedFileName = picked.name;
+        });
+      }
+    } catch (e) {
+      if (mounted) _showError('Görsel seçilirken hata oluştu: $e');
+    }
+  }
+
+  void _showImageOptions() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        return Container(
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerLowest,
+            borderRadius: AppRadius.borderTopXl,
+          ),
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: cs.outlineVariant,
+                  borderRadius: AppRadius.borderFull,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                'Ürün Görseli Ekle',
+                style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDCFCE7),
+                    borderRadius: AppRadius.borderMd,
+                  ),
+                  child: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
+                ),
+                title: const Text('📸 Kamera ile Fotoğraf Çek'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDBEAFE),
+                    borderRadius: AppRadius.borderMd,
+                  ),
+                  child: const Icon(Icons.photo_library_rounded, color: Color(0xFF2563EB)),
+                ),
+                title: const Text('🖼️ Galeriden Fotoğraf Seç'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   // ── Form Gönderimi ────────────────────────────────────────────────────────
 
   Future<void> _submit() async {
@@ -81,33 +185,61 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
       return;
     }
 
-    final notifier = ref.read(expirationNotifierProvider.notifier);
+    setState(() => _isUploading = true);
 
-    if (_isEditMode) {
-      final updated = widget.editItem!.copyWith(
-        title: _titleCtrl.text.trim(),
-        location: _locationCtrl.text.trim(),
-        expirationDate: _selectedDate,
-        // ignore: non_const_argument_for_const_parameter
-        icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
-      );
-      await notifier.updateItem(updated);
-    } else {
-      await notifier.addItem(
-        title: _titleCtrl.text.trim(),
-        location: _locationCtrl.text.trim(),
-        expirationDate: _selectedDate!,
-        iconCodePoint: _selectedIconCodePoint,
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
-      );
-    }
+    try {
+      final notifier = ref.read(expirationNotifierProvider.notifier);
+      final familyId = ref.read(activeFamilyIdProvider);
+      final storageService = ref.read(storageServiceProvider);
 
-    final state = ref.read(expirationNotifierProvider);
-    if (state.hasError) {
-      if (mounted) _showError(state.error.toString());
-    } else {
-      if (mounted) Navigator.of(context).pop();
+      String? imageUrl = widget.editItem?.imageUrl;
+
+      if (_pickedFilePath != null || _pickedFileBytes != null) {
+        final docId = _isEditMode
+            ? widget.editItem!.id
+            : DateTime.now().millisecondsSinceEpoch.toString();
+
+        imageUrl = await storageService.uploadExpirationImage(
+          familyId: familyId,
+          docId: docId,
+          fileName: _pickedFileName ?? 'product.jpg',
+          file: kIsWeb || _pickedFilePath == null ? null : File(_pickedFilePath!),
+          bytes: _pickedFileBytes,
+        );
+      }
+
+      if (_isEditMode) {
+        final updated = widget.editItem!.copyWith(
+          title: _titleCtrl.text.trim(),
+          location: _locationCtrl.text.trim(),
+          expirationDate: _selectedDate,
+          // ignore: non_const_argument_for_const_parameter
+          icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
+          imageUrl: imageUrl,
+          notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+        );
+        await notifier.updateItem(updated);
+      } else {
+        await notifier.addItem(
+          title: _titleCtrl.text.trim(),
+          location: _locationCtrl.text.trim(),
+          expirationDate: _selectedDate!,
+          iconCodePoint: _selectedIconCodePoint,
+          imageUrl: imageUrl,
+          notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+        );
+      }
+
+      final state = ref.read(expirationNotifierProvider);
+      if (state.hasError) {
+        if (mounted) _showError(state.error.toString());
+      } else {
+        if (mounted) Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (mounted) _showError('Görsel yüklenirken hata oluştu: $e');
+    } finally {
+      if (mounted) setState(() => _isUploading = false);
     }
   }
 
@@ -189,6 +321,63 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
+                // ── Ürün Görseli ─────────────────────────────────────────────
+                Text(
+                  'Ürün Görseli (İsteğe Bağlı)',
+                  style: AppTypography.labelMedium.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                if (_pickedFileName != null || (widget.editItem?.imageUrl != null && widget.editItem!.imageUrl!.isNotEmpty)) ...[
+                  Container(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerHigh,
+                      borderRadius: AppRadius.borderMd,
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.image_rounded, color: AppColors.primary, size: 20),
+                        const SizedBox(width: AppSpacing.xs),
+                        Expanded(
+                          child: Text(
+                            _pickedFileName ?? widget.editItem!.imageUrl!.split('/').last,
+                            style: AppTypography.bodySmall,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close_rounded, size: 18),
+                          onPressed: () => setState(() {
+                            _pickedFilePath = null;
+                            _pickedFileBytes = null;
+                            _pickedFileName = null;
+                          }),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                ],
+                OutlinedButton.icon(
+                  onPressed: _showImageOptions,
+                  icon: const Icon(Icons.add_a_photo_rounded),
+                  label: Text(_pickedFileName != null || widget.editItem?.imageUrl != null
+                      ? 'Ürün Görselini Değiştir'
+                      : '📸 Ürün Görseli Ekle'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 44),
+                    side: BorderSide(color: colorScheme.outlineVariant),
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.lg),
+
                 // ── İkon Seçici ───────────────────────────────────────────────
                 _buildIconPicker(colorScheme),
                 const SizedBox(height: AppSpacing.lg),
@@ -209,8 +398,8 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
                   icon: _isEditMode
                       ? Icons.check_rounded
                       : Icons.add_rounded,
-                  isLoading: isLoading,
-                  onPressed: isLoading ? null : _submit,
+                  isLoading: isLoading || _isUploading,
+                  onPressed: (isLoading || _isUploading) ? null : _submit,
                 ),
 
                 const SizedBox(height: AppSpacing.xl),

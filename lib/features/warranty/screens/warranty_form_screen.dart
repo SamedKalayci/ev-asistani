@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -7,14 +13,10 @@ import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
-import '../../../core/providers/user_provider.dart';
 import '../models/warranty_model.dart';
 import '../providers/warranty_provider.dart';
 
 /// Garanti kaydı ekleme ve düzenleme formu.
-///
-/// [editItem] null ise → "Ekle" modu.
-/// [editItem] dolu ise → "Düzenle" modu.
 class WarrantyFormScreen extends ConsumerStatefulWidget {
   const WarrantyFormScreen({super.key, this.editItem});
 
@@ -36,6 +38,11 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
   DateTime? _warrantyEndDate;
   bool _hasInvoice = false;
   int _selectedIconCodePoint = Icons.devices_rounded.codePoint;
+
+  String? _pickedFilePath;
+  Uint8List? _pickedFileBytes;
+  String? _pickedFileName;
+  bool _isUploading = false;
 
   bool get _isEditMode => widget.editItem != null;
 
@@ -70,6 +77,10 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
     _hasInvoice = item?.hasInvoice ?? false;
     _selectedIconCodePoint =
         item?.icon.codePoint ?? Icons.devices_rounded.codePoint;
+
+    if (item?.invoiceUrl != null && item!.invoiceUrl!.isNotEmpty) {
+      _pickedFileName = item.invoiceUrl!.split('/').last;
+    }
   }
 
   @override
@@ -80,6 +91,141 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
     _invoiceCtrl.dispose();
     _notesCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      if (!kIsWeb && source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isDenied || status.isPermanentlyDenied) {
+          if (mounted) _showError('Kamera izni verilmedi. Fotoğraf çekebilmek için lütfen kamera iznini onaylayın.');
+          return;
+        }
+      }
+      final picker = ImagePicker();
+      final picked = await picker.pickImage(
+        source: source,
+        maxWidth: 2048,
+        maxHeight: 2048,
+        imageQuality: 85,
+      );
+      if (picked != null) {
+        final bytes = await picked.readAsBytes();
+        setState(() {
+          _pickedFileBytes = bytes;
+          _pickedFilePath = picked.path;
+          _pickedFileName = picked.name;
+          _hasInvoice = true;
+        });
+      }
+    } catch (e) {
+      if (mounted) _showError('Görsel seçilirken hata oluştu: $e');
+    }
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'],
+        withData: true,
+      );
+      if (result != null && result.files.isNotEmpty) {
+        final picked = result.files.single;
+        setState(() {
+          _pickedFileBytes = picked.bytes;
+          _pickedFilePath = picked.path;
+          _pickedFileName = picked.name;
+          _hasInvoice = true;
+        });
+      }
+    } catch (e) {
+      if (mounted) _showError('Dosya seçilirken hata oluştu: $e');
+    }
+  }
+
+  void _showFilePickerOptions() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        return Container(
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerLowest,
+            borderRadius: AppRadius.borderTopXl,
+          ),
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: cs.outlineVariant,
+                  borderRadius: AppRadius.borderFull,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                'Fatura / Belge Görseli Seç',
+                style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDCFCE7),
+                    borderRadius: AppRadius.borderMd,
+                  ),
+                  child: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
+                ),
+                title: const Text('📸 Kamera ile Çek'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDBEAFE),
+                    borderRadius: AppRadius.borderMd,
+                  ),
+                  child: const Icon(Icons.photo_library_rounded, color: Color(0xFF2563EB)),
+                ),
+                title: const Text('🖼️ Galeriden Seç'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEE2E2),
+                    borderRadius: AppRadius.borderMd,
+                  ),
+                  child: const Icon(Icons.picture_as_pdf_rounded, color: Color(0xFFDC2626)),
+                ),
+                title: const Text('📄 PDF / Belge Seç'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _pickFile();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // ── Submit ────────────────────────────────────────────────────────────────
@@ -95,52 +241,79 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
       return;
     }
 
-    final notifier = ref.read(warrantyNotifierProvider.notifier);
-    final familyId = ref.read(activeFamilyIdProvider);
-    final uid = ref.read(firebaseAuthProvider).currentUser?.uid ?? '';
+    setState(() => _isUploading = true);
 
-    if (_isEditMode) {
-      final updated = widget.editItem!.copyWith(
-        name: _nameCtrl.text.trim(),
-        brand: _brandCtrl.text.trim(),
-        store: _storeCtrl.text.trim(),
-        purchaseDate: _purchaseDate,
-        warrantyEndDate: _warrantyEndDate,
-        // ignore: non_const_argument_for_const_parameter
-        icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
-        hasInvoice: _hasInvoice,
-        invoiceNumber: _hasInvoice && _invoiceCtrl.text.trim().isNotEmpty
-            ? _invoiceCtrl.text.trim()
-            : null,
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
-      );
-      await notifier.updateItem(updated);
-    } else {
-      final item = WarrantyModel(
-        id: '',
-        familyId: familyId,
-        name: _nameCtrl.text.trim(),
-        brand: _brandCtrl.text.trim(),
-        store: _storeCtrl.text.trim(),
-        purchaseDate: _purchaseDate!,
-        warrantyEndDate: _warrantyEndDate!,
-        // ignore: non_const_argument_for_const_parameter
-        icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
-        createdBy: uid,
-        hasInvoice: _hasInvoice,
-        invoiceNumber: _hasInvoice && _invoiceCtrl.text.trim().isNotEmpty
-            ? _invoiceCtrl.text.trim()
-            : null,
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
-      );
-      await notifier.addItem(item);
-    }
+    try {
+      final notifier = ref.read(warrantyNotifierProvider.notifier);
+      final familyId = ref.read(activeFamilyIdProvider);
+      final uid = ref.read(firebaseAuthProvider).currentUser?.uid ?? '';
+      final storageService = ref.read(storageServiceProvider);
 
-    final state = ref.read(warrantyNotifierProvider);
-    if (state.hasError) {
-      if (mounted) _showError(state.error.toString());
-    } else {
-      if (mounted) Navigator.of(context).pop();
+      String? invoiceUrl = widget.editItem?.invoiceUrl;
+
+      if (_pickedFilePath != null || _pickedFileBytes != null) {
+        final docId = _isEditMode
+            ? widget.editItem!.id
+            : DateTime.now().millisecondsSinceEpoch.toString();
+
+        invoiceUrl = await storageService.uploadWarrantyDocument(
+          familyId: familyId,
+          docId: docId,
+          fileName: _pickedFileName ?? 'invoice',
+          file: kIsWeb || _pickedFilePath == null ? null : File(_pickedFilePath!),
+          bytes: _pickedFileBytes,
+        );
+      }
+
+      if (_isEditMode) {
+        final updated = widget.editItem!.copyWith(
+          name: _nameCtrl.text.trim(),
+          brand: _brandCtrl.text.trim(),
+          store: _storeCtrl.text.trim(),
+          purchaseDate: _purchaseDate,
+          warrantyEndDate: _warrantyEndDate,
+          // ignore: non_const_argument_for_const_parameter
+          icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
+          hasInvoice: _hasInvoice,
+          invoiceNumber: _hasInvoice && _invoiceCtrl.text.trim().isNotEmpty
+              ? _invoiceCtrl.text.trim()
+              : null,
+          invoiceUrl: invoiceUrl,
+          notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+        );
+        await notifier.updateItem(updated);
+      } else {
+        final item = WarrantyModel(
+          id: '',
+          familyId: familyId,
+          name: _nameCtrl.text.trim(),
+          brand: _brandCtrl.text.trim(),
+          store: _storeCtrl.text.trim(),
+          purchaseDate: _purchaseDate!,
+          warrantyEndDate: _warrantyEndDate!,
+          // ignore: non_const_argument_for_const_parameter
+          icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
+          createdBy: uid,
+          hasInvoice: _hasInvoice,
+          invoiceNumber: _hasInvoice && _invoiceCtrl.text.trim().isNotEmpty
+              ? _invoiceCtrl.text.trim()
+              : null,
+          invoiceUrl: invoiceUrl,
+          notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+        );
+        await notifier.addItem(item);
+      }
+
+      final state = ref.read(warrantyNotifierProvider);
+      if (state.hasError) {
+        if (mounted) _showError(state.error.toString());
+      } else {
+        if (mounted) Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (mounted) _showError('Fatura/Görsel yüklenirken hata oluştu: $e');
+    } finally {
+      if (mounted) setState(() => _isUploading = false);
     }
   }
 
@@ -269,6 +442,53 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                     controller: _invoiceCtrl,
                     textInputAction: TextInputAction.next,
                   ),
+                  const SizedBox(height: AppSpacing.md),
+                  if (_pickedFileName != null) ...[
+                    Container(
+                      padding: const EdgeInsets.all(AppSpacing.sm),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerHigh,
+                        borderRadius: AppRadius.borderMd,
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.attach_file_rounded,
+                              color: AppColors.primary, size: 20),
+                          const SizedBox(width: AppSpacing.xs),
+                          Expanded(
+                            child: Text(
+                              _pickedFileName!,
+                              style: AppTypography.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close_rounded, size: 18),
+                            onPressed: () => setState(() {
+                              _pickedFilePath = null;
+                              _pickedFileBytes = null;
+                              _pickedFileName = null;
+                            }),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                  ],
+                  OutlinedButton.icon(
+                    onPressed: _showFilePickerOptions,
+                    icon: const Icon(Icons.upload_file_rounded),
+                    label: Text(_pickedFileName != null
+                        ? 'Fatura Dosyasını Değiştir'
+                        : '📸 Fatura Görseli / PDF Yükle'),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 44),
+                      side: BorderSide(color: colorScheme.outlineVariant),
+                    ),
+                  ),
                 ],
 
                 const SizedBox(height: AppSpacing.lg),
@@ -294,8 +514,8 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                   icon: _isEditMode
                       ? Icons.check_rounded
                       : Icons.verified_outlined,
-                  isLoading: isLoading,
-                  onPressed: isLoading ? null : _submit,
+                  isLoading: isLoading || _isUploading,
+                  onPressed: (isLoading || _isUploading) ? null : _submit,
                 ),
 
                 const SizedBox(height: AppSpacing.xl),

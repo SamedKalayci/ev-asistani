@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/firestore_service.dart';
+import '../../../shared/models/family_model.dart';
 import '../../../shared/models/user_model.dart';
 
 /// Kullanıcı kimlik doğrulama ve profil yönetimi repository'si.
@@ -36,6 +37,10 @@ class AuthRepository {
     if (user != null) {
       try {
         await user.updateDisplayName(name.trim());
+      } catch (_) {}
+
+      try {
+        await user.sendEmailVerification();
       } catch (_) {}
 
       await _firestoreService.setUser(
@@ -151,13 +156,49 @@ class AuthRepository {
     UserRole? role,
   }) async {
     final updates = <String, dynamic>{
-      if (name != null) 'name': name,
-      if (name != null) 'displayName': name,
-      if (photoUrl != null) 'photoUrl': photoUrl,
-      if (familyId != null) 'familyId': familyId,
-      if (role != null) 'role': role.name,
+      if (name != null) ...{
+        'name': name,
+        'displayName': name,
+      },
+      'photoUrl': ?photoUrl,
+      'familyId': ?familyId,
+      'role': ?role?.name,
       'updatedAt': FieldValue.serverTimestamp(),
     };
     await _firestoreService.setUser(uid, updates, merge: true);
+  }
+
+  /// Kullanıcı hesabını ve ilişkili verileri siler.
+  /// Kullanıcı ailedeki tek üye ise ilişkili aile kaydını veritabanından tamamen siler.
+  Future<void> deleteAccount({
+    required String uid,
+    FamilyModel? currentFamily,
+  }) async {
+    final user = currentUser;
+    if (user == null) return;
+
+    if (currentFamily != null) {
+      if (currentFamily.memberUids.length <= 1 ||
+          (currentFamily.memberUids.length == 1 &&
+              currentFamily.memberUids.contains(uid))) {
+        // Ailedeki tek üye ise aile dökümanını sil
+        await _firestoreService.familiesRef.doc(currentFamily.id).delete();
+      } else {
+        // Birden fazla üye varsa kullanıcıyı aile listesinden çıkar
+        await _firestoreService.updateFamily(currentFamily.id, {
+          'memberUids': FieldValue.arrayRemove([uid]),
+          'memberIds': FieldValue.arrayRemove([uid]),
+        });
+      }
+    }
+
+    // users/{uid} dökümanını sil
+    await _firestoreService.usersRef.doc(uid).delete();
+
+    // Firebase Auth kullanıcısını sil
+    await user.delete();
+
+    // Oturumu kapat
+    await signOut();
   }
 }
