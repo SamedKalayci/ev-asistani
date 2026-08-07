@@ -12,6 +12,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
+import '../../../core/utils/permission_utils.dart';
 import '../models/expiration_model.dart';
 import '../providers/expiration_provider.dart';
 
@@ -105,25 +106,19 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
   Future<void> _pickImage(ImageSource source) async {
     try {
       if (!kIsWeb) {
-        PermissionStatus status;
-        if (source == ImageSource.camera) {
-          status = await Permission.camera.request();
-        } else {
-          status = await Permission.photos.request();
-          if (Platform.isAndroid && (status.isDenied || status.isPermanentlyDenied)) {
-            status = await Permission.storage.request();
-          }
-        }
+        final status = await PermissionUtils.requestImagePermission(source);
 
-        if (status.isDenied || status.isPermanentlyDenied) {
+        if (status.isPermanentlyDenied) {
           if (mounted) {
             await _showPermissionDeniedDialog(
-              'İzin Verilmedi',
+              'İzin Gerekli',
               source == ImageSource.camera
-                  ? 'Fotoğraf çekebilmek için kamera izni gereklidir. Lütfen ayarlardan izin verin.'
-                  : 'Galeriye erişim izni gereklidir. Lütfen ayarlardan izin verin.',
+                  ? 'Fotoğraf çekebilmek için kamera izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.'
+                  : 'Galeriye erişim izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.',
             );
           }
+          return;
+        } else if (!status.isGranted && !status.isLimited) {
           return;
         }
       }

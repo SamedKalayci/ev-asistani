@@ -43,6 +43,33 @@ class StorageService {
     return SettableMetadata(contentType: contentType);
   }
 
+  /// Dosya adındaki geçersiz karakterleri temizler ve sonuna zaman damgası ekler.
+  String _sanitizeFileName(String fileName) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final ext = fileName.contains('.') ? fileName.split('.').last.toLowerCase() : 'file';
+    
+    var nameWithoutExt = fileName.contains('.') 
+        ? fileName.substring(0, fileName.lastIndexOf('.')) 
+        : fileName;
+        
+    // Türkçe ve özel karakterleri dönüştür
+    nameWithoutExt = nameWithoutExt
+        .replaceAll(RegExp(r'[çÇ]'), 'c')
+        .replaceAll(RegExp(r'[ğĞ]'), 'g')
+        .replaceAll(RegExp(r'[ıİ]'), 'i')
+        .replaceAll(RegExp(r'[öÖ]'), 'o')
+        .replaceAll(RegExp(r'[şŞ]'), 's')
+        .replaceAll(RegExp(r'[üÜ]'), 'u')
+        .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
+        
+    nameWithoutExt = nameWithoutExt.replaceAll(RegExp(r'_+'), '_').replaceAll(RegExp(r'^_+|_+$'), '');
+    
+    if (nameWithoutExt.isEmpty) nameWithoutExt = 'file';
+    if (nameWithoutExt.length > 20) nameWithoutExt = nameWithoutExt.substring(0, 20);
+    
+    return '${nameWithoutExt}_$timestamp.$ext';
+  }
+
   /// Vault dökümanını / görselini Firebase Storage'a yükler ve indirme bağlantısını (`downloadURL`) döner.
   ///
   /// Dosya `families/{familyId}/vault/{docId}_{fileName}` yoluna kaydedilir.
@@ -57,8 +84,9 @@ class StorageService {
       if (familyId.trim().isEmpty) throw Exception('Geçersiz Family ID');
       if (docId.trim().isEmpty) throw Exception('Geçersiz Document ID');
       
-      final ref = _storage.ref().child('families/$familyId/vault/${docId}_$fileName');
-      final metadata = _getMetadata(fileName);
+      final cleanFileName = _sanitizeFileName(fileName);
+      final ref = _storage.ref().child('families/$familyId/vault/${docId}_$cleanFileName');
+      final metadata = _getMetadata(cleanFileName);
 
       if (kIsWeb) {
         if (bytes == null) {
@@ -73,7 +101,8 @@ class StorageService {
           if (!await file.exists()) {
             throw Exception('Yüklenecek dosya cihazda bulunamadı veya erişilemiyor.');
           }
-          await ref.putFile(file, metadata).whenComplete(() {});
+          final fileBytes = await file.readAsBytes();
+          await ref.putData(fileBytes, metadata).whenComplete(() {});
         } else {
           await ref.putData(bytes!, metadata).whenComplete(() {});
         }
@@ -100,8 +129,9 @@ class StorageService {
       if (familyId.trim().isEmpty) throw Exception('Geçersiz Family ID');
       if (docId.trim().isEmpty) throw Exception('Geçersiz Document ID');
 
-      final ref = _storage.ref().child('families/$familyId/warranty/${docId}_$fileName');
-      final metadata = _getMetadata(fileName);
+      final cleanFileName = _sanitizeFileName(fileName);
+      final ref = _storage.ref().child('families/$familyId/warranty/${docId}_$cleanFileName');
+      final metadata = _getMetadata(cleanFileName);
 
       if (kIsWeb) {
         if (bytes == null) {
@@ -116,7 +146,8 @@ class StorageService {
           if (!await file.exists()) {
             throw Exception('Yüklenecek dosya cihazda bulunamadı veya erişilemiyor.');
           }
-          await ref.putFile(file, metadata).whenComplete(() {});
+          final fileBytes = await file.readAsBytes();
+          await ref.putData(fileBytes, metadata).whenComplete(() {});
         } else {
           await ref.putData(bytes!, metadata).whenComplete(() {});
         }
@@ -143,8 +174,9 @@ class StorageService {
       if (familyId.trim().isEmpty) throw Exception('Geçersiz Family ID');
       if (docId.trim().isEmpty) throw Exception('Geçersiz Document ID');
 
-      final ref = _storage.ref().child('families/$familyId/expiration/${docId}_$fileName');
-      final metadata = _getMetadata(fileName);
+      final cleanFileName = _sanitizeFileName(fileName);
+      final ref = _storage.ref().child('families/$familyId/expiration/${docId}_$cleanFileName');
+      final metadata = _getMetadata(cleanFileName);
 
       if (kIsWeb) {
         if (bytes == null) {
@@ -159,7 +191,8 @@ class StorageService {
           if (!await file.exists()) {
             throw Exception('Yüklenecek resim cihazda bulunamadı veya erişilemiyor.');
           }
-          await ref.putFile(file, metadata).whenComplete(() {});
+          final fileBytes = await file.readAsBytes();
+          await ref.putData(fileBytes, metadata).whenComplete(() {});
         } else {
           await ref.putData(bytes!, metadata).whenComplete(() {});
         }
@@ -199,7 +232,8 @@ class StorageService {
           if (!await imageFile.exists()) {
             throw Exception('Yüklenecek resim cihazda bulunamadı veya erişilemiyor.');
           }
-          await ref.putFile(imageFile, metadata).whenComplete(() {});
+          final fileBytes = await imageFile.readAsBytes();
+          await ref.putData(fileBytes, metadata).whenComplete(() {});
         } else {
           await ref.putData(bytes!, metadata).whenComplete(() {});
         }

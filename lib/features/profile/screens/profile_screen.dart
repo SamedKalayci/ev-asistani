@@ -169,8 +169,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 child: const Text('İptal'),
               ),
               FilledButton.icon(
-                icon: const Icon(Icons.ondemand_video_rounded, size: 18),
-                label: const Text('1 Reklam İzle & Aile Oluştur'),
+                icon: const Icon(Icons.add_home_rounded, size: 18),
+                label: const Text('Ev Oluştur'),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     Navigator.of(ctx).pop({'name': controller.text.trim(), 'role': selectedRole ?? '👑 Ev Sahibi'});
@@ -209,33 +209,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               backgroundColor: AppColors.error,
             ),
           );
+        } else {
+          // Başarılıysa geçiş reklamı göster
+          if (!isPro) {
+            await ref.read(adServiceProvider).showInterstitialAd();
+          }
         }
       }
 
-      // Pro üye ise reklamı atla ve doğrudan aileyi oluştur
-      if (isPro) {
-        await executeCreate();
-        return;
-      }
-
-      // Ücretsiz üye için Ödüllü Reklam zorunlu akışı
-      await ref.read(adServiceProvider).showRewardedAd(
-        onRewardEarned: () async {
-          await executeCreate();
-        },
-        onAdFailed: () {
-          if (!mounted) return;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Reklam tamamlanamadı veya yüklenemedi. Aile oluşturabilmek için reklamı sonuna kadar izlemeniz gerekmektedir.',
-              ),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        },
-      );
+      await executeCreate();
     }
   }
 

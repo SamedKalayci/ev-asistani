@@ -1,5 +1,5 @@
-# Set platform to iOS 13.0
-platform :ios, '13.0'
+# Set platform to iOS 15.0
+platform :ios, '15.0'
 
 # Force CocoaPods integration for all plugins to fix SPM conflict (google_mobile_ads vs webview_flutter)
 ENV['FLUTTER_SUPPORTS_SWIFT_PACKAGE_MANAGER'] = 'false'

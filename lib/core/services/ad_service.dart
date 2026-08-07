@@ -94,7 +94,8 @@ class AdService {
   }
 
   /// Önceden yüklenmiş reklamı gösterir ve hemen yenisini yüklemeye başlar.
-  Future<void> _showPreloadedInterstitialAd() async {
+  Future<void> showInterstitialAd() async {
+    if (kIsWeb || isPremium) return;
     if (_preloadedInterstitialAd != null) {
       final ad = _preloadedInterstitialAd!;
       _preloadedInterstitialAd = null; // Gösterilmeden önce temizle
@@ -135,11 +136,11 @@ class AdService {
 
       if (triggerFirst) {
         if (currentCount % interval == 1) {
-          await _showPreloadedInterstitialAd();
+          await showInterstitialAd();
         }
       } else {
         if (currentCount % interval == 0) {
-          await _showPreloadedInterstitialAd();
+          await showInterstitialAd();
         }
       }
     } catch (e) {
@@ -169,7 +170,7 @@ class AdService {
       await prefs.setInt(featureKey, currentCount);
       
       if (thresholds.contains(currentCount)) {
-        await _showPreloadedInterstitialAd();
+        await showInterstitialAd();
       }
     } catch (e) {
       debugPrint('Ad trigger error: $e');
