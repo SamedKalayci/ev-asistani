@@ -67,8 +67,8 @@ class WarrantyNotifier extends AsyncNotifier<void> {
       final newItem = item.copyWith(id: docId);
       await _notificationService.scheduleWarrantyNotifications(newItem);
 
-      // Oturum bazlı döngüsel geçiş reklamı (1. üründe, ardından her 3 üründe bir)
-      await ref.read(adServiceProvider).handleSessionFeatureAdTrigger('warranty_add_count', 3, triggerFirst: true);
+      // Oturum bazlı döngüsel geçiş reklamı (1-3-5 mantığı)
+      await ref.read(adServiceProvider).handleSessionFeatureAdTrigger('warranty_add_count', 2, triggerFirst: true);
     });
   }
 

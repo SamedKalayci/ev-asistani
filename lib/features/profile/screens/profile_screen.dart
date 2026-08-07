@@ -18,6 +18,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../premium/widgets/paywall_bottom_sheet.dart';
 import '../providers/family_provider.dart';
+import '../widgets/link_account_bottom_sheet.dart';
 import '../widgets/profile_edit_bottom_sheet.dart';
 import '../widgets/profile_setting_tile.dart';
 
@@ -31,49 +32,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  bool _isLinkingGoogle = false;
-
-  // ── Google Hesap Bağlama Akışı ───────────────────────────────────────────
-
-  Future<void> _handleGoogleLink() async {
-    setState(() => _isLinkingGoogle = true);
-    try {
-      await ref.read(familyNotifierProvider.notifier).linkWithGoogle();
-      final state = ref.read(familyNotifierProvider);
-
-      if (state.hasError && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Bağlama hatası: ${state.error}'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('🎉 Hesabınız başarıyla Google ile bağlandı!'),
-            backgroundColor: AppColors.primary,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Bağlama sırasında hata: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLinkingGoogle = false);
-      }
-    }
-  }
 
   // ── Hesabımı Sil ──────────────────────────────────────────────────────────
 
@@ -548,7 +506,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       content: Text(
                         isAnonymous
-                            ? 'Tüm verileriniz ve aile erişiminiz kaybolacaktır. Hesabınızdan çıkış yapmak istediğinize emin misiniz?'
+                            ? 'Tüm verileriniz ve aile erişiminiz kaybolacaktır. Hesabınızı bağlamadan çıkış yapmak istediğinize emin misiniz?'
                             : 'Hesabınızdan çıkış yapmak istediğinize emin misiniz?',
                       ),
                       actions: [
@@ -556,6 +514,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           onPressed: () => Navigator.of(ctx).pop(false),
                           child: const Text('İptal'),
                         ),
+                        if (isAnonymous)
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop(false);
+                              LinkAccountBottomSheet.show(context);
+                            },
+                            child: const Text('Hesabı Bağla'),
+                          ),
                         FilledButton(
                           style: FilledButton.styleFrom(
                             backgroundColor: AppColors.error,
@@ -1214,7 +1180,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  Icons.g_mobiledata_rounded,
+                  Icons.link_rounded,
                   size: 32,
                   color: colorScheme.onPrimaryContainer,
                 ),
@@ -1225,7 +1191,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hesabınızı Google ile Bağlayın',
+                      'Hesabınızı Bağlayın',
                       style: AppTypography.titleMedium.copyWith(
                         color: colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
@@ -1233,7 +1199,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Misafir modundasınız. Verilerinizi kaybetmeden Google hesabınızla kalıcı yapın.',
+                      'Misafir modundasınız. Verilerinizi kaybetmeden hesabınızı kalıcı yapın.',
                       style: AppTypography.bodySmall.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -1255,24 +1221,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   borderRadius: AppRadius.borderFull,
                 ),
               ),
-              icon: _isLinkingGoogle
-                  ? SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: colorScheme.onPrimary,
-                      ),
-                    )
-                  : const Icon(Icons.account_circle_rounded, size: 20),
+              icon: const Icon(Icons.account_circle_rounded, size: 20),
               label: Text(
-                _isLinkingGoogle ? 'Bağlanıyor...' : 'Google ile Bağla',
+                'Bağlantı Seçenekleri',
                 style: AppTypography.labelLarge.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onPrimary,
                 ),
               ),
-              onPressed: _isLinkingGoogle ? null : _handleGoogleLink,
+              onPressed: () => LinkAccountBottomSheet.show(context),
             ),
           ),
         ],

@@ -24,6 +24,9 @@ class AdService {
   InterstitialAd? _preloadedInterstitialAd;
   bool _isInterstitialLoading = false;
 
+  RewardedAd? _preloadedRewardedAd;
+  bool _isRewardedLoading = false;
+
 
   // ── Ad Unit ID'leri ──────────────────────────────────────────────────────
 
@@ -58,6 +61,7 @@ class AdService {
       debugPrint('AdMob SDK başarıyla başlatıldı.');
       if (!isPremium) {
         preloadInterstitialAd();
+        preloadRewardedAd();
       }
     } catch (e) {
       debugPrint('AdMob SDK başlatılırken hata: $e');
@@ -127,12 +131,16 @@ class AdService {
 
     try {
       final currentCount = (_sessionFeatureCounts[featureKey] ?? 0) + 1;
+      _sessionFeatureCounts[featureKey] = currentCount;
 
-      if ((triggerFirst && currentCount == 1) || currentCount >= interval) {
-        _sessionFeatureCounts[featureKey] = 0; // Sayacı sıfırla
-        await _showPreloadedInterstitialAd();
+      if (triggerFirst) {
+        if (currentCount % interval == 1) {
+          await _showPreloadedInterstitialAd();
+        }
       } else {
-        _sessionFeatureCounts[featureKey] = currentCount;
+        if (currentCount % interval == 0) {
+          await _showPreloadedInterstitialAd();
+        }
       }
     } catch (e) {
       debugPrint('Session ad trigger error: $e');
@@ -170,59 +178,69 @@ class AdService {
 
   // ── Ödüllü Reklam (Rewarded Ad) ──────────────────────────────────────────
 
-  /// Ödüllü reklam yükler ve gösterir.
-  /// Reklam izlemesi tamamlandığında [onRewardEarned] callback'i çalışır.
-  /// Reklam izlenmeden erken kapatılırsa veya yüklenemezse [onAdFailed] callback'i tetiklenir.
-  /// Web ortamında reklam gösterilemeyeceğinden doğrudan ödül tetiklenir.
+  /// Ödüllü reklamı arka planda sessizce yükler.
+  void preloadRewardedAd() {
+    if (kIsWeb || isPremium || _isRewardedLoading || _preloadedRewardedAd != null) return;
+    _isRewardedLoading = true;
+    
+    RewardedAd.load(
+      adUnitId: rewardedAdUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          _preloadedRewardedAd = ad;
+          _isRewardedLoading = false;
+          debugPrint('Rewarded ad preloaded.');
+        },
+        onAdFailedToLoad: (error) {
+          _isRewardedLoading = false;
+          debugPrint('Rewarded ad preloading failed: $error');
+        },
+      ),
+    );
+  }
+
+  /// Ödüllü reklam gösterir. (Önceden yüklenmiş reklamı kullanır)
   Future<void> showRewardedAd({
     required VoidCallback onRewardEarned,
     VoidCallback? onAdFailed,
   }) async {
     if (kIsWeb) {
-      // Web ortamında reklam desteklenmediği için doğrudan ödülü ver
       onRewardEarned();
       return;
     }
 
-    try {
+    if (_preloadedRewardedAd != null) {
       bool rewardEarned = false;
+      final ad = _preloadedRewardedAd!;
+      _preloadedRewardedAd = null;
 
-      await RewardedAd.load(
-        adUnitId: rewardedAdUnitId,
-        request: const AdRequest(),
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
-          onAdLoaded: (ad) {
-            ad.fullScreenContentCallback = FullScreenContentCallback(
-              onAdDismissedFullScreenContent: (ad) {
-                ad.dispose();
-                if (!rewardEarned) {
-                  // Kullanıcı ödül kazanmadan reklamı kapattı
-                  onAdFailed?.call();
-                }
-              },
-              onAdFailedToShowFullScreenContent: (ad, error) {
-                ad.dispose();
-                onAdFailed?.call();
-              },
-            );
-
-            ad.show(
-              onUserEarnedReward: (adWithoutView, reward) {
-                debugPrint('Kullanıcı ödüllü reklamı tamamladı: ${reward.amount}');
-                rewardEarned = true;
-                onRewardEarned();
-              },
-            );
-          },
-          onAdFailedToLoad: (error) {
-            debugPrint('Ödüllü reklam yüklenemedi: $error');
+      ad.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          if (!rewardEarned) {
             onAdFailed?.call();
-          },
-        ),
+          }
+          preloadRewardedAd(); // Yenisini yükle
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          onAdFailed?.call();
+          preloadRewardedAd(); // Yenisini yükle
+        },
       );
-    } catch (e) {
-      debugPrint('Ödüllü reklam gösterilirken hata: $e');
+
+      ad.show(
+        onUserEarnedReward: (adWithoutView, reward) {
+          debugPrint('Kullanıcı ödüllü reklamı tamamladı: ${reward.amount}');
+          rewardEarned = true;
+          onRewardEarned();
+        },
+      );
+    } else {
+      debugPrint('Ödüllü reklam hazır değil.');
       onAdFailed?.call();
+      preloadRewardedAd(); // Hazır değilse yüklemeyi dene
     }
   }
 

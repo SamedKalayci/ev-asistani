@@ -67,19 +67,49 @@ class _VaultDocumentFormBottomSheetState
     super.dispose();
   }
 
+  Future<void> _showPermissionDeniedDialog(String title, String content) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('İptal'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              openAppSettings();
+            },
+            child: const Text('Ayarlara Git'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     try {
-      if (!kIsWeb && source == ImageSource.camera) {
-        final status = await Permission.camera.request();
+      if (!kIsWeb) {
+        PermissionStatus status;
+        if (source == ImageSource.camera) {
+          status = await Permission.camera.request();
+        } else {
+          status = await Permission.photos.request();
+          if (Platform.isAndroid && (status.isDenied || status.isPermanentlyDenied)) {
+            status = await Permission.storage.request();
+          }
+        }
+
         if (status.isDenied || status.isPermanentlyDenied) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Kamera izni verilmedi. Fotoğraf çekebilmek için lütfen kamera iznini onaylayın.',
-                ),
-                backgroundColor: AppColors.error,
-              ),
+            await _showPermissionDeniedDialog(
+              'İzin Verilmedi',
+              source == ImageSource.camera
+                  ? 'Fotoğraf çekebilmek için kamera izni gereklidir. Lütfen ayarlardan izin verin.'
+                  : 'Galeriye erişim izni gereklidir. Lütfen ayarlardan izin verin.',
             );
           }
           return;

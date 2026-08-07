@@ -73,42 +73,51 @@ class AuthRepository {
 
   /// Google ile doğrudan giriş yapar ve Firestore dökümanını eşitler.
   Future<UserCredential?> signInWithGoogle() async {
-    final credential = await _authService.signInWithGoogle();
-    final user = credential?.user;
-    if (user != null) {
-      final data = <String, dynamic>{
-        'uid': user.uid,
-        'email': user.email ?? '',
-        'displayName': user.displayName ?? '',
-        'name': user.displayName ?? '',
-        'photoUrl': user.photoURL,
-        'createdAt': FieldValue.serverTimestamp(),
-        'role': UserRole.member.name,
-      };
-      await _firestoreService.setUser(user.uid, data, merge: true);
+    try {
+      final credential = await _authService.signInWithGoogle();
+      final user = credential?.user;
+      if (user != null) {
+        final data = <String, dynamic>{
+          'uid': user.uid,
+          'email': user.email ?? '',
+          'displayName': user.displayName ?? '',
+          'name': user.displayName ?? '',
+          'photoUrl': user.photoURL,
+          'createdAt': FieldValue.serverTimestamp(),
+          'role': UserRole.member.name,
+        };
+        await _firestoreService.setUser(user.uid, data, merge: true);
+      }
+      return credential;
+    } catch (e) {
+      // Çökmeyi önlemek için hatayı yakala, null dönebilir veya UI'a fırlatılabilir
+      rethrow;
     }
-    return credential;
   }
 
   /// Apple ile doğrudan giriş yapar ve Firestore dökümanını eşitler.
   Future<UserCredential?> signInWithApple() async {
-    final credential = await _authService.signInWithApple();
-    final user = credential?.user;
-    if (user != null) {
-      final data = <String, dynamic>{
-        'uid': user.uid,
-        if (user.email != null) 'email': user.email,
-        if (user.displayName != null && user.displayName!.isNotEmpty) ...{
-          'displayName': user.displayName,
-          'name': user.displayName,
-        },
-        if (user.photoURL != null) 'photoUrl': user.photoURL,
-        'createdAt': FieldValue.serverTimestamp(),
-        'role': UserRole.member.name,
-      };
-      await _firestoreService.setUser(user.uid, data, merge: true);
+    try {
+      final credential = await _authService.signInWithApple();
+      final user = credential?.user;
+      if (user != null) {
+        final data = <String, dynamic>{
+          'uid': user.uid,
+          if (user.email != null) 'email': user.email,
+          if (user.displayName != null && user.displayName!.isNotEmpty) ...{
+            'displayName': user.displayName,
+            'name': user.displayName,
+          },
+          if (user.photoURL != null) 'photoUrl': user.photoURL,
+          'createdAt': FieldValue.serverTimestamp(),
+          'role': UserRole.member.name,
+        };
+        await _firestoreService.setUser(user.uid, data, merge: true);
+      }
+      return credential;
+    } catch (e) {
+      rethrow;
     }
-    return credential;
   }
 
   /// Parola sıfırlama e-postası gönderir.
@@ -121,22 +130,75 @@ class AuthRepository {
 
   /// Anonim hesabı Google ile bağlar ve Firestore kullanıcı dökümanını günceller.
   Future<UserCredential?> linkWithGoogle() async {
-    final credential = await _authService.linkWithGoogle();
-    final user = credential?.user;
-    if (user != null) {
-      final updates = <String, dynamic>{
-        'uid': user.uid,
-        if (user.email != null) 'email': user.email,
-        if (user.displayName != null && user.displayName!.isNotEmpty) ...{
-          'displayName': user.displayName,
-          'name': user.displayName,
-        },
-        if (user.photoURL != null) 'photoUrl': user.photoURL,
-        'updatedAt': FieldValue.serverTimestamp(),
-      };
-      await _firestoreService.setUser(user.uid, updates, merge: true);
+    try {
+      final credential = await _authService.linkWithGoogle();
+      final user = credential?.user;
+      if (user != null) {
+        final updates = <String, dynamic>{
+          'uid': user.uid,
+          if (user.email != null) 'email': user.email,
+          if (user.displayName != null && user.displayName!.isNotEmpty) ...{
+            'displayName': user.displayName,
+            'name': user.displayName,
+          },
+          if (user.photoURL != null) 'photoUrl': user.photoURL,
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+        await _firestoreService.setUser(user.uid, updates, merge: true);
+      }
+      return credential;
+    } catch (e) {
+      rethrow;
     }
-    return credential;
+  }
+
+  /// Anonim hesabı Apple ile bağlar ve Firestore kullanıcı dökümanını günceller.
+  Future<UserCredential?> linkWithApple() async {
+    try {
+      final credential = await _authService.linkWithApple();
+      final user = credential?.user;
+      if (user != null) {
+        final updates = <String, dynamic>{
+          'uid': user.uid,
+          if (user.email != null) 'email': user.email,
+          if (user.displayName != null && user.displayName!.isNotEmpty) ...{
+            'displayName': user.displayName,
+            'name': user.displayName,
+          },
+          if (user.photoURL != null) 'photoUrl': user.photoURL,
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+        await _firestoreService.setUser(user.uid, updates, merge: true);
+      }
+      return credential;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Anonim hesabı E-posta ile bağlar ve Firestore kullanıcı dökümanını günceller.
+  Future<UserCredential?> linkWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final credential = await _authService.linkWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+      final user = credential?.user;
+      if (user != null) {
+        final updates = <String, dynamic>{
+          'uid': user.uid,
+          'email': email.trim(),
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+        await _firestoreService.setUser(user.uid, updates, merge: true);
+      }
+      return credential;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   /// Firestore'daki kullanıcı profilini dinler.

@@ -25,7 +25,6 @@ class FinanceScreen extends ConsumerStatefulWidget {
 }
 
 class _FinanceScreenState extends ConsumerState<FinanceScreen> {
-  int _selectedMainTab = 0; // 0: Genel Bakış, 1: Ev Cüzdanı
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,8 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
       floatingActionButton: isPremium
           ? FloatingActionButton.extended(
               onPressed: () {
-                if (_selectedMainTab == 0) {
+                final selectedMainTab = ref.read(financeTabProvider);
+                if (selectedMainTab == 0) {
                   // Hesap / Takvim menüsü
                   showModalBottomSheet(
                     context: context,
@@ -84,7 +84,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                 }
               },
               icon: const Icon(Icons.add_rounded),
-              label: Text(_selectedMainTab == 0 ? 'Hesap / Takvim' : 'Harcama'),
+              label: Text(ref.watch(financeTabProvider) == 0 ? 'Hesap / Takvim' : 'Harcama'),
               backgroundColor: colorScheme.primary,
               foregroundColor: colorScheme.onPrimary,
             )
@@ -117,11 +117,9 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                           label: Text('Ev Cüzdanı'),
                         ),
                       ],
-                      selected: {_selectedMainTab},
+                      selected: {ref.watch(financeTabProvider)},
                       onSelectionChanged: (Set<int> newSelection) {
-                        setState(() {
-                          _selectedMainTab = newSelection.first;
-                        });
+                        ref.read(financeTabProvider.notifier).state = newSelection.first;
                       },
                       style: SegmentedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -196,7 +194,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
 
             // ── İçerik Alanı ──
             Expanded(
-              child: _selectedMainTab == 0
+              child: ref.watch(financeTabProvider) == 0
                   ? const AccountsOverviewView()
                   : HouseholdWalletView(
                       monthItems: financeItemsAsync.valueOrNull ?? []),

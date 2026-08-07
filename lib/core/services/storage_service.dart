@@ -54,15 +54,17 @@ class StorageService {
     Uint8List? bytes,
   }) async {
     try {
+      if (familyId.trim().isEmpty) throw Exception('Geçersiz Family ID');
+      if (docId.trim().isEmpty) throw Exception('Geçersiz Document ID');
+      
       final ref = _storage.ref().child('families/$familyId/vault/${docId}_$fileName');
       final metadata = _getMetadata(fileName);
-      final TaskSnapshot uploadTask;
 
       if (kIsWeb) {
         if (bytes == null) {
           throw ArgumentError('Web platformunda dosya yükleme için bytes parametresi zorunludur.');
         }
-        uploadTask = await ref.putData(bytes, metadata);
+        await ref.putData(bytes, metadata).whenComplete(() {});
       } else {
         if (file == null && bytes == null) {
           throw ArgumentError('Mobil platformda file veya bytes parametresi zorunludur.');
@@ -71,12 +73,12 @@ class StorageService {
           if (!await file.exists()) {
             throw Exception('Yüklenecek dosya cihazda bulunamadı veya erişilemiyor.');
           }
-          uploadTask = await ref.putFile(file, metadata);
+          await ref.putFile(file, metadata).whenComplete(() {});
         } else {
-          uploadTask = await ref.putData(bytes!, metadata);
+          await ref.putData(bytes!, metadata).whenComplete(() {});
         }
       }
-      return await uploadTask.ref.getDownloadURL();
+      return await ref.getDownloadURL();
     } on FirebaseException catch (e) {
       throw Exception('Depolama hatası: ${e.message ?? 'Dosya yüklenemedi.'}');
     } catch (e) {
@@ -95,15 +97,17 @@ class StorageService {
     Uint8List? bytes,
   }) async {
     try {
+      if (familyId.trim().isEmpty) throw Exception('Geçersiz Family ID');
+      if (docId.trim().isEmpty) throw Exception('Geçersiz Document ID');
+
       final ref = _storage.ref().child('families/$familyId/warranty/${docId}_$fileName');
       final metadata = _getMetadata(fileName);
-      final TaskSnapshot uploadTask;
 
       if (kIsWeb) {
         if (bytes == null) {
           throw ArgumentError('Web platformunda dosya yükleme için bytes parametresi zorunludur.');
         }
-        uploadTask = await ref.putData(bytes, metadata);
+        await ref.putData(bytes, metadata).whenComplete(() {});
       } else {
         if (file == null && bytes == null) {
           throw ArgumentError('Mobil platformda file veya bytes parametresi zorunludur.');
@@ -112,12 +116,12 @@ class StorageService {
           if (!await file.exists()) {
             throw Exception('Yüklenecek dosya cihazda bulunamadı veya erişilemiyor.');
           }
-          uploadTask = await ref.putFile(file, metadata);
+          await ref.putFile(file, metadata).whenComplete(() {});
         } else {
-          uploadTask = await ref.putData(bytes!, metadata);
+          await ref.putData(bytes!, metadata).whenComplete(() {});
         }
       }
-      return await uploadTask.ref.getDownloadURL();
+      return await ref.getDownloadURL();
     } on FirebaseException catch (e) {
       throw Exception('Depolama hatası: ${e.message ?? 'Garanti belgesi yüklenemedi.'}');
     } catch (e) {
@@ -136,15 +140,17 @@ class StorageService {
     Uint8List? bytes,
   }) async {
     try {
+      if (familyId.trim().isEmpty) throw Exception('Geçersiz Family ID');
+      if (docId.trim().isEmpty) throw Exception('Geçersiz Document ID');
+
       final ref = _storage.ref().child('families/$familyId/expiration/${docId}_$fileName');
       final metadata = _getMetadata(fileName);
-      final TaskSnapshot uploadTask;
 
       if (kIsWeb) {
         if (bytes == null) {
           throw ArgumentError('Web platformunda resim yükleme için bytes parametresi zorunludur.');
         }
-        uploadTask = await ref.putData(bytes, metadata);
+        await ref.putData(bytes, metadata).whenComplete(() {});
       } else {
         if (file == null && bytes == null) {
           throw ArgumentError('Mobil platformda file veya bytes parametresi zorunludur.');
@@ -153,12 +159,12 @@ class StorageService {
           if (!await file.exists()) {
             throw Exception('Yüklenecek resim cihazda bulunamadı veya erişilemiyor.');
           }
-          uploadTask = await ref.putFile(file, metadata);
+          await ref.putFile(file, metadata).whenComplete(() {});
         } else {
-          uploadTask = await ref.putData(bytes!, metadata);
+          await ref.putData(bytes!, metadata).whenComplete(() {});
         }
       }
-      return await uploadTask.ref.getDownloadURL();
+      return await ref.getDownloadURL();
     } on FirebaseException catch (e) {
       throw Exception('Depolama hatası: ${e.message ?? 'Ürün görseli yüklenemedi.'}');
     } catch (e) {
@@ -175,14 +181,16 @@ class StorageService {
     Uint8List? bytes,
   }) async {
     try {
+      if (userId.trim().isEmpty) throw Exception('Geçersiz User ID');
+
       final ref = _storage.ref().child('users/$userId/avatar.jpg');
       final metadata = _getMetadata('avatar.jpg');
-      final TaskSnapshot uploadTask;
+      
       if (kIsWeb) {
         if (bytes == null) {
           throw ArgumentError('Web platformunda resim yükleme için bytes parametresi zorunludur.');
         }
-        uploadTask = await ref.putData(bytes, metadata);
+        await ref.putData(bytes, metadata).whenComplete(() {});
       } else {
         if (imageFile == null && bytes == null) {
           throw ArgumentError('Mobil platformda imageFile veya bytes parametresi zorunludur.');
@@ -191,12 +199,12 @@ class StorageService {
           if (!await imageFile.exists()) {
             throw Exception('Yüklenecek resim cihazda bulunamadı veya erişilemiyor.');
           }
-          uploadTask = await ref.putFile(imageFile, metadata);
+          await ref.putFile(imageFile, metadata).whenComplete(() {});
         } else {
-          uploadTask = await ref.putData(bytes!, metadata);
+          await ref.putData(bytes!, metadata).whenComplete(() {});
         }
       }
-      return await uploadTask.ref.getDownloadURL();
+      return await ref.getDownloadURL();
     } on FirebaseException catch (e) {
       throw Exception('Depolama hatası: ${e.message ?? 'Resim yüklenemedi.'}');
     } catch (e) {

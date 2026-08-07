@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -131,11 +132,10 @@ class NotificationService {
     final androidPlugin = _notificationsPlugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     if (androidPlugin != null) {
-      final notifGranted =
-          await androidPlugin.requestNotificationsPermission() ?? false;
+      final status = await Permission.notification.request();
       final exactAlarmGranted =
           await androidPlugin.requestExactAlarmsPermission() ?? false;
-      granted = notifGranted || exactAlarmGranted;
+      granted = status.isGranted || exactAlarmGranted;
     }
 
     // iOS İzinleri

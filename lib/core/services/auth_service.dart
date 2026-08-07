@@ -160,19 +160,61 @@ class AuthService {
 
   /// Apple ile doğrudan giriş yapar.
   Future<UserCredential?> signInWithApple() async {
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
 
-    final oauthCredential = OAuthProvider('apple.com').credential(
-      idToken: appleCredential.identityToken,
-      accessToken: appleCredential.authorizationCode,
-    );
+      final oauthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
 
-    return _auth.signInWithCredential(oauthCredential);
+      return await _auth.signInWithCredential(oauthCredential);
+    } catch (e) {
+      final message = e.toString().toLowerCase();
+      if (message.contains('canceled') ||
+          message.contains('cancelled') ||
+          message.contains('cancel')) {
+        return null;
+      }
+      rethrow;
+    }
+  }
+
+  // ── Apple Hesap Bağlama (Account Linking) ───────────────────────────────
+
+  /// Anonim hesabı Apple ile kalıcı hesaba bağlar.
+  Future<UserCredential?> linkWithApple() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oauthCredential = OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      return await user.linkWithCredential(oauthCredential);
+    } catch (e) {
+      final message = e.toString().toLowerCase();
+      if (message.contains('canceled') ||
+          message.contains('cancelled') ||
+          message.contains('cancel')) {
+        return null;
+      }
+      rethrow;
+    }
   }
 
   // ── Çıkış ────────────────────────────────────────────────────────────────

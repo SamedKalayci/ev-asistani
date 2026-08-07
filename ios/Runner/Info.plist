@@ -91,6 +91,10 @@
 		<string>Fiş, fatura veya profil fotoğrafı çekmek için kameranıza erişim gereklidir.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Fiş, fatura veya profil fotoğrafı yüklemek için fotoğraf galerinize erişim gereklidir.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Düzenlenen veya seçilen görselleri galerinize kaydetmek için erişim gereklidir.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Uygulama içi kamera kullanımında ses kaydı için mikrofon erişimi gereklidir.</string>
 		<key>NSUserTrackingUsageDescription</key>
 		<string>Size daha uygun reklamlar ve kişiselleştirilmiş içerikler sunabilmek için cihaz verilerinize erişim izni istiyoruz.</string>
 	</dict>

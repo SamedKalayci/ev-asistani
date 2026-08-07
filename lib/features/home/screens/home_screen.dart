@@ -22,6 +22,7 @@ import '../../profile/providers/family_provider.dart';
 import '../../shopping/providers/shopping_provider.dart';
 import '../../warranty/models/warranty_model.dart';
 import '../../warranty/providers/warranty_provider.dart';
+import '../../warranty/screens/warranty_form_screen.dart';
 import '../../finance/widgets/quick_add_expense_bottom_sheet.dart';
 import '../../finance/providers/finance_provider.dart';
 import '../../finance/models/payment_schedule_model.dart';
@@ -718,7 +719,7 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
             TextButton(
-              onPressed: () => context.go(AppRoutes.inventory),
+              onPressed: () => context.go(AppRoutes.warranty),
               child: Text(
                 'Tümünü Gör',
                 style: AppTypography.labelLarge.copyWith(
@@ -1211,6 +1212,29 @@ class HomeScreen extends ConsumerWidget {
                   width: 40,
                   height: 40,
                   decoration: const BoxDecoration(
+                    color: Color(0xFFFFF3E0),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.verified_user_outlined, color: Color(0xFFF57C00)),
+                ),
+                title: Text(
+                  'Garanti Belgesi / Evrak Ekle',
+                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                ),
+                subtitle: const Text('Ürün garanti belgeleri ve cihaz evrakları'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const WarrantyFormScreen()),
+                  );
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
                     color: Color(0xFFE3F2FD),
                     shape: BoxShape.circle,
                   ),
@@ -1224,27 +1248,6 @@ class HomeScreen extends ConsumerWidget {
                 onTap: () {
                   Navigator.pop(context);
                   _showShoppingQuickAddBottomSheet(context, ref);
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFDCFCE7),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.flash_on_rounded, color: AppColors.primary),
-                ),
-                title: Text(
-                  'Hızlı Harcama Ekle',
-                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
-                ),
-                subtitle: const Text('Ev cüzdanına hızlı harcama kaydı'),
-                onTap: () {
-                  Navigator.pop(context);
-                  QuickAddExpenseBottomSheet.show(context);
                 },
               ),
               const SizedBox(height: AppSpacing.md),

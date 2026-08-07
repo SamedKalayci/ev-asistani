@@ -11,6 +11,9 @@ final financeRepositoryProvider = Provider<FinanceRepository>((ref) {
   return FinanceRepository(firestoreService);
 });
 
+/// Finance sekmesindeki aktif tabı (0: Genel Bakış, 1: Ev Cüzdanı) tutan provider.
+final financeTabProvider = StateProvider<int>((ref) => 0);
+
 /// Aktif ailenin tüm finans kalemlerini sunan ve tarihe göre sıralayan StreamProvider.
 final financeItemsProvider = StreamProvider<List<FinanceItemModel>>((ref) {
   final familyId = ref.watch(activeFamilyIdProvider);

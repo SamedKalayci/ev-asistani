@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../features/inventory/screens/inventory_screen.dart';
+import '../../features/finance/providers/finance_provider.dart';
 import '../../router/app_router.dart';
 
 /// 5 sekmeli alt navigasyon (CustomBottomNavigation) bileşeni.
@@ -74,6 +75,11 @@ class CustomBottomNavigation extends ConsumerWidget {
     // Envanter sekmesine tıklanmışsa üst sekmeleri "Son Kullanma" (0) ekranına sıfırla
     if (index == 1) {
       ref.read(inventoryTabProvider.notifier).state = 0;
+    }
+
+    // Finans sekmesine tıklanmışsa üst sekmeleri "Genel Bakış" (0) ekranına sıfırla
+    if (index == 3) {
+      ref.read(financeTabProvider.notifier).state = 0;
     }
 
     // 2. StatefulNavigationShell varsa goBranch(index, initialLocation: true) ile sekme köküne sıfırla

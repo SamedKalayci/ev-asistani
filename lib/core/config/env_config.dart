@@ -29,5 +29,5 @@ class EnvConfig {
       dotenv.env['ADMOB_REWARDED_ID_ANDROID'] ?? 'ca-app-pub-3940256099942544/5224354917';
 
   static String get admobRewardedIdIOS =>
-      dotenv.env['ADMOB_REWARDED_ID_IOS'] ?? 'ca-app-pub-3940256099942544/1712485639';
+      dotenv.env['ADMOB_REWARDED_ID_IOS'] ?? 'ca-app-pub-3940256099942544/1712485313';
 }
