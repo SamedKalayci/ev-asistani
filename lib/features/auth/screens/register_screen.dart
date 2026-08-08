@@ -58,13 +58,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-              'Hesabınız başarıyla oluşturuldu! Doğrulama e-postası gönderildi. 📧',
+              'E-posta adresinize onay bağlantısı gönderildi. Lütfen e-postanızı onaylayıp giriş yapın.',
             ),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
         );
-        context.go(AppRoutes.emailVerification);
+        context.go(AppRoutes.login);
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {

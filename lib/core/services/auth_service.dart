@@ -48,15 +48,26 @@ class AuthService {
 
   /// Mevcut kullanıcı ile e-posta & parola girişi yapar.
   ///
-  /// Throws [FirebaseAuthException] giriş hatalarında.
+  /// Throws [FirebaseAuthException] giriş hatalarında veya e-posta doğrulanmamışsa.
   Future<UserCredential> signInWithEmailAndPassword({
     required String email,
     required String password,
-  }) =>
-      _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+  }) async {
+    final credential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final user = credential.user;
+    if (user != null && !user.emailVerified) {
+      await _auth.signOut();
+      throw FirebaseAuthException(
+        code: 'email-not-verified',
+        message:
+            'Lütfen önce e-posta adresinize gönderilen onay bağlantısına tıklayın.',
       );
+    }
+    return credential;
+  }
 
   /// Anonim hesabı e-posta & parola ile kalıcı hesaba bağlar.
   ///

@@ -39,10 +39,6 @@ class AuthRepository {
         await user.updateDisplayName(name.trim());
       } catch (_) {}
 
-      try {
-        await user.sendEmailVerification();
-      } catch (_) {}
-
       await _firestoreService.setUser(
         user.uid,
         {
@@ -56,6 +52,13 @@ class AuthRepository {
         },
         merge: true,
       );
+
+      try {
+        await user.sendEmailVerification();
+      } catch (_) {}
+
+      // Standart kayıt ol akışında oturumu hemen kapat
+      await _authService.signOut();
     }
     return credential;
   }
@@ -194,6 +197,10 @@ class AuthRepository {
           'updatedAt': FieldValue.serverTimestamp(),
         };
         await _firestoreService.setUser(user.uid, updates, merge: true);
+
+        try {
+          await user.sendEmailVerification();
+        } catch (_) {}
       }
       return credential;
     } catch (e) {

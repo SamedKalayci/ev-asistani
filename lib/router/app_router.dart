@@ -15,6 +15,7 @@ import '../features/profile/screens/profile_screen.dart';
 import '../features/recipes/screens/recipe_form_screen.dart';
 import '../features/recipes/screens/recipes_screen.dart';
 import '../features/shopping/screens/shopping_screen.dart';
+import '../features/vault/screens/vault_maintenance_screen.dart';
 import '../features/warranty/screens/warranty_form_screen.dart';
 import '../features/splash/screens/splash_screen.dart';
 import '../shared/widgets/app_scaffold.dart';
@@ -158,6 +159,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                 ],
               ),
+              // Ev Kasası sekmesi (tab 2)
+              GoRoute(
+                path: AppRoutes.vault,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: InventoryScreen(initialTabIndex: 2),
+                ),
+              ),
+              // Ev Kasası > Periyodik Bakım Takvimi detay sayfası
+              GoRoute(
+                path: AppRoutes.vaultMaintenance,
+                builder: (context, state) => const VaultMaintenanceScreen(),
+              ),
             ],
           ),
           // Branch 2: Alışveriş
@@ -230,6 +243,10 @@ class AppRoutes {
   static const String expirationAdd = '/son-kullanma/ekle';
   static const String warranty = '/garanti';
   static const String warrantyAdd = '/garanti/ekle';
+  // Ev Kasası sekmesi (InventoryScreen tab=2)
+  static const String vault = '/ev-kasasi';
+  // Ev Kasası > Periyodik Bakım (tab=2 açık, ardından VaultMaintenanceScreen push)
+  static const String vaultMaintenance = '/ev-kasasi/bakim';
   static const String shopping = '/alisveris';
   static const String finance = '/finans';
   static const String recipes = '/tarifler';

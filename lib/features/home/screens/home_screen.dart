@@ -563,18 +563,20 @@ class HomeScreen extends ConsumerWidget {
       children: [
         // Başlık & Tümünü Gör
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Son Kullanma Tarihleri\nYaklaşıyor',
-              style: AppTypography.titleLarge.copyWith(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-                height: 1.2,
+            Flexible(
+              child: Text(
+                'Son Kullanma Tarihleri\nYaklaşıyor',
+                style: AppTypography.titleLarge.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
               ),
             ),
             TextButton(
-              onPressed: () => context.go(AppRoutes.inventory),
+              onPressed: () => context.go(AppRoutes.expiration),
               child: Text(
                 'Tümünü\nGör',
                 textAlign: TextAlign.right,
@@ -626,7 +628,7 @@ class HomeScreen extends ConsumerWidget {
     ExpirationModel item,
   ) {
     return InkWell(
-      onTap: () => context.go(AppRoutes.inventory),
+      onTap: () => context.go(AppRoutes.expiration),
       borderRadius: AppRadius.borderLg,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.md),
@@ -709,13 +711,15 @@ class HomeScreen extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Garanti Süresi Yaklaşıyor',
-              style: AppTypography.titleLarge.copyWith(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
+            Flexible(
+              child: Text(
+                'Garanti Süresi Yaklaşıyor',
+                style: AppTypography.titleLarge.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             TextButton(
@@ -769,7 +773,7 @@ class HomeScreen extends ConsumerWidget {
     WarrantyModel item,
   ) {
     return InkWell(
-      onTap: () => context.go(AppRoutes.inventory),
+      onTap: () => context.go(AppRoutes.warranty),
       borderRadius: AppRadius.borderLg,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.md),
@@ -1057,24 +1061,29 @@ class HomeScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Başlık & Tümünü Gör — Flexible ile taşmayı önle
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                const Icon(Icons.build_circle_outlined, size: 20, color: Color(0xFF2563EB)),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  'Yaklaşan Periyodik Bakımlar',
-                  style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+            Flexible(
+              child: Text(
+                'Yaklaşan Periyodik Bakımlar',
+                style: AppTypography.titleLarge.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            Text(
-              '${maintenanceItems.length} Görev',
-              style: AppTypography.labelSmall.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
+            TextButton(
+              onPressed: () => context.go(AppRoutes.vault),
+              child: Text(
+                'Tümünü Gör',
+                style: AppTypography.labelLarge.copyWith(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -1084,63 +1093,82 @@ class HomeScreen extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: maintenanceItems.take(3).length,
-          separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+          separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
           itemBuilder: (context, index) {
             final item = maintenanceItems[index];
-            return Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: const Color(0xFFEFF6FF),
-                borderRadius: AppRadius.borderLg,
-                border: Border.all(color: const Color(0xFFBFDBFE)),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFDBEAFE),
-                      borderRadius: AppRadius.borderMd,
-                    ),
-                    child: const Icon(Icons.build_rounded, size: 20, color: Color(0xFF2563EB)),
+            // Kart tıklaması: Ev Kasası sekmesine git (Bakım Takvimi sekmesi)
+            return InkWell(
+              onTap: () => context.go(AppRoutes.vault),
+              borderRadius: AppRadius.borderLg,
+              child: Container(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerLowest,
+                  borderRadius: AppRadius.borderLg,
+                  boxShadow: AppShadows.xs,
+                  border: Border.all(
+                    color: colorScheme.outlineVariant.withValues(alpha: 0.3),
                   ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.title,
-                          style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.bold),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (item.description.isNotEmpty)
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerLow,
+                        borderRadius: AppRadius.borderMd,
+                      ),
+                      child: Icon(
+                        Icons.build_rounded,
+                        size: 20,
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            item.description,
-                            style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
+                            item.title,
+                            style: AppTypography.bodyMedium.copyWith(
+                              color: colorScheme.onSurface,
+                              fontWeight: FontWeight.bold,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: AppRadius.borderFull,
-                      border: Border.all(color: const Color(0xFF93C5FD)),
-                    ),
-                    child: Text(
-                      item.remainingDaysText,
-                      style: AppTypography.labelSmall.copyWith(
-                        color: const Color(0xFF1E40AF),
-                        fontWeight: FontWeight.bold,
+                          if (item.description.isNotEmpty)
+                            Text(
+                              item.description,
+                              style: AppTypography.labelSmall.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainerLow,
+                        borderRadius: AppRadius.borderFull,
+                        border: Border.all(
+                          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      child: Text(
+                        item.remainingDaysText,
+                        style: AppTypography.labelSmall.copyWith(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },

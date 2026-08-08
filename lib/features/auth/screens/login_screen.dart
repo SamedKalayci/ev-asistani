@@ -49,27 +49,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     try {
       final authRepo = ref.read(authRepositoryProvider);
-      final credential = await authRepo.signInWithEmailAndPassword(
+      await authRepo.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-
-      final user = credential.user;
-      if (user != null && !user.emailVerified) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'E-posta adresiniz henüz doğrulanmamış. Lütfen e-postanıza gelen doğrulama bağlantısını onaylayın.',
-              ),
-              backgroundColor: AppColors.tertiary,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-          context.go(AppRoutes.emailVerification);
-        }
-        return;
-      }
 
       if (mounted) {
         context.go(AppRoutes.home);
@@ -77,7 +60,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         String message = 'Giriş yapılamadı.';
-        if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
+        if (e.code == 'email-not-verified') {
+          message = 'Lütfen önce e-posta adresinize gönderilen onay bağlantısına tıklayın.';
+        } else if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
           message = 'E-posta veya şifre hatalı.';
         } else if (e.code == 'wrong-password') {
           message = 'Şifre hatalı.';

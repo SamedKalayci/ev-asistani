@@ -35,12 +35,19 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   @override
   void initState() {
     super.initState();
-    final initial = ref.read(inventoryTabProvider);
+    // widget.initialTabIndex ile geldiyse (home'dan deep-nav), onu esas al
+    final startIndex = widget.initialTabIndex.clamp(0, 2);
     _tabController = TabController(
       length: 3,
       vsync: this,
-      initialIndex: initial.clamp(0, 2),
+      initialIndex: startIndex,
     );
+    // Provider'ı post-frame'de güncelle (initState içinde state yazılamaz)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref.read(inventoryTabProvider.notifier).state = startIndex;
+      }
+    });
     _tabController.addListener(() {
       if (mounted && _tabController.indexIsChanging) {
         ref.read(inventoryTabProvider.notifier).state = _tabController.index;

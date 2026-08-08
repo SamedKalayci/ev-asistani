@@ -173,10 +173,19 @@ class _LinkAccountBottomSheetState
            
            if (mounted && credential != null) {
              Navigator.of(context).pop();
-             ScaffoldMessenger.of(context).showSnackBar(
-               const SnackBar(
-                 content: Text('🎉 Hesabınız başarıyla E-posta ile bağlandı!'),
-                 backgroundColor: AppColors.primary,
+             showDialog(
+               context: context,
+               builder: (ctx) => AlertDialog(
+                 title: const Text('E-posta Doğrulama'),
+                 content: const Text(
+                   'E-posta adresinize onay linki gönderildi. Bağlantıya tıklayıp e-postanızı onayladıktan sonra e-posta ile giriş yapabilirsiniz.',
+                 ),
+                 actions: [
+                   TextButton(
+                     onPressed: () => Navigator.of(ctx).pop(),
+                     child: const Text('Tamam'),
+                   ),
+                 ],
                ),
              );
            }

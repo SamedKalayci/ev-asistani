@@ -119,7 +119,12 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
           }
           return;
         } else if (!status.isGranted && !status.isLimited) {
-          return;
+          // Galeri için isRestricted (iOS Limited'ın bazı sürümlerde görünümü) de geçerlidir
+          if (source == ImageSource.gallery && status.isRestricted) {
+            // isRestricted durumunda galeri erişimine izin ver — devam et
+          } else {
+            return;
+          }
         }
       }
       final picker = ImagePicker();

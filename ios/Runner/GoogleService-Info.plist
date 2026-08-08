@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>687057369612-59bgoioaluavvndc4n4q1u2q7b6fpd7t.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.687057369612-59bgoioaluavvndc4n4q1u2q7b6fpd7t</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>687057369612-lfnhm40okn34ncvthp8vcbs7hg4ifsus.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCsL4mXwvhLlkbjqpOYdS70MLmZ89WT23g</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.evasisstani.evAsistani</string>
+	<string>com.samedkalayci.evasistani</string>
 	<key>PROJECT_ID</key>
 	<string>ev-asistani-1</string>
 	<key>STORAGE_BUCKET</key>
@@ -24,11 +30,7 @@
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
-	<key>CLIENT_ID</key>
-	<string>687057369612-4bljhci5up2bnaqdmmf5b2tq9p1o4or9.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.687057369612-4bljhci5up2bnaqdmmf5b2tq9p1o4or9</string>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:687057369612:ios:52db05bea7d40ddbf30c29</string>
+	<string>1:687057369612:ios:8a1632eee9fbfeb3f30c29</string>
 </dict>
 </plist>
