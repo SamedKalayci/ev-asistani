@@ -128,6 +128,18 @@ abstract class AppLocalizations {
   /// **'Uygulama dilini değiştirin (Türkçe / English)'**
   String get languageSelectionSubtitle;
 
+  /// No description provided for @currencySelection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Para Birimi'**
+  String get currencySelection;
+
+  /// No description provided for @currencySelectionSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ücret ve bütçe ekranlarında kullanılacak para birimini seçin'**
+  String get currencySelectionSubtitle;
+
   /// No description provided for @preferencesAndSettings.
   ///
   /// In tr, this message translates to:
@@ -1357,6 +1369,408 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bütçe hedefleri güncellendi!'**
   String get budgetPlanUpdated;
+
+  /// No description provided for @linkAccountTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınızı Bağlayın'**
+  String get linkAccountTitle;
+
+  /// No description provided for @guestModeDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir modundasınız. Verilerinizi kaybetmeden hesabınızı kalıcı yapın.'**
+  String get guestModeDesc;
+
+  /// No description provided for @guestModeBottomSheetDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir modundasınız. Verilerinizi kaybetmemek için bir giriş yöntemi seçerek kalıcı bir hesap oluşturun.'**
+  String get guestModeBottomSheetDesc;
+
+  /// No description provided for @connectionOptions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı Seçenekleri'**
+  String get connectionOptions;
+
+  /// No description provided for @userRoleLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcı'**
+  String get userRoleLabel;
+
+  /// No description provided for @anonymousSession.
+  ///
+  /// In tr, this message translates to:
+  /// **'Anonim Oturum'**
+  String get anonymousSession;
+
+  /// No description provided for @notMemberOfFamilyYet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz Bir Aileye Bağlı Değilsiniz'**
+  String get notMemberOfFamilyYet;
+
+  /// No description provided for @notMemberOfHomeYet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz Bir Eve Dahil Değilsiniz'**
+  String get notMemberOfHomeYet;
+
+  /// No description provided for @noHomeSyncDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak ürün ve alışveriş listesi senkronizasyonu için bir ev oluşturun veya var olan bir eve davet kodu ile katılın.'**
+  String get noHomeSyncDesc;
+
+  /// No description provided for @createHome.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev Oluştur'**
+  String get createHome;
+
+  /// No description provided for @enterCode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kodu Gir'**
+  String get enterCode;
+
+  /// No description provided for @createOrJoinHome.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev Oluştur veya Katıl'**
+  String get createOrJoinHome;
+
+  /// No description provided for @createNewHomeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Ev / Aile Oluştur'**
+  String get createNewHomeTitle;
+
+  /// No description provided for @createNewHomeDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evinize bir isim verin. 1 kısa reklam izleyerek evinizi ücretsiz oluşturabilirsiniz.'**
+  String get createNewHomeDesc;
+
+  /// No description provided for @homeNameLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev / Aile Adı'**
+  String get homeNameLabel;
+
+  /// No description provided for @homeNameHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Yılmaz Ailesi'**
+  String get homeNameHint;
+
+  /// No description provided for @homeNameRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev adı zorunludur.'**
+  String get homeNameRequired;
+
+  /// No description provided for @roleInHomeLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evdeki Rolünüz'**
+  String get roleInHomeLabel;
+
+  /// No description provided for @roleHouseOwner.
+  ///
+  /// In tr, this message translates to:
+  /// **'👑 Ev Sahibi'**
+  String get roleHouseOwner;
+
+  /// No description provided for @roleMother.
+  ///
+  /// In tr, this message translates to:
+  /// **'👨‍👩‍👧 Anne'**
+  String get roleMother;
+
+  /// No description provided for @roleFather.
+  ///
+  /// In tr, this message translates to:
+  /// **'👨‍👩‍👦 Baba'**
+  String get roleFather;
+
+  /// No description provided for @roleChild.
+  ///
+  /// In tr, this message translates to:
+  /// **'👶 Çocuk'**
+  String get roleChild;
+
+  /// No description provided for @roleRoommate.
+  ///
+  /// In tr, this message translates to:
+  /// **'🏠 Ev Arkadaşı'**
+  String get roleRoommate;
+
+  /// No description provided for @roleOtherResident.
+  ///
+  /// In tr, this message translates to:
+  /// **'🐾 Diğer/Ev Sakini'**
+  String get roleOtherResident;
+
+  /// No description provided for @noUpcomingExpirationsMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yaklaşan son kullanma tarihi bulunan ürün yok. 👍'**
+  String get noUpcomingExpirationsMessage;
+
+  /// No description provided for @expirationProductItem.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Kullanma Tarihli Ürün'**
+  String get expirationProductItem;
+
+  /// No description provided for @expirationProductSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Buzdolabı veya kilerdeki gıda/ilaç takibi'**
+  String get expirationProductSubtitle;
+
+  /// No description provided for @warrantyDocumentItem.
+  ///
+  /// In tr, this message translates to:
+  /// **'Garanti Belgesi / Evrak Ekle'**
+  String get warrantyDocumentItem;
+
+  /// No description provided for @warrantyDocumentSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün garanti belgeleri ve cihaz evrakları'**
+  String get warrantyDocumentSubtitle;
+
+  /// No description provided for @enterQuickExpense.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı Harcama Gir'**
+  String get enterQuickExpense;
+
+  /// No description provided for @amountLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tutar'**
+  String get amountLabel;
+
+  /// No description provided for @amountRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen tutar girin'**
+  String get amountRequired;
+
+  /// No description provided for @validAmountRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçerli bir tutar girin'**
+  String get validAmountRequired;
+
+  /// No description provided for @shortDescriptionLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa Açıklama'**
+  String get shortDescriptionLabel;
+
+  /// No description provided for @shortDescriptionHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Kahve, Market vs.'**
+  String get shortDescriptionHint;
+
+  /// No description provided for @descriptionRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açıklama girin'**
+  String get descriptionRequired;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategori'**
+  String get categoryLabel;
+
+  /// No description provided for @addToPaymentSchedule.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ödeme Takvimine Ekle'**
+  String get addToPaymentSchedule;
+
+  /// No description provided for @editPaymentSchedule.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ödeme Takvimini Düzenle'**
+  String get editPaymentSchedule;
+
+  /// No description provided for @billExpenseOption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fatura / Gider'**
+  String get billExpenseOption;
+
+  /// No description provided for @incomeCollectionOption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahsilat / Gelir'**
+  String get incomeCollectionOption;
+
+  /// No description provided for @scheduleTitleLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlık (örn: Elektrik Faturası, Kira)'**
+  String get scheduleTitleLabel;
+
+  /// No description provided for @titleRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen başlık girin'**
+  String get titleRequired;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarih'**
+  String get dateLabel;
+
+  /// No description provided for @bankAccountNameOptional.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlgili Banka / Hesap Adı (Opsiyonel)'**
+  String get bankAccountNameOptional;
+
+  /// No description provided for @markAsPaid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ödendi Olarak İşaretle'**
+  String get markAsPaid;
+
+  /// No description provided for @repeatMonthly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık Tekrarlansın'**
+  String get repeatMonthly;
+
+  /// No description provided for @oneTimePaymentNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tek seferlik ödeme.'**
+  String get oneTimePaymentNotice;
+
+  /// No description provided for @addToScheduleBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takvime Ekle'**
+  String get addToScheduleBtn;
+
+  /// No description provided for @addNewDocumentTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Belge / Evrak Ekle'**
+  String get addNewDocumentTitle;
+
+  /// No description provided for @editDocumentTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Belgeyi Düzenle'**
+  String get editDocumentTitle;
+
+  /// No description provided for @documentTitleLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Belge Başlığı'**
+  String get documentTitleLabel;
+
+  /// No description provided for @documentTitleHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Tapu Senedi, Kira Sözleşmesi'**
+  String get documentTitleHint;
+
+  /// No description provided for @notesDescriptionLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açıklama / Notlar'**
+  String get notesDescriptionLabel;
+
+  /// No description provided for @notesDescriptionHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Dosya dolabında 2. gözde saklanıyor.'**
+  String get notesDescriptionHint;
+
+  /// No description provided for @addFileImage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dosya / Görsel Ekle'**
+  String get addFileImage;
+
+  /// No description provided for @selectPhotoDocument.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraf / Belge Seç'**
+  String get selectPhotoDocument;
+
+  /// No description provided for @saveDocumentBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Belgeyi Kaydet'**
+  String get saveDocumentBtn;
+
+  /// No description provided for @addNewContactTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni İletişim / Servis Numarası Ekle'**
+  String get addNewContactTitle;
+
+  /// No description provided for @editContactTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Numarayı Düzenle'**
+  String get editContactTitle;
+
+  /// No description provided for @namePersonLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'İsim / Kişi Adı'**
+  String get namePersonLabel;
+
+  /// No description provided for @namePersonHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Tesisatçı Ahmet Usta, Site Yönetimi'**
+  String get namePersonHint;
+
+  /// No description provided for @titleCategoryLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Unvan / Kategori'**
+  String get titleCategoryLabel;
+
+  /// No description provided for @titleCategoryHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Su Tesisatı, Elektrik, Çilingir, Yönetim'**
+  String get titleCategoryHint;
+
+  /// No description provided for @phoneNumberLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon Numarası'**
+  String get phoneNumberLabel;
+
+  /// No description provided for @phoneNumberHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: 0555 123 45 67'**
+  String get phoneNumberHint;
+
+  /// No description provided for @saveNumberBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Numarayı Kaydet'**
+  String get saveNumberBtn;
 }
 
 class _AppLocalizationsDelegate

@@ -11,6 +11,7 @@ class FamilyModel {
     this.createdAt,
     this.createdBy,
     this.isPremium = false,
+    this.isAdFree = false,
   });
 
   /// Firestore döküman ID'si.
@@ -34,6 +35,10 @@ class FamilyModel {
   /// Ailedeki herhangi bir üyenin PRO üyelik durumu.
   /// Bir üye PRO satın aldığında tüm aile üyeleri PRO sayılır.
   final bool isPremium;
+
+  /// Aile bazlı reklamsız mod durumu.
+  /// Bir üye Ad-Free satın aldığında tüm aile üyeleri reklamsız olur.
+  final bool isAdFree;
 
   // ── Takma adlar / Getters ──────────────────────────────────────────────────
 
@@ -61,6 +66,7 @@ class FamilyModel {
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
       createdBy: (map['createdBy'] as String?) ?? (map['ownerId'] as String?),
       isPremium: (map['isPremium'] as bool?) ?? false,
+      isAdFree: (map['isAdFree'] as bool?) ?? false,
     );
   }
 
@@ -85,6 +91,7 @@ class FamilyModel {
       'createdBy': createdBy,
       'ownerId': createdBy,
       'isPremium': isPremium,
+      'isAdFree': isAdFree,
       'createdAt': createdAt != null
           ? Timestamp.fromDate(createdAt!)
           : FieldValue.serverTimestamp(),
@@ -101,6 +108,7 @@ class FamilyModel {
     DateTime? createdAt,
     String? createdBy,
     bool? isPremium,
+    bool? isAdFree,
   }) {
     return FamilyModel(
       familyId: familyId ?? this.familyId,
@@ -110,6 +118,7 @@ class FamilyModel {
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
       isPremium: isPremium ?? this.isPremium,
+      isAdFree: isAdFree ?? this.isAdFree,
     );
   }
 

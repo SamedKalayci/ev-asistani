@@ -19,6 +19,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Change app language (Turkish / English)';
 
   @override
+  String get currencySelection => 'Currency';
+
+  @override
+  String get currencySelectionSubtitle =>
+      'Select currency for budget and finance screens';
+
+  @override
   String get preferencesAndSettings => 'Preferences & Settings';
 
   @override
@@ -674,4 +681,215 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get budgetPlanUpdated => 'Budget targets updated!';
+
+  @override
+  String get linkAccountTitle => 'Link Your Account';
+
+  @override
+  String get guestModeDesc =>
+      'You are in guest mode. Make your account permanent without losing data.';
+
+  @override
+  String get guestModeBottomSheetDesc =>
+      'You are in guest mode. Select a sign-in method to create a permanent account so you don\'t lose your data.';
+
+  @override
+  String get connectionOptions => 'Sign-in Options';
+
+  @override
+  String get userRoleLabel => 'User';
+
+  @override
+  String get anonymousSession => 'Anonymous Session';
+
+  @override
+  String get notMemberOfFamilyYet => 'Not Connected to a Family Yet';
+
+  @override
+  String get notMemberOfHomeYet => 'Not Connected to a Home Yet';
+
+  @override
+  String get noHomeSyncDesc =>
+      'Create a home or join an existing home with an invite code to sync items and shopping lists.';
+
+  @override
+  String get createHome => 'Create Home';
+
+  @override
+  String get enterCode => 'Enter Code';
+
+  @override
+  String get createOrJoinHome => 'Create or Join Home';
+
+  @override
+  String get createNewHomeTitle => 'Create New Home / Family';
+
+  @override
+  String get createNewHomeDesc =>
+      'Name your home. You can create your home for free by watching 1 short ad.';
+
+  @override
+  String get homeNameLabel => 'Home / Family Name';
+
+  @override
+  String get homeNameHint => 'e.g. Smith Family';
+
+  @override
+  String get homeNameRequired => 'Home name is required.';
+
+  @override
+  String get roleInHomeLabel => 'Your Role in Home';
+
+  @override
+  String get roleHouseOwner => '👑 House Owner';
+
+  @override
+  String get roleMother => '👨‍👩‍👧 Mother';
+
+  @override
+  String get roleFather => '👨‍👩‍👦 Father';
+
+  @override
+  String get roleChild => '👶 Child';
+
+  @override
+  String get roleRoommate => '🏠 Roommate';
+
+  @override
+  String get roleOtherResident => '🐾 Other/Resident';
+
+  @override
+  String get noUpcomingExpirationsMessage =>
+      'No products with upcoming expiration dates. 👍';
+
+  @override
+  String get expirationProductItem => 'Expiration Date Product';
+
+  @override
+  String get expirationProductSubtitle =>
+      'Track food/medicine in fridge or pantry';
+
+  @override
+  String get warrantyDocumentItem => 'Add Warranty Document / File';
+
+  @override
+  String get warrantyDocumentSubtitle =>
+      'Product warranty documents and appliance files';
+
+  @override
+  String get enterQuickExpense => 'Quick Add Expense';
+
+  @override
+  String get amountLabel => 'Amount';
+
+  @override
+  String get amountRequired => 'Please enter an amount';
+
+  @override
+  String get validAmountRequired => 'Please enter a valid amount';
+
+  @override
+  String get shortDescriptionLabel => 'Short Description';
+
+  @override
+  String get shortDescriptionHint => 'e.g. Coffee, Grocery etc.';
+
+  @override
+  String get descriptionRequired => 'Enter a description';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get addToPaymentSchedule => 'Add to Payment Schedule';
+
+  @override
+  String get editPaymentSchedule => 'Edit Payment Schedule';
+
+  @override
+  String get billExpenseOption => 'Bill / Expense';
+
+  @override
+  String get incomeCollectionOption => 'Income / Collection';
+
+  @override
+  String get scheduleTitleLabel => 'Title (e.g. Electricity Bill, Rent)';
+
+  @override
+  String get titleRequired => 'Please enter a title';
+
+  @override
+  String get dateLabel => 'Date';
+
+  @override
+  String get bankAccountNameOptional =>
+      'Associated Bank / Account Name (Optional)';
+
+  @override
+  String get markAsPaid => 'Mark as Paid';
+
+  @override
+  String get repeatMonthly => 'Repeat Monthly';
+
+  @override
+  String get oneTimePaymentNotice => 'One-time payment.';
+
+  @override
+  String get addToScheduleBtn => 'Add to Schedule';
+
+  @override
+  String get addNewDocumentTitle => 'Add New Document / File';
+
+  @override
+  String get editDocumentTitle => 'Edit Document';
+
+  @override
+  String get documentTitleLabel => 'Document Title';
+
+  @override
+  String get documentTitleHint => 'e.g. Title Deed, Lease Agreement';
+
+  @override
+  String get notesDescriptionLabel => 'Description / Notes';
+
+  @override
+  String get notesDescriptionHint =>
+      'e.g. Stored in 2nd drawer of file cabinet.';
+
+  @override
+  String get addFileImage => 'Add File / Image';
+
+  @override
+  String get selectPhotoDocument => 'Select Photo / Document';
+
+  @override
+  String get saveDocumentBtn => 'Save Document';
+
+  @override
+  String get addNewContactTitle => 'Add New Contact / Service Number';
+
+  @override
+  String get editContactTitle => 'Edit Number';
+
+  @override
+  String get namePersonLabel => 'Name / Contact Person';
+
+  @override
+  String get namePersonHint => 'e.g. Plumber John, Building Management';
+
+  @override
+  String get titleCategoryLabel => 'Title / Category';
+
+  @override
+  String get titleCategoryHint =>
+      'e.g. Plumbing, Electricity, Locksmith, Admin';
+
+  @override
+  String get phoneNumberLabel => 'Phone Number';
+
+  @override
+  String get phoneNumberHint => 'e.g. +1 555 123 4567';
+
+  @override
+  String get saveNumberBtn => 'Save Number';
 }

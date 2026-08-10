@@ -3,6 +3,8 @@
   "appName": "Asistente del Hogar",
   "languageSelection": "Selección de Idioma",
   "languageSelectionSubtitle": "Cambiar idioma de la aplicación",
+  "currencySelection": "Moneda",
+  "currencySelectionSubtitle": "Seleccionar moneda para pantallas de presupuesto y finanzas",
   "preferencesAndSettings": "Preferencias y Ajustes",
   "notificationSettings": "Ajustes de Notificaciones",
   "notificationSettingsSubtitle": "Gestionar notificaciones del sistema",

@@ -10,6 +10,7 @@ import '../../../l10n/app_localizations.dart';
 import '../models/finance_item_model.dart';
 import '../models/payment_schedule_model.dart';
 import '../providers/finance_provider.dart';
+import '../../../core/providers/currency_provider.dart';
 
 class MonthlySummaryBottomSheet extends ConsumerStatefulWidget {
   const MonthlySummaryBottomSheet({super.key});
@@ -31,6 +32,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
   int _selectedPeriodIndex = 1; // 0: Yıllık, 1: Aylık, 2: Haftalık, 3: Günlük
 
   String _formatCurrency(double amount) {
+    final symbol = ref.read(currencySymbolProvider);
     final isNegative = amount < 0;
     final absAmount = amount.abs().toStringAsFixed(0);
     final buffer = StringBuffer();
@@ -40,7 +42,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
       }
       buffer.write(absAmount[i]);
     }
-    return '${isNegative ? '-' : ''}₺${buffer.toString()}';
+    return '${isNegative ? '-' : ''}$symbol${buffer.toString()}';
   }
 
   @override

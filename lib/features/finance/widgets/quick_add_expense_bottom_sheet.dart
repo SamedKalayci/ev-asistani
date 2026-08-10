@@ -8,6 +8,8 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
+import '../../../core/providers/currency_provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/finance_item_model.dart';
 import '../providers/finance_provider.dart';
 
@@ -100,6 +102,8 @@ class _QuickAddExpenseBottomSheetState extends ConsumerState<QuickAddExpenseBott
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final currencySymbol = ref.watch(currencySymbolProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -142,7 +146,7 @@ class _QuickAddExpenseBottomSheetState extends ConsumerState<QuickAddExpenseBott
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Text(
-                  'Hızlı Harcama Gir',
+                  l10n.enterQuickExpense,
                   style: AppTypography.headlineSmall.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
@@ -152,28 +156,37 @@ class _QuickAddExpenseBottomSheetState extends ConsumerState<QuickAddExpenseBott
             ),
             const SizedBox(height: AppSpacing.xl),
             AppTextField(
-              label: 'Tutar (₺)',
+              label: '${l10n.amountLabel} ($currencySymbol)',
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              prefixIcon: const Icon(Icons.currency_lira_rounded, size: 18),
+              prefixIcon: Center(
+                widthFactor: 1.0,
+                child: Text(
+                  currencySymbol,
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
               validator: (v) {
-                if (v == null || v.trim().isEmpty) return 'Lütfen tutar girin';
-                if (double.tryParse(v.replaceAll(',', '.')) == null) return 'Geçerli bir tutar girin';
+                if (v == null || v.trim().isEmpty) return l10n.amountRequired;
+                if (double.tryParse(v.replaceAll(',', '.')) == null) return l10n.validAmountRequired;
                 return null;
               },
             ),
             const SizedBox(height: AppSpacing.md),
             AppTextField(
-              label: 'Kısa Açıklama',
+              label: l10n.shortDescriptionLabel,
               controller: _titleController,
-              hintText: 'Örn: Kahve, Market vs.',
-              validator: (v) => (v == null || v.trim().isEmpty) ? 'Açıklama girin' : null,
+              hintText: l10n.shortDescriptionHint,
+              validator: (v) => (v == null || v.trim().isEmpty) ? l10n.descriptionRequired : null,
             ),
             const SizedBox(height: AppSpacing.md),
             DropdownButtonFormField<FinanceCategory>(
               value: _selectedCategory,
               decoration: InputDecoration(
-                labelText: 'Kategori',
+                labelText: l10n.categoryLabel,
                 border: const OutlineInputBorder(borderRadius: AppRadius.borderMd),
                 contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
               ),
@@ -195,7 +208,7 @@ class _QuickAddExpenseBottomSheetState extends ConsumerState<QuickAddExpenseBott
             ),
             const SizedBox(height: AppSpacing.xxl),
             PrimaryButton(
-              text: 'Kaydet',
+              text: l10n.save,
               onPressed: _isLoading ? null : _saveExpense,
               isLoading: _isLoading,
               icon: Icons.check_circle_outline_rounded,

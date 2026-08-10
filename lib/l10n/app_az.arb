@@ -3,6 +3,8 @@
   "appName": "Ev köməkçisi",
   "languageSelection": "Dil seçimi",
   "languageSelectionSubtitle": "Tətbiq dilini dəyişin",
+  "currencySelection": "Valyuta",
+  "currencySelectionSubtitle": "Büdcə və maliyyə ekranları üçün valyuta seçin",
   "preferencesAndSettings": "Üstünlüklər və Tənzimləmələr",
   "notificationSettings": "Bildiriş Tənzimləmələri",
   "notificationSettingsSubtitle": "Sistem bildirişlərini idarə edin",

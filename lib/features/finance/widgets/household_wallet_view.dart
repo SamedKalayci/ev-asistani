@@ -13,13 +13,14 @@ import '../models/finance_item_model.dart';
 import '../providers/budget_provider.dart';
 import '../providers/finance_provider.dart';
 import 'budget_plan_bottom_sheet.dart';
+import '../../../core/providers/currency_provider.dart';
 
 class HouseholdWalletView extends ConsumerWidget {
   final List<FinanceItemModel> monthItems;
 
   const HouseholdWalletView({super.key, required this.monthItems});
 
-  String _formatCurrency(double amount) {
+  String _formatCurrency(double amount, String symbol) {
     final isNegative = amount < 0;
     final absAmount = amount.abs().toStringAsFixed(0);
     final buffer = StringBuffer();
@@ -29,7 +30,7 @@ class HouseholdWalletView extends ConsumerWidget {
       }
       buffer.write(absAmount[i]);
     }
-    return '${isNegative ? '-' : ''}₺${buffer.toString()}';
+    return '${isNegative ? '-' : ''}$symbol${buffer.toString()}';
   }
 
   @override
@@ -40,6 +41,7 @@ class HouseholdWalletView extends ConsumerWidget {
     
     final budgetsAsync = ref.watch(budgetsProvider);
     final rawBudgets = budgetsAsync.valueOrNull ?? [];
+    final currencySymbol = ref.watch(currencySymbolProvider);
 
     final Map<FinanceCategory, double> consolidatedBudgets = {};
     for (final b in rawBudgets) {
@@ -91,7 +93,7 @@ class HouseholdWalletView extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  _formatCurrency(monthlyFreeBudget),
+                  _formatCurrency(monthlyFreeBudget, currencySymbol),
                   style: AppTypography.displayMedium.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -196,7 +198,7 @@ class HouseholdWalletView extends ConsumerWidget {
                         ],
                       ),
                       Text(
-                        '${_formatCurrency(spent)} / ${_formatCurrency(limitAmount)}',
+                        '${_formatCurrency(spent, currencySymbol)} / ${_formatCurrency(limitAmount, currencySymbol)}',
                         style: AppTypography.labelSmall.copyWith(
                           color: isOver ? AppColors.error : colorScheme.onSurfaceVariant,
                           fontWeight: isOver ? FontWeight.bold : FontWeight.normal,
@@ -242,7 +244,7 @@ class HouseholdWalletView extends ConsumerWidget {
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             Text(
-              '${l10n.totalExpense}: ${_formatCurrency(totalWalletExpense)}',
+              '${l10n.totalExpense}: ${_formatCurrency(totalWalletExpense, currencySymbol)}',
               style: AppTypography.titleSmall.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
@@ -353,7 +355,7 @@ class HouseholdWalletView extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  _formatCurrency(data['amount'] as double),
+                  _formatCurrency(data['amount'] as double, ref.read(currencySymbolProvider)),
                   style: AppTypography.labelSmall.copyWith(
                     color: AppColors.error,
                     fontWeight: FontWeight.bold,
@@ -420,7 +422,7 @@ class HouseholdWalletView extends ConsumerWidget {
               ),
             ),
             Text(
-              '-${_formatCurrency(item.amount)}',
+              '-${_formatCurrency(item.amount, ref.read(currencySymbolProvider))}',
               style: AppTypography.bodyMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,

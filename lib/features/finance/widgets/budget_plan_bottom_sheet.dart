@@ -12,6 +12,7 @@ import '../../../shared/widgets/primary_button.dart';
 import '../models/budget_model.dart';
 import '../models/finance_item_model.dart';
 import '../providers/budget_provider.dart';
+import '../../../core/providers/currency_provider.dart';
 
 class BudgetPlanBottomSheet extends ConsumerStatefulWidget {
   final List<BudgetModel> currentBudgets;
@@ -113,6 +114,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
     final colorScheme = theme.colorScheme;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final l10n = AppLocalizations.of(context)!;
+    final currencySymbol = ref.watch(currencySymbolProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -192,7 +194,16 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
                             controller: _controllers[cat],
                             keyboardType: TextInputType.number,
                             hintText: l10n.limitAmountHint,
-                            prefixIcon: const Icon(Icons.currency_lira_rounded, size: 16),
+                            prefixIcon: Center(
+                              widthFactor: 1.0,
+                              child: Text(
+                                currencySymbol,
+                                style: AppTypography.titleSmall.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],

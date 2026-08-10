@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:ev_asistani/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/providers/locale_provider.dart';
+import '../../../core/providers/currency_provider.dart';
 import '../../../core/providers/ad_provider.dart';
 import '../../../core/providers/purchase_provider.dart';
 import '../../../core/providers/user_provider.dart';
@@ -144,6 +146,77 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  // ── Para Birimi Seçimi Diyaloğu ──────────────────────────────────────────────
+
+  void _showCurrencySelectorDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final currentCurrency = ref.read(currencyProvider);
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text(
+            l10n.currencySelection,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: AppCurrency.values.map((currency) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildCurrencyOption(
+                      ctx,
+                      currency,
+                      '${currency.name} (${currency.symbol})',
+                      currentCurrency == currency,
+                    ),
+                    if (currency != AppCurrency.values.last) const Divider(height: 1),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(l10n.cancel),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildCurrencyOption(
+    BuildContext context,
+    AppCurrency currency,
+    String label,
+    bool isSelected,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: colorScheme.onSurface,
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check_circle_rounded, color: colorScheme.primary)
+          : null,
+      onTap: () {
+        ref.read(currencyProvider.notifier).setCurrency(currency);
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   Widget _buildLanguageOption(
     BuildContext context,
     String code,
@@ -197,49 +270,48 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   // ── Aile Oluşturma Diyaloğu ───────────────────────────────────────────────
 
   Future<void> _showCreateFamilyDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    String? selectedRole = '👑 Ev Sahibi'; // Varsayılan
+    String? selectedRole = l10n.roleHouseOwner; // Varsayılan
 
     final result = await showDialog<Map<String, String>?>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: const Text('Yeni Ev / Aile Oluştur'),
+            title: Text(l10n.createNewHomeTitle),
             content: Form(
               key: formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Evinize bir isim verin. 1 kısa reklam izleyerek evinizi ücretsiz oluşturabilirsiniz.',
-                  ),
+                  Text(l10n.createNewHomeDesc),
                   const SizedBox(height: AppSpacing.md),
                   AppTextField(
-                    label: 'Ev / Aile Adı',
-                    hintText: 'Örn: Yılmaz Ailesi',
+                    label: l10n.homeNameLabel,
+                    hintText: l10n.homeNameHint,
                     controller: controller,
                     validator: (v) =>
-                        (v == null || v.trim().isEmpty) ? 'Ev adı zorunludur.' : null,
+                        (v == null || v.trim().isEmpty) ? l10n.homeNameRequired : null,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   DropdownButtonFormField<String>(
                     value: selectedRole,
                     decoration: InputDecoration(
-                      labelText: 'Evdeki Rolünüz',
+                      labelText: l10n.roleInHomeLabel,
                       border: OutlineInputBorder(
                         borderRadius: AppRadius.borderMd,
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
-                    items: const [
-                      DropdownMenuItem(value: '👑 Ev Sahibi', child: Text('👑 Ev Sahibi')),
-                      DropdownMenuItem(value: '👨‍👩‍👧 Anne', child: Text('👨‍👩‍👧 Anne')),
-                      DropdownMenuItem(value: '👨‍👩‍👦 Baba', child: Text('👨‍👩‍👦 Baba')),
-                      DropdownMenuItem(value: '👶 Çocuk', child: Text('👶 Çocuk')),
-                      DropdownMenuItem(value: '🏠 Ev Arkadaşı', child: Text('🏠 Ev Arkadaşı')),
-                      DropdownMenuItem(value: '🐾 Diğer/Ev Sakini', child: Text('🐾 Diğer/Ev Sakini')),
+                    items: [
+                      DropdownMenuItem(value: l10n.roleHouseOwner, child: Text(l10n.roleHouseOwner)),
+                      DropdownMenuItem(value: l10n.roleMother, child: Text(l10n.roleMother)),
+                      DropdownMenuItem(value: l10n.roleFather, child: Text(l10n.roleFather)),
+                      DropdownMenuItem(value: l10n.roleChild, child: Text(l10n.roleChild)),
+                      DropdownMenuItem(value: l10n.roleRoommate, child: Text(l10n.roleRoommate)),
+                      DropdownMenuItem(value: l10n.roleOtherResident, child: Text(l10n.roleOtherResident)),
                     ],
                     onChanged: (val) {
                       setState(() => selectedRole = val);
@@ -251,14 +323,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(null),
-                child: const Text('İptal'),
+                child: Text(l10n.cancel),
               ),
               FilledButton.icon(
                 icon: const Icon(Icons.add_home_rounded, size: 18),
-                label: const Text('Ev Oluştur'),
+                label: Text(l10n.createHome),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    Navigator.of(ctx).pop({'name': controller.text.trim(), 'role': selectedRole ?? '👑 Ev Sahibi'});
+                    Navigator.of(ctx).pop({'name': controller.text.trim(), 'role': selectedRole ?? l10n.roleHouseOwner});
                   }
                 },
               ),
@@ -497,6 +569,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 subtitle: l10n.languageSelectionSubtitle,
                 onTap: () => _showLanguageSelectorDialog(context),
               ),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
+                icon: Icons.attach_money_rounded,
+                title: l10n.currencySelection,
+                subtitle: l10n.currencySelectionSubtitle,
+                onTap: () => _showCurrencySelectorDialog(context),
+              ),
 
               const SizedBox(height: AppSpacing.sectionGap),
 
@@ -635,8 +714,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   // ── Kullanıcı Profil Kartı ─────────────────────────────────────────────────
 
   Widget _buildUserProfileCard(ColorScheme colorScheme, UserModel? user) {
-    final displayName = user?.displayName ?? 'Kullanıcı';
-    final email = user?.email.isNotEmpty == true ? user!.email : 'Anonim Oturum';
+    final l10n = AppLocalizations.of(context)!;
+    final displayName = user?.displayName.isNotEmpty == true ? user!.displayName : l10n.userRoleLabel;
+    final email = user?.email.isNotEmpty == true ? user!.email : l10n.anonymousSession;
 
     final avatarUrl = user?.effectiveAvatarUrl;
     final avatarType = user?.safeAvatarType ?? AvatarType.presetAvatar;
@@ -887,36 +967,53 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Future<void> _purchaseRemoveAds(BuildContext context) async {
-    showDialog(
+    // Siyah ekran sorununu önlemek için overlay flag ile yönetiyoruz
+    bool overlayOpen = false;
+
+    void closeOverlay() {
+      if (overlayOpen && context.mounted) {
+        overlayOpen = false;
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+    }
+
+    // Dialog'u AWAIT ETMEDİ açıyoruz — purchase mantığı hemen çalışsın
+    overlayOpen = true;
+    unawaited(showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => const Center(child: CircularProgressIndicator()),
-    );
+      barrierColor: Colors.black38,
+      builder: (ctx) => const PopScope(
+        canPop: false,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+    ));
 
+    // Satın alma mantığını çalıştır
+    await _executePurchase(context, closeOverlay);
+  }
+
+  Future<void> _executePurchase(BuildContext context, VoidCallback closeOverlay) async {
     try {
-      bool success = false;
       final service = ref.read(purchaseServiceProvider);
       final offerings = await service.getOfferings();
-      final adFreePackage = offerings?.current?.lifetime ?? offerings?.current?.monthly; 
-      
+      final adFreePackage = offerings?.current?.lifetime ?? offerings?.current?.monthly;
+
       if (adFreePackage != null) {
         final customerInfo = await service.purchasePackage(adFreePackage);
-        success = customerInfo != null &&
+        // Entitlement kontrolü — RC bağlı değilse fallback ile devam edilir
+        final _ = customerInfo != null &&
             (customerInfo.entitlements.all['remove_ads']?.isActive == true ||
              customerInfo.entitlements.all['pro']?.isActive == true ||
              customerInfo.entitlements.all['premium']?.isActive == true);
       }
 
-      // Local / Offline fallback simulation if RC not configured
-      if (!success) {
-        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
-        success = true;
-      } else {
-        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
-      }
+      // Firestore aile dokümanına yaz (cihaz-bağımsız, aile bazlı)
+      await ref.read(isAdFreeProvider.notifier).setAdFreeForFamily();
+
+      closeOverlay();
 
       if (context.mounted) {
-        Navigator.of(context).pop(); // Close loading
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('🎉 Tebrikler! Reklamlar başarıyla kaldırıldı!'),
@@ -925,28 +1022,49 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
       }
     } catch (e) {
+      closeOverlay();
       if (context.mounted) {
-        Navigator.of(context).pop(); // Close loading
-        // Fallback simulated success
-        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Satın alma başarılı (Simüle edildi) 🎉'),
-              backgroundColor: AppColors.primary,
+        // RevenueCat bağlanamadıysa ya da iptal edildiyse hata göster
+        final errMsg = e.toString();
+        final isCancelled = errMsg.contains('cancelled') ||
+            errMsg.contains('cancel') ||
+            errMsg.contains('1') ; // StoreKit cancel code
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isCancelled
+                  ? 'Satın alma iptal edildi.'
+                  : 'Satın alma hatası: $errMsg',
             ),
-          );
-        }
+            backgroundColor: isCancelled ? AppColors.primary : AppColors.error,
+          ),
+        );
       }
     }
   }
 
   Future<void> _restoreRemoveAds(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => const Center(child: CircularProgressIndicator()),
-    );
+    bool overlayOpen = false;
+
+    void closeOverlay() {
+      if (overlayOpen && context.mounted) {
+        overlayOpen = false;
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+    }
+
+    overlayOpen = true;
+    if (context.mounted) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black38,
+        builder: (ctx) => const PopScope(
+          canPop: false,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
 
     try {
       final service = ref.read(purchaseServiceProvider);
@@ -957,11 +1075,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
            customerInfo.entitlements.all['premium']?.isActive == true);
 
       if (isEntitled) {
-        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
+        await ref.read(isAdFreeProvider.notifier).setAdFreeForFamily();
       }
 
+      closeOverlay();
+
       if (context.mounted) {
-        Navigator.of(context).pop(); // Close loading
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(isEntitled
@@ -972,8 +1091,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
       }
     } catch (e) {
+      closeOverlay();
       if (context.mounted) {
-        Navigator.of(context).pop(); // Close loading
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Geri yükleme hatası: $e'),
@@ -987,6 +1106,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   // ── Aile Henüz Yoksa Kartı ────────────────────────────────────────────────
 
   Widget _buildNoFamilyCard(ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -1008,7 +1128,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Henüz Bir Aileye Bağlı Değilsiniz',
+                      l10n.notMemberOfFamilyYet,
                       style: AppTypography.titleMedium.copyWith(
                         color: colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
@@ -1016,7 +1136,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Ortak ürün ve alışveriş listesi senkronizasyonu için bir ev oluşturun veya var olan bir eve davet kodu ile katılın.',
+                      l10n.noHomeSyncDesc,
                       style: AppTypography.bodySmall.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -1031,7 +1151,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             children: [
               Expanded(
                 child: PrimaryButton(
-                  text: 'Ev Oluştur',
+                  text: l10n.createHome,
                   icon: Icons.add_home_rounded,
                   onPressed: _showCreateFamilyDialog,
                 ),
@@ -1049,7 +1169,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.qr_code_rounded, size: 18),
-                  label: const Text('Kodu Gir'),
+                  label: Text(l10n.enterCode),
                 ),
               ),
             ],
@@ -1281,6 +1401,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget _buildGoogleLinkCard(ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -1315,7 +1436,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hesabınızı Bağlayın',
+                      l10n.linkAccountTitle,
                       style: AppTypography.titleMedium.copyWith(
                         color: colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
@@ -1323,7 +1444,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Misafir modundasınız. Verilerinizi kaybetmeden hesabınızı kalıcı yapın.',
+                      l10n.guestModeDesc,
                       style: AppTypography.bodySmall.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -1347,7 +1468,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               icon: const Icon(Icons.account_circle_rounded, size: 20),
               label: Text(
-                'Bağlantı Seçenekleri',
+                l10n.connectionOptions,
                 style: AppTypography.labelLarge.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onPrimary,

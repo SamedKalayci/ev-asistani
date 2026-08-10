@@ -5,6 +5,7 @@ import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -260,6 +261,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     
+    final l10n = AppLocalizations.of(context)!;
     return Material(
       color: Theme.of(context).colorScheme.surface,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
@@ -290,7 +292,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
               ),
               const SizedBox(height: AppSpacing.xl),
               Text(
-                widget.scheduleToEdit != null ? 'Ödeme Kaydını Düzenle' : 'Ödeme Takvimine Ekle',
+                widget.scheduleToEdit != null ? l10n.editPaymentSchedule : l10n.addToPaymentSchedule,
                 style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -301,7 +303,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
                 children: [
                   Expanded(
                     child: RadioListTile<bool>(
-                      title: const Text('Fatura / Gider'),
+                      title: Text(l10n.billExpenseOption),
                       value: false,
                       groupValue: _isIncome,
                       onChanged: (v) => setState(() => _isIncome = v!),
@@ -310,7 +312,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
                   ),
                   Expanded(
                     child: RadioListTile<bool>(
-                      title: const Text('Tahsilat / Gelir'),
+                      title: Text(l10n.incomeCollectionOption),
                       value: true,
                       groupValue: _isIncome,
                       onChanged: (v) => setState(() => _isIncome = v!),
@@ -323,8 +325,8 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
 
               AppTextField(
                 controller: _titleController,
-                label: 'Başlık (örn: Elektrik Faturası, Kira)',
-                validator: (val) => val == null || val.isEmpty ? 'Gerekli' : null,
+                label: l10n.scheduleTitleLabel,
+                validator: (val) => val == null || val.isEmpty ? l10n.titleRequired : null,
               ),
               const SizedBox(height: AppSpacing.md),
 
@@ -333,15 +335,15 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
                   Expanded(
                     child: AppTextField(
                       controller: _amountController,
-                      label: 'Tutar',
+                      label: l10n.amountLabel,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      validator: (val) => val == null || val.isEmpty ? 'Gerekli' : null,
+                      validator: (val) => val == null || val.isEmpty ? l10n.amountRequired : null,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: DatePickerField(
-                      label: 'Tarih',
+                      label: l10n.dateLabel,
                       selectedDate: _date,
                       onDateSelected: (date) => setState(() => _date = date),
                     ),
@@ -352,7 +354,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
 
               AppTextField(
                 controller: _accountNameController,
-                label: 'İlgili Banka / Hesap Adı (Opsiyonel)',
+                label: l10n.bankAccountNameOptional,
               ),
               const SizedBox(height: AppSpacing.md),
 
@@ -360,7 +362,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(
-                  _isIncome ? 'Tahsil Edildi Olarak İşaretle' : 'Ödendi Olarak İşaretle',
+                  _isIncome ? 'Tahsil Edildi Olarak İşaretle' : l10n.markAsPaid,
                   style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
                 ),
                 value: _isPaid,
@@ -374,11 +376,11 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    'Aylık Tekrarlansın',
+                    l10n.repeatMonthly,
                     style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
                   ),
                   subtitle: Text(
-                    _isRecurring ? 'Seçilen tarihten itibaren her ay otomatik eklenir.' : 'Tek seferlik ödeme.',
+                    _isRecurring ? 'Seçilen tarihten itibaren her ay otomatik eklenir.' : l10n.oneTimePaymentNotice,
                     style: AppTypography.bodySmall,
                   ),
                   value: _isRecurring,
@@ -413,7 +415,7 @@ class _PaymentScheduleBottomSheetState extends ConsumerState<PaymentScheduleBott
 
               PrimaryButton(
                 onPressed: _isLoading ? () {} : _submit,
-                text: widget.scheduleToEdit != null ? 'Kaydı Güncelle' : 'Takvime Ekle',
+                text: widget.scheduleToEdit != null ? l10n.save : l10n.addToScheduleBtn,
                 isLoading: _isLoading,
               ),
               if (widget.scheduleToEdit != null) ...[

@@ -18,6 +18,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageSelectionSubtitle => 'Changer la langue de l\'application';
 
   @override
+  String get currencySelection => 'Devise';
+
+  @override
+  String get currencySelectionSubtitle =>
+      'Sélectionner la devise pour les écrans de budget et de finances';
+
+  @override
   String get preferencesAndSettings => 'Préférences et Paramètres';
 
   @override
@@ -673,4 +680,214 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get budgetPlanUpdated => 'Objectifs budgétaires mis à jour !';
+
+  @override
+  String get linkAccountTitle => 'Hesabınızı Bağlayın';
+
+  @override
+  String get guestModeDesc =>
+      'Misafir modundasınız. Verilerinizi kaybetmeden hesabınızı kalıcı yapın.';
+
+  @override
+  String get guestModeBottomSheetDesc =>
+      'Misafir modundasınız. Verilerinizi kaybetmemek için bir giriş yöntemi seçerek kalıcı bir hesap oluşturun.';
+
+  @override
+  String get connectionOptions => 'Bağlantı Seçenekleri';
+
+  @override
+  String get userRoleLabel => 'Kullanıcı';
+
+  @override
+  String get anonymousSession => 'Anonim Oturum';
+
+  @override
+  String get notMemberOfFamilyYet => 'Henüz Bir Aileye Bağlı Değilsiniz';
+
+  @override
+  String get notMemberOfHomeYet => 'Henüz Bir Eve Dahil Değilsiniz';
+
+  @override
+  String get noHomeSyncDesc =>
+      'Ortak ürün ve alışveriş listesi senkronizasyonu için bir ev oluşturun veya var olan bir eve davet kodu ile katılın.';
+
+  @override
+  String get createHome => 'Ev Oluştur';
+
+  @override
+  String get enterCode => 'Kodu Gir';
+
+  @override
+  String get createOrJoinHome => 'Ev Oluştur veya Katıl';
+
+  @override
+  String get createNewHomeTitle => 'Yeni Ev / Aile Oluştur';
+
+  @override
+  String get createNewHomeDesc =>
+      'Evinize bir isim verin. 1 kısa reklam izleyerek evinizi ücretsiz oluşturabilirsiniz.';
+
+  @override
+  String get homeNameLabel => 'Ev / Aile Adı';
+
+  @override
+  String get homeNameHint => 'Örn: Yılmaz Ailesi';
+
+  @override
+  String get homeNameRequired => 'Ev adı zorunludur.';
+
+  @override
+  String get roleInHomeLabel => 'Evdeki Rolünüz';
+
+  @override
+  String get roleHouseOwner => '👑 Ev Sahibi';
+
+  @override
+  String get roleMother => '👨‍👩‍👧 Anne';
+
+  @override
+  String get roleFather => '👨‍👩‍👦 Baba';
+
+  @override
+  String get roleChild => '👶 Çocuk';
+
+  @override
+  String get roleRoommate => '🏠 Ev Arkadaşı';
+
+  @override
+  String get roleOtherResident => '🐾 Diğer/Ev Sakini';
+
+  @override
+  String get noUpcomingExpirationsMessage =>
+      'Yaklaşan son kullanma tarihi bulunan ürün yok. 👍';
+
+  @override
+  String get expirationProductItem => 'Son Kullanma Tarihli Ürün';
+
+  @override
+  String get expirationProductSubtitle =>
+      'Buzdolabı veya kilerdeki gıda/ilaç takibi';
+
+  @override
+  String get warrantyDocumentItem => 'Garanti Belgesi / Evrak Ekle';
+
+  @override
+  String get warrantyDocumentSubtitle =>
+      'Ürün garanti belgeleri ve cihaz evrakları';
+
+  @override
+  String get enterQuickExpense => 'Hızlı Harcama Gir';
+
+  @override
+  String get amountLabel => 'Tutar';
+
+  @override
+  String get amountRequired => 'Lütfen tutar girin';
+
+  @override
+  String get validAmountRequired => 'Geçerli bir tutar girin';
+
+  @override
+  String get shortDescriptionLabel => 'Kısa Açıklama';
+
+  @override
+  String get shortDescriptionHint => 'Örn: Kahve, Market vs.';
+
+  @override
+  String get descriptionRequired => 'Açıklama girin';
+
+  @override
+  String get categoryLabel => 'Kategori';
+
+  @override
+  String get addToPaymentSchedule => 'Ödeme Takvimine Ekle';
+
+  @override
+  String get editPaymentSchedule => 'Ödeme Takvimini Düzenle';
+
+  @override
+  String get billExpenseOption => 'Fatura / Gider';
+
+  @override
+  String get incomeCollectionOption => 'Tahsilat / Gelir';
+
+  @override
+  String get scheduleTitleLabel => 'Başlık (örn: Elektrik Faturası, Kira)';
+
+  @override
+  String get titleRequired => 'Lütfen başlık girin';
+
+  @override
+  String get dateLabel => 'Tarih';
+
+  @override
+  String get bankAccountNameOptional => 'İlgili Banka / Hesap Adı (Opsiyonel)';
+
+  @override
+  String get markAsPaid => 'Ödendi Olarak İşaretle';
+
+  @override
+  String get repeatMonthly => 'Aylık Tekrarlansın';
+
+  @override
+  String get oneTimePaymentNotice => 'Tek seferlik ödeme.';
+
+  @override
+  String get addToScheduleBtn => 'Takvime Ekle';
+
+  @override
+  String get addNewDocumentTitle => 'Yeni Belge / Evrak Ekle';
+
+  @override
+  String get editDocumentTitle => 'Belgeyi Düzenle';
+
+  @override
+  String get documentTitleLabel => 'Belge Başlığı';
+
+  @override
+  String get documentTitleHint => 'Örn: Tapu Senedi, Kira Sözleşmesi';
+
+  @override
+  String get notesDescriptionLabel => 'Açıklama / Notlar';
+
+  @override
+  String get notesDescriptionHint =>
+      'Örn: Dosya dolabında 2. gözde saklanıyor.';
+
+  @override
+  String get addFileImage => 'Dosya / Görsel Ekle';
+
+  @override
+  String get selectPhotoDocument => 'Fotoğraf / Belge Seç';
+
+  @override
+  String get saveDocumentBtn => 'Belgeyi Kaydet';
+
+  @override
+  String get addNewContactTitle => 'Yeni İletişim / Servis Numarası Ekle';
+
+  @override
+  String get editContactTitle => 'Numarayı Düzenle';
+
+  @override
+  String get namePersonLabel => 'İsim / Kişi Adı';
+
+  @override
+  String get namePersonHint => 'Örn: Tesisatçı Ahmet Usta, Site Yönetimi';
+
+  @override
+  String get titleCategoryLabel => 'Unvan / Kategori';
+
+  @override
+  String get titleCategoryHint =>
+      'Örn: Su Tesisatı, Elektrik, Çilingir, Yönetim';
+
+  @override
+  String get phoneNumberLabel => 'Telefon Numarası';
+
+  @override
+  String get phoneNumberHint => 'Örn: 0555 123 45 67';
+
+  @override
+  String get saveNumberBtn => 'Numarayı Kaydet';
 }

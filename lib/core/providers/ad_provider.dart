@@ -1,61 +1,81 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../services/ad_service.dart';
 import 'purchase_provider.dart';
+import 'user_provider.dart';
+import '../../features/profile/providers/family_provider.dart';
 
-const String _kAdFreeKey = 'isAdFree';
+/// Aile bazlı reklamsız mod durumunu dinleyen provider.
+///
+/// Öncelik sırası:
+///  1. Kullanıcının bağlı olduğu aile Firestore dokümanındaki `isAdFree == true`
+///  2. RevenueCat entitlement aktifse (ağ erişimi olduğunda)
+///  3. Aile yoksa, anonim/yeni kullanıcıysa → false (reklamlar gösterilir)
+///
+/// SharedPreferences tamamen kaldırıldı; durum artık cihaza değil aileye bağlı.
+final isAdFreeProvider = StateNotifierProvider<_AdFreeNotifier, bool>((ref) {
+  return _AdFreeNotifier(ref);
+});
 
-/// Reklamsız mod durumunu yöneten StateNotifier.
-class AdFreeNotifier extends StateNotifier<bool> {
-  AdFreeNotifier() : super(false) {
+class _AdFreeNotifier extends StateNotifier<bool> {
+  _AdFreeNotifier(this._ref) : super(false) {
     _init();
   }
 
-  Future<void> _init() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final localAdFree = prefs.getBool(_kAdFreeKey) ?? false;
-      state = localAdFree;
-      AdService.instance.setPremium(localAdFree);
-    } catch (e) {
-      // SharedPreferences hatası durumunda false başla
-      state = false;
+  final Ref _ref;
+
+  void _init() {
+    // Aktif ailenin Firestore verisini gerçek zamanlı dinle
+    _ref.listen<AsyncValue<dynamic>>(currentFamilyProvider, (_, next) {
+      final family = next.valueOrNull;
+      if (family == null) {
+        // Aile yok (anonim veya yeni kullanıcı) → reklamlar gösterilir
+        _update(false);
+        return;
+      }
+      _update((family.isAdFree as bool?) ?? false);
+    }, fireImmediately: true);
+
+    // RevenueCat müşteri bilgilerini de dinle (entitlement yenileme için)
+    _ref.listen(customerInfoProvider, (_, next) {
+      final customerInfo = next.valueOrNull;
+      if (customerInfo != null) {
+        final activeEntitlements = customerInfo.entitlements.all;
+        final hasEntitlement =
+            (activeEntitlements['remove_ads']?.isActive ?? false) ||
+            (activeEntitlements['pro']?.isActive ?? false) ||
+            (activeEntitlements['premium']?.isActive ?? false);
+        if (hasEntitlement && !state) {
+          // RC entitlement aktifse Firestore'a da yaz
+          setAdFreeForFamily();
+        }
+      }
+    });
+  }
+
+  void _update(bool value) {
+    if (state != value) {
+      state = value;
+      AdService.instance.setPremium(value);
     }
   }
 
-  /// Reklamsız mod durumunu kalıcı olarak günceller.
-  Future<void> setAdFree(bool value) async {
-    state = value;
-    AdService.instance.setPremium(value);
+  /// Satın alma sonrası çağrılır: Firestore'daki aile dokümanına isAdFree=true yazar.
+  /// Bu sayede tüm aile üyeleri anlık olarak reklamsız moda geçer.
+  Future<void> setAdFreeForFamily() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_kAdFreeKey, value);
+      final familyId = _ref.read(activeFamilyIdProvider);
+      if (familyId.isEmpty) {
+        // Aile yoksa hiçbir şey yapma (anonim kullanıcı)
+        return;
+      }
+      final firestoreService = _ref.read(firestoreServiceProvider);
+      await firestoreService.updateFamily(familyId, {'isAdFree': true});
+      // Firestore stream otomatik güncelleyecek; elle _update gerekmez
     } catch (e) {
-      // Hata yönetimi
+      // Firestore yazma hatası; state güncellenmez, kullanıcı tekrar deneyebilir
     }
   }
 }
-
-/// Reklamsız mod durumunu dinleyen temel provider.
-final isAdFreeProvider = StateNotifierProvider<AdFreeNotifier, bool>((ref) {
-  final notifier = AdFreeNotifier();
-  
-  // Ayrıca RevenueCat müşteri bilgilerini dinle ve 'remove_ads' paketini kontrol et
-  ref.listen(customerInfoProvider, (previous, next) {
-    final customerInfo = next.valueOrNull;
-    if (customerInfo != null) {
-      final activeEntitlements = customerInfo.entitlements.all;
-      final hasAdFreeEntitlement = (activeEntitlements['remove_ads']?.isActive ?? false) ||
-          (activeEntitlements['pro']?.isActive ?? false) ||
-          (activeEntitlements['premium']?.isActive ?? false);
-      if (hasAdFreeEntitlement) {
-        notifier.setAdFree(true);
-      }
-    }
-  });
-
-  return notifier;
-});
 
 /// Aile Boyu PRO Üyelik sağlayıcısı.
 /// Tüm özellik kısıtlamalarını kaldırdığımız için ARTIK HER ZAMAN TRUE döner.

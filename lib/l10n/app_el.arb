@@ -3,6 +3,8 @@
   "appName": "Βοηθός Σπιτιού",
   "languageSelection": "Επιλογή Γλώσσας",
   "languageSelectionSubtitle": "Αλλαγή γλώσσας εφαρμογής",
+  "currencySelection": "Νόμισμα",
+  "currencySelectionSubtitle": "Επιλογή νομίσματος για οθόνες προϋπολογισμού και οικονομικών",
   "preferencesAndSettings": "Προτιμήσεις & Ρυθμίσεις",
   "notificationSettings": "Ρυθμίσεις Ειδοποιήσεων",
   "notificationSettingsSubtitle": "Διαχείριση ειδοποιήσεων συστήματος",

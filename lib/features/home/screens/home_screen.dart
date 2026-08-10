@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/providers/ad_provider.dart';
+import '../../../core/providers/currency_provider.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
@@ -34,7 +35,7 @@ import '../../vault/models/vault_item_model.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static String _formatCurrency(double amount) {
+  static String _formatCurrency(double amount, String symbol) {
     final isNegative = amount < 0;
     final absAmount = amount.abs().toStringAsFixed(0);
     final buffer = StringBuffer();
@@ -44,7 +45,7 @@ class HomeScreen extends ConsumerWidget {
       }
       buffer.write(absAmount[i]);
     }
-    return '${isNegative ? '-' : ''}₺${buffer.toString()}';
+    return '${isNegative ? '-' : ''}$symbol${buffer.toString()}';
   }
 
   @override
@@ -55,6 +56,7 @@ class HomeScreen extends ConsumerWidget {
     final hasFamily = ref.watch(hasRealFamilyProvider);
     final isPremium = ref.watch(isPremiumProvider);
     final freeBudget = ref.watch(monthlyFreeBudgetProvider);
+    final currencySymbol = ref.watch(currencySymbolProvider);
 
     if (!hasFamily) {
       return Scaffold(
@@ -165,7 +167,7 @@ class HomeScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.lg),
 
               // ── Kalan Serbest Bütçe (Nakit Akışı) Özet Kartı ─────────────
-              _buildBudgetOverviewBanner(context, colorScheme, isPremium, freeBudget),
+              _buildBudgetOverviewBanner(context, colorScheme, isPremium, freeBudget, currencySymbol),
 
               const SizedBox(height: AppSpacing.xxl),
 
@@ -193,7 +195,7 @@ class HomeScreen extends ConsumerWidget {
               if (maintenanceItems.isNotEmpty) const SizedBox(height: AppSpacing.xxl),
 
               // ── Yaklaşan Ödemeler Mini Kartı ──────────────────────────────
-              _buildUpcomingPaymentsSection(context, colorScheme, schedules),
+              _buildUpcomingPaymentsSection(context, colorScheme, schedules, currencySymbol),
 
               // Alt FAB boşluğu
               const SizedBox(height: AppSpacing.xxl * 2.5),
@@ -410,6 +412,7 @@ class HomeScreen extends ConsumerWidget {
     ColorScheme colorScheme,
     bool isPremium,
     double freeBudget,
+    String currencySymbol,
   ) {
     final l10n = AppLocalizations.of(context)!;
     final innerContent = Container(
@@ -457,7 +460,7 @@ class HomeScreen extends ConsumerWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                _formatCurrency(freeBudget),
+                _formatCurrency(freeBudget, currencySymbol),
                 style: AppTypography.displayMedium.copyWith(
                   color: freeBudget >= 0 ? AppColors.success : AppColors.error,
                   fontWeight: FontWeight.w800,
@@ -576,7 +579,7 @@ class HomeScreen extends ConsumerWidget {
               borderRadius: AppRadius.borderLg,
             ),
             child: Text(
-              'Yaklaşan son kullanma tarihi bulunan ürün yok. 👍',
+              l10n.noUpcomingExpirationsMessage,
               style: AppTypography.bodyMedium.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -828,6 +831,7 @@ class HomeScreen extends ConsumerWidget {
     BuildContext context,
     ColorScheme colorScheme,
     List<PaymentScheduleModel> schedules,
+    String currencySymbol,
   ) {
     final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
@@ -886,6 +890,7 @@ class HomeScreen extends ConsumerWidget {
             colorScheme,
             upcomingExpenses.first,
             today,
+            currencySymbol,
           ),
       ],
     );
@@ -896,6 +901,7 @@ class HomeScreen extends ConsumerWidget {
     ColorScheme colorScheme,
     PaymentScheduleModel schedule,
     DateTime today,
+    String currencySymbol,
   ) {
     final scheduleDate = DateTime(schedule.date.year, schedule.date.month, schedule.date.day);
     final differenceInDays = scheduleDate.difference(today).inDays;
@@ -977,7 +983,7 @@ class HomeScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  _formatCurrency(schedule.amount),
+                  _formatCurrency(schedule.amount, currencySymbol),
                   style: AppTypography.titleMedium.copyWith(
                     color: colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
@@ -1203,10 +1209,10 @@ class HomeScreen extends ConsumerWidget {
                   child: const Icon(Icons.alarm_add_rounded, color: Color(0xFFE53935)),
                 ),
                 title: Text(
-                  'Son Kullanma Tarihli Ürün',
+                  l10n.expirationProductItem,
                   style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
-                subtitle: const Text('Buzdolabı veya kilerdeki gıda/ilaç takibi'),
+                subtitle: Text(l10n.expirationProductSubtitle),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(
@@ -1226,10 +1232,10 @@ class HomeScreen extends ConsumerWidget {
                   child: const Icon(Icons.verified_user_outlined, color: Color(0xFFF57C00)),
                 ),
                 title: Text(
-                  'Garanti Belgesi / Evrak Ekle',
+                  l10n.warrantyDocumentItem,
                   style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
-                subtitle: const Text('Ürün garanti belgeleri ve cihaz evrakları'),
+                subtitle: Text(l10n.warrantyDocumentSubtitle),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(

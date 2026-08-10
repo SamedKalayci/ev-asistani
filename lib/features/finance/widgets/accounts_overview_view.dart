@@ -8,6 +8,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../core/providers/user_provider.dart';
+import '../../../core/providers/currency_provider.dart';
 import '../models/account_model.dart';
 import '../models/payment_schedule_model.dart';
 import '../providers/finance_provider.dart';
@@ -17,7 +18,7 @@ import 'payment_schedule_bottom_sheet.dart';
 class AccountsOverviewView extends ConsumerWidget {
   const AccountsOverviewView({super.key});
 
-  static String _formatCurrency(double amount) {
+  static String _formatCurrency(double amount, String symbol) {
     final isNegative = amount < 0;
     final absAmount = amount.abs().toStringAsFixed(0);
     final buffer = StringBuffer();
@@ -27,7 +28,7 @@ class AccountsOverviewView extends ConsumerWidget {
       }
       buffer.write(absAmount[i]);
     }
-    return '${isNegative ? '-' : ''}₺${buffer.toString()}';
+    return '${isNegative ? '-' : ''}$symbol${buffer.toString()}';
   }
 
   @override
@@ -39,6 +40,7 @@ class AccountsOverviewView extends ConsumerWidget {
     final monthlyPersonalExpense = ref.watch(monthlyPersonalExpenseProvider);
     final accountsAsync = ref.watch(accountsProvider);
     final schedulesAsync = ref.watch(paymentSchedulesProvider);
+    final currencySymbol = ref.watch(currencySymbolProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -54,15 +56,16 @@ class AccountsOverviewView extends ConsumerWidget {
             monthlyIncome,
             monthlyExpense,
             monthlyPersonalExpense,
+            currencySymbol,
           ),
           const SizedBox(height: AppSpacing.xxl),
 
           // 2. Hesaplar (Gruplandırılmış)
-          ..._buildAccountsList(context, accountsAsync.valueOrNull ?? []),
+          ..._buildAccountsList(context, accountsAsync.valueOrNull ?? [], currencySymbol),
           const SizedBox(height: AppSpacing.xxl),
 
           // 3. Ödeme Takvimi
-          _buildPaymentSchedules(context, ref, schedulesAsync.valueOrNull ?? []),
+          _buildPaymentSchedules(context, ref, schedulesAsync.valueOrNull ?? [], currencySymbol),
           const SizedBox(height: 100), // Alt boşluk
         ],
       ),
@@ -77,6 +80,7 @@ class AccountsOverviewView extends ConsumerWidget {
     double monthlyIncome,
     double monthlyExpense,
     double monthlyPersonalExpense,
+    String currencySymbol,
   ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -91,7 +95,7 @@ class AccountsOverviewView extends ConsumerWidget {
         Text(formattedTitle, style: AppTypography.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant)),
         const SizedBox(height: AppSpacing.xs),
         Text(
-          _formatCurrency(netWorth),
+          _formatCurrency(netWorth, currencySymbol),
           style: AppTypography.displayMedium.copyWith(
             color: netWorth >= 0 ? AppColors.success : AppColors.error,
             fontWeight: FontWeight.bold,
@@ -107,7 +111,7 @@ class AccountsOverviewView extends ConsumerWidget {
                 const Icon(Icons.arrow_upward_rounded, size: 16, color: AppColors.success),
                 const SizedBox(width: 4.0),
                 Text(
-                  '${l10n.totalIncome}: +${_formatCurrency(monthlyIncome)}',
+                  '${l10n.totalIncome}: +${_formatCurrency(monthlyIncome, currencySymbol)}',
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.success,
                     fontWeight: FontWeight.w600,
@@ -120,7 +124,7 @@ class AccountsOverviewView extends ConsumerWidget {
                 const Icon(Icons.arrow_downward_rounded, size: 16, color: AppColors.error),
                 const SizedBox(width: 4.0),
                 Text(
-                  '${l10n.totalExpense}: -${_formatCurrency(monthlyExpense)}',
+                  '${l10n.totalExpense}: -${_formatCurrency(monthlyExpense, currencySymbol)}',
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.error,
                     fontWeight: FontWeight.w600,
@@ -135,7 +139,7 @@ class AccountsOverviewView extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              '${l10n.personalExpenses}: -${_formatCurrency(monthlyPersonalExpense)}',
+              '${l10n.personalExpenses}: -${_formatCurrency(monthlyPersonalExpense, currencySymbol)}',
               style: AppTypography.labelSmall.copyWith(
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                 fontWeight: FontWeight.w500,
@@ -147,7 +151,7 @@ class AccountsOverviewView extends ConsumerWidget {
     );
   }
 
-  List<Widget> _buildAccountsList(BuildContext context, List<AccountModel> accounts) {
+  List<Widget> _buildAccountsList(BuildContext context, List<AccountModel> accounts, String currencySymbol) {
     final l10n = AppLocalizations.of(context)!;
     if (accounts.isEmpty) {
       return [
@@ -213,14 +217,14 @@ class AccountsOverviewView extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      _formatCurrency(acc.balance),
+                      _formatCurrency(acc.balance, currencySymbol),
                       style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
                         color: acc.type == AccountType.debtCredit && acc.personType == 'debt' ? Colors.red : null,
                       ),
                     ),
                     if (acc.limit != null && acc.type == AccountType.creditCard)
-                      Text('/ ${_formatCurrency(acc.limit!)}', style: AppTypography.labelSmall),
+                      Text('/ ${_formatCurrency(acc.limit!, currencySymbol)}', style: AppTypography.labelSmall),
                   ],
                 ),
               );
@@ -241,7 +245,7 @@ class AccountsOverviewView extends ConsumerWidget {
     }
   }
 
-  Widget _buildPaymentSchedules(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedules) {
+  Widget _buildPaymentSchedules(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedules, String currencySymbol) {
     final l10n = AppLocalizations.of(context)!;
     final selectedMonth = ref.watch(selectedMonthProvider);
     final localeCode = Localizations.localeOf(context).toString();
@@ -322,13 +326,13 @@ class AccountsOverviewView extends ConsumerWidget {
             if (pendingSchedules.isNotEmpty) ...[
               Text(l10n.paymentSchedule, style: AppTypography.labelLarge.copyWith(color: Theme.of(context).colorScheme.primary)),
               const SizedBox(height: AppSpacing.sm),
-              _buildScheduleList(context, ref, pendingSchedules),
+              _buildScheduleList(context, ref, pendingSchedules, currencySymbol),
               if (realizedSchedules.isNotEmpty) const SizedBox(height: AppSpacing.lg),
             ],
             if (realizedSchedules.isNotEmpty) ...[
               Text(l10n.realizedPayments, style: AppTypography.labelLarge.copyWith(color: Colors.grey, decoration: TextDecoration.lineThrough)),
               const SizedBox(height: AppSpacing.sm),
-              _buildScheduleList(context, ref, realizedSchedules),
+              _buildScheduleList(context, ref, realizedSchedules, currencySymbol),
             ],
           ],
         ],
@@ -336,7 +340,7 @@ class AccountsOverviewView extends ConsumerWidget {
     ));
   }
 
-  Widget _buildScheduleList(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedulesList) {
+  Widget _buildScheduleList(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedulesList, String currencySymbol) {
     final now = DateTime.now();
     final localeCode = Localizations.localeOf(context).toString();
     return ListView.separated(
@@ -422,7 +426,7 @@ class AccountsOverviewView extends ConsumerWidget {
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  (s.isIncome ? '+' : '-') + _formatCurrency(s.amount),
+                  (s.isIncome ? '+' : '-') + _formatCurrency(s.amount, currencySymbol),
                   style: AppTypography.titleMedium.copyWith(
                     fontWeight: FontWeight.bold,
                     decoration: s.isPaid ? TextDecoration.lineThrough : null,

@@ -12,6 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/permission_utils.dart';
@@ -334,6 +335,7 @@ class _VaultDocumentFormBottomSheetState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final hasFile = _pickedFilePath != null || _pickedFileBytes != null;
@@ -503,8 +505,8 @@ class _VaultDocumentFormBottomSheetState
                 onPressed: _showFilePickerOptions,
                 icon: const Icon(Icons.upload_file_rounded),
                 label: Text(_pickedFilePath != null
-                    ? 'Dosyayı Değiştir'
-                    : '📸 Fotoğraf / Belge Seç'),
+                    ? l10n.selectPhotoDocument
+                    : '📸 ${l10n.selectPhotoDocument}'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
                   side: BorderSide(color: colorScheme.outlineVariant),
@@ -514,7 +516,7 @@ class _VaultDocumentFormBottomSheetState
               const SizedBox(height: AppSpacing.xl),
 
               PrimaryButton(
-                text: _isEditing ? 'Belgeyi Güncelle' : 'Belgeyi Kaydet',
+                text: _isEditing ? l10n.save : l10n.saveDocumentBtn,
                 isLoading: _isLoading,
                 onPressed: _submit,
               ),

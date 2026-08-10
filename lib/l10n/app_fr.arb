@@ -3,6 +3,8 @@
   "appName": "Assistant Maison",
   "languageSelection": "Choix de la Langue",
   "languageSelectionSubtitle": "Changer la langue de l'application",
+  "currencySelection": "Devise",
+  "currencySelectionSubtitle": "Sélectionner la devise pour les écrans de budget et de finances",
   "preferencesAndSettings": "Préférences et Paramètres",
   "notificationSettings": "Paramètres de Notification",
   "notificationSettingsSubtitle": "Gérer les notifications système",

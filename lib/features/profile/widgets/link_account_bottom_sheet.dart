@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../providers/family_provider.dart';
 
@@ -204,6 +205,7 @@ class _LinkAccountBottomSheetState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isBusy = _isLinkingGoogle || _isLinkingApple;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -223,7 +225,7 @@ class _LinkAccountBottomSheetState
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Hesabınızı Bağlayın',
+            l10n.linkAccountTitle,
             style: AppTypography.titleLarge.copyWith(
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurface,
@@ -232,7 +234,7 @@ class _LinkAccountBottomSheetState
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Misafir modundasınız. Verilerinizi kaybetmemek için bir giriş yöntemi seçerek kalıcı bir hesap oluşturun.',
+            l10n.guestModeBottomSheetDesc,
             style: AppTypography.bodyMedium.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

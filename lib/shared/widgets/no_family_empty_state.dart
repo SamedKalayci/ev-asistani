@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../router/app_router.dart';
+import '../../l10n/app_localizations.dart';
 import 'empty_state.dart';
 
 /// Kullanıcı henüz bir eve / aileye dahil olmadığında gösterilen Empty State / CTA bileşeni.
@@ -10,12 +11,12 @@ class NoFamilyEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return EmptyState(
       icon: Icons.home_work_outlined,
-      title: 'Henüz Bir Eve Dahil Değilsiniz',
-      description:
-          'Henüz bir eve dahil değilsiniz. Bir ev oluşturun veya davet koduyla katılın.',
-      actionLabel: 'Ev Oluştur veya Katıl',
+      title: l10n.notMemberOfHomeYet,
+      description: l10n.noHomeSyncDesc,
+      actionLabel: l10n.createOrJoinHome,
       actionIcon: Icons.add_home_outlined,
       onActionPressed: () {
         context.go(AppRoutes.profile);

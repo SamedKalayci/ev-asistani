@@ -3,6 +3,8 @@
   "appName": "Haushaltsassistent",
   "languageSelection": "Sprachauswahl",
   "languageSelectionSubtitle": "App-Sprache ändern",
+  "currencySelection": "Währung",
+  "currencySelectionSubtitle": "Währung für Budget- und Finanzbildschirme auswählen",
   "preferencesAndSettings": "Einstellungen & Optionen",
   "notificationSettings": "Benachrichtigungseinstellungen",
   "notificationSettingsSubtitle": "Systembenachrichtigungen verwalten",

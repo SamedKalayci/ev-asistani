@@ -37,6 +37,7 @@ class VaultContactsScreen extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         final bottomInset = MediaQuery.of(ctx).viewInsets.bottom;
+        final l10n = AppLocalizations.of(ctx)!;
         return Container(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(ctx).size.height * 0.85,
@@ -72,8 +73,8 @@ class VaultContactsScreen extends ConsumerWidget {
                   Center(
                     child: Text(
                       isEditing
-                          ? 'İletişim / Servis Numarasını Düzenle'
-                          : 'Yeni İletişim / Servis Numarası Ekle',
+                          ? l10n.editContactTitle
+                          : l10n.addNewContactTitle,
                       style: AppTypography.headlineSmall.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -81,30 +82,30 @@ class VaultContactsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   AppTextField(
-                    label: 'İsim / Kişi Adı',
-                    hintText: 'Örn: Tesisatçı Ahmet Usta, Site Yönetimi',
+                    label: l10n.namePersonLabel,
+                    hintText: l10n.namePersonHint,
                     controller: titleController,
                     validator: (v) =>
-                        (v == null || v.trim().isEmpty) ? 'İsim zorunludur.' : null,
+                        (v == null || v.trim().isEmpty) ? l10n.titleRequired : null,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   AppTextField(
-                    label: 'Unvan / Kategori',
-                    hintText: 'Örn: Su Tesisatı, Elektrik, Çilingir, Yönetim',
+                    label: l10n.titleCategoryLabel,
+                    hintText: l10n.titleCategoryHint,
                     controller: roleController,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   AppTextField(
-                    label: 'Telefon Numarası',
-                    hintText: 'Örn: 0555 123 45 67',
+                    label: l10n.phoneNumberLabel,
+                    hintText: l10n.phoneNumberHint,
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
                     validator: (v) =>
-                        (v == null || v.trim().isEmpty) ? 'Telefon zorunludur.' : null,
+                        (v == null || v.trim().isEmpty) ? l10n.titleRequired : null,
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   PrimaryButton(
-                    text: isEditing ? 'Numarayı Güncelle' : 'Numarayı Kaydet',
+                    text: isEditing ? l10n.save : l10n.saveNumberBtn,
                     onPressed: () async {
                       if (!formKey.currentState!.validate()) return;
                       final familyId = ref.read(activeFamilyIdProvider);
