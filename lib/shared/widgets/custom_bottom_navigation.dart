@@ -6,6 +6,7 @@ import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../features/inventory/screens/inventory_screen.dart';
 import '../../features/finance/providers/finance_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../../router/app_router.dart';
 
 /// 5 sekmeli alt navigasyon (CustomBottomNavigation) bileşeni.
@@ -119,6 +120,7 @@ class CustomBottomNavigation extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final effectiveIndex = _getEffectiveIndex(context);
 
     final effectiveBgColor =
@@ -161,76 +163,34 @@ class CustomBottomNavigation extends ConsumerWidget {
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         destinations: [
           // 1. 🏠 Ana Sayfa
-          const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
-            label: 'Ana Sayfa',
+          NavigationDestination(
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home_rounded),
+            label: l10n.navHome,
           ),
           // 2. 📦 Envanter
-          const NavigationDestination(
-            icon: Icon(Icons.inventory_2_outlined),
-            selectedIcon: Icon(Icons.inventory_2_rounded),
-            label: 'Envanter',
+          NavigationDestination(
+            icon: const Icon(Icons.inventory_2_outlined),
+            selectedIcon: const Icon(Icons.inventory_2_rounded),
+            label: l10n.navInventory,
           ),
           // 3. 🛒 Alışveriş
-          const NavigationDestination(
-            icon: Icon(Icons.shopping_cart_outlined),
-            selectedIcon: Icon(Icons.shopping_cart_rounded),
-            label: 'Alışveriş',
-          ),
-          // 4. 💳 Finans (👑 PRO Rozetli)
           NavigationDestination(
-            icon: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const Icon(Icons.account_balance_wallet_outlined),
-                Positioned(
-                  top: -5,
-                  right: -7,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3B82F6),
-                      borderRadius: AppRadius.borderFull,
-                      border: Border.all(color: Colors.white, width: 1),
-                    ),
-                    child: const Text(
-                      '👑',
-                      style: TextStyle(fontSize: 8, height: 1.0),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            selectedIcon: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const Icon(Icons.account_balance_wallet_rounded),
-                Positioned(
-                  top: -5,
-                  right: -7,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3B82F6),
-                      borderRadius: AppRadius.borderFull,
-                      border: Border.all(color: Colors.white, width: 1),
-                    ),
-                    child: const Text(
-                      '👑',
-                      style: TextStyle(fontSize: 8, height: 1.0),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            label: 'Finans',
+            icon: const Icon(Icons.shopping_cart_outlined),
+            selectedIcon: const Icon(Icons.shopping_cart_rounded),
+            label: l10n.navShopping,
+          ),
+          // 4. 💳 Finans
+          NavigationDestination(
+            icon: const Icon(Icons.account_balance_wallet_outlined),
+            selectedIcon: const Icon(Icons.account_balance_wallet_rounded),
+            label: l10n.navFinance,
           ),
           // 5. 👤 Profil
-          const NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            selectedIcon: Icon(Icons.person_rounded),
-            label: 'Profil',
+          NavigationDestination(
+            icon: const Icon(Icons.person_outline_rounded),
+            selectedIcon: const Icon(Icons.person_rounded),
+            label: l10n.navProfile,
           ),
         ],
       ),

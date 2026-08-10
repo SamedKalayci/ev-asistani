@@ -9,6 +9,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../router/app_router.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_text_field.dart';
@@ -50,6 +51,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasFamily = ref.watch(hasRealFamilyProvider);
     final isPremium = ref.watch(isPremiumProvider);
     final freeBudget = ref.watch(monthlyFreeBudgetProvider);
@@ -129,7 +131,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         icon: const Icon(Icons.add_rounded, size: 22),
         label: Text(
-          'Hızlı Ekle',
+          l10n.quickAdd,
           style: AppTypography.titleSmall.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -146,7 +148,7 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ── Üst Başlık & Ev İsmi ───────────────────────────────────────
-              _buildGreetingHeader(colorScheme, userName, familyName),
+              _buildGreetingHeader(context, colorScheme, userName, familyName),
 
               const SizedBox(height: AppSpacing.xl),
 
@@ -205,15 +207,17 @@ class HomeScreen extends ConsumerWidget {
   // ── 1. Üst Başlık & Karşılama ─────────────────────────────────────────────
 
   Widget _buildGreetingHeader(
+    BuildContext context,
     ColorScheme colorScheme,
     String userName,
     String familyName,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Merhaba $userName',
+          l10n.greetingUser(userName),
           style: AppTypography.headlineLarge.copyWith(
             color: colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -222,7 +226,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Evindeki her şey yolunda görünüyor.',
+          l10n.everythingLooksGood,
           style: AppTypography.bodyMedium.copyWith(
             color: colorScheme.onSurfaceVariant,
           ),
@@ -256,6 +260,7 @@ class HomeScreen extends ConsumerWidget {
     required int warrantyCount,
     required int shoppingCount,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -276,7 +281,7 @@ class HomeScreen extends ConsumerWidget {
                 child: _buildMiniStatCard(
                   context,
                   colorScheme,
-                  title: 'Envanter',
+                  title: l10n.navInventory,
                   value: '$inventoryCount',
                   iconWidget: const Icon(
                     Icons.inventory_2_rounded,
@@ -291,7 +296,7 @@ class HomeScreen extends ConsumerWidget {
                 child: _buildMiniStatCard(
                   context,
                   colorScheme,
-                  title: 'Son Kullanma',
+                  title: l10n.expirationTab,
                   value: '$expirationCount',
                   iconWidget: const Icon(
                     Icons.alarm_rounded,
@@ -312,7 +317,7 @@ class HomeScreen extends ConsumerWidget {
                 child: _buildMiniStatCard(
                   context,
                   colorScheme,
-                  title: 'Garanti',
+                  title: l10n.warrantyTab,
                   value: '$warrantyCount',
                   iconWidget: const Icon(
                     Icons.shield_outlined,
@@ -327,7 +332,7 @@ class HomeScreen extends ConsumerWidget {
                 child: _buildMiniStatCard(
                   context,
                   colorScheme,
-                  title: 'Alışveriş',
+                  title: l10n.navShopping,
                   value: '$shoppingCount',
                   iconWidget: const Icon(
                     Icons.shopping_cart_outlined,
@@ -406,6 +411,7 @@ class HomeScreen extends ConsumerWidget {
     bool isPremium,
     double freeBudget,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final innerContent = Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -429,49 +435,18 @@ class HomeScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.account_balance_wallet_rounded,
-                    color: AppColors.primary,
-                    size: 22,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Kalan Serbest Bütçe',
-                    style: AppTypography.titleMedium.copyWith(
-                      color: colorScheme.onSurface,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const Icon(
+                Icons.account_balance_wallet_rounded,
+                color: AppColors.primary,
+                size: 22,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: 2,
-                ),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF60A5FA), Color(0xFF3B82F6)],
-                  ),
-                  borderRadius: AppRadius.borderFull,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('👑', style: TextStyle(fontSize: 10)),
-                    const SizedBox(width: 3),
-                    Text(
-                      'PRO',
-                      style: AppTypography.labelSmall.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+              const SizedBox(width: 8),
+              Text(
+                l10n.monthlyFreeBudget,
+                style: AppTypography.titleMedium.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -491,7 +466,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                '/ bu ay',
+                l10n.perMonthSuffix,
                 style: AppTypography.titleMedium.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
@@ -500,7 +475,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Aylık net gelirden sabit giderler düşüldükten sonra kalan tutar.',
+            l10n.freeBudgetDescription,
             style: AppTypography.bodySmall.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -512,7 +487,7 @@ class HomeScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: PrimaryButton(
-                    text: 'İncele',
+                    text: l10n.viewDetails,
                     onPressed: () => context.go(AppRoutes.finance),
                     icon: Icons.account_balance_wallet_outlined,
                   ),
@@ -530,9 +505,9 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                     icon: const Icon(Icons.flash_on_rounded, size: 18),
-                    label: const Text(
-                      'Harcama Gir',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    label: Text(
+                      l10n.quickAddExpense,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -558,6 +533,7 @@ class HomeScreen extends ConsumerWidget {
     ColorScheme colorScheme,
     List<ExpirationModel> items,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -567,7 +543,7 @@ class HomeScreen extends ConsumerWidget {
           children: [
             Flexible(
               child: Text(
-                'Son Kullanma Tarihleri\nYaklaşıyor',
+                l10n.expiringSoonTitle,
                 style: AppTypography.titleLarge.copyWith(
                   color: colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
@@ -578,7 +554,7 @@ class HomeScreen extends ConsumerWidget {
             TextButton(
               onPressed: () => context.go(AppRoutes.expiration),
               child: Text(
-                'Tümünü\nGör',
+                l10n.viewAll,
                 textAlign: TextAlign.right,
                 style: AppTypography.labelLarge.copyWith(
                   color: colorScheme.primary,
@@ -707,6 +683,7 @@ class HomeScreen extends ConsumerWidget {
     ColorScheme colorScheme,
     List<WarrantyModel> items,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -715,7 +692,7 @@ class HomeScreen extends ConsumerWidget {
           children: [
             Flexible(
               child: Text(
-                'Garanti Süresi Yaklaşıyor',
+                l10n.warrantiesExpiringTitle,
                 style: AppTypography.titleLarge.copyWith(
                   color: colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
@@ -725,7 +702,7 @@ class HomeScreen extends ConsumerWidget {
             TextButton(
               onPressed: () => context.go(AppRoutes.warranty),
               child: Text(
-                'Tümünü Gör',
+                l10n.viewAll,
                 style: AppTypography.labelLarge.copyWith(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -852,6 +829,7 @@ class HomeScreen extends ConsumerWidget {
     ColorScheme colorScheme,
     List<PaymentScheduleModel> schedules,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
@@ -867,7 +845,7 @@ class HomeScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Yaklaşan Ödemeler',
+              l10n.paymentSchedule,
               style: AppTypography.titleLarge.copyWith(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
@@ -876,7 +854,7 @@ class HomeScreen extends ConsumerWidget {
             TextButton(
               onPressed: () => context.go(AppRoutes.finance),
               child: Text(
-                'Tümünü Gör',
+                l10n.viewAll,
                 style: AppTypography.labelLarge.copyWith(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -1057,6 +1035,7 @@ class HomeScreen extends ConsumerWidget {
     List<VaultItemModel> maintenanceItems,
   ) {
     if (maintenanceItems.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1067,7 +1046,7 @@ class HomeScreen extends ConsumerWidget {
           children: [
             Flexible(
               child: Text(
-                'Yaklaşan Periyodik Bakımlar',
+                l10n.periodicMaintenance,
                 style: AppTypography.titleLarge.copyWith(
                   color: colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
@@ -1079,7 +1058,7 @@ class HomeScreen extends ConsumerWidget {
             TextButton(
               onPressed: () => context.go(AppRoutes.vault),
               child: Text(
-                'Tümünü Gör',
+                l10n.viewAll,
                 style: AppTypography.labelLarge.copyWith(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -1185,6 +1164,7 @@ class HomeScreen extends ConsumerWidget {
       builder: (context) {
         final theme = Theme.of(context);
         final colorScheme = theme.colorScheme;
+        final l10n = AppLocalizations.of(context)!;
 
         return Container(
           decoration: BoxDecoration(
@@ -1205,7 +1185,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Hızlı Ekle',
+                l10n.quickAdd,
                 style: AppTypography.titleLarge.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onSurface,
@@ -1269,7 +1249,7 @@ class HomeScreen extends ConsumerWidget {
                   child: const Icon(Icons.shopping_bag_outlined, color: Color(0xFF1E88E5)),
                 ),
                 title: Text(
-                  'Alışveriş Listesine Ürün Ekle',
+                  l10n.addShoppingItemTitle,
                   style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
                 subtitle: const Text('Eksilen gıda, temizlik ve ev ihtiyaçları'),
@@ -1294,6 +1274,7 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         final bottomInset = MediaQuery.of(ctx).viewInsets.bottom;
+        final l10n = AppLocalizations.of(ctx)!;
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(ctx).colorScheme.surfaceContainerLowest,
@@ -1321,19 +1302,19 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                '🛒 Alışveriş Listesine Ürün Ekle',
+                '🛒 ${l10n.addShoppingItemTitle}',
                 style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: AppSpacing.md),
               AppTextField(
                 controller: controller,
                 label: 'Ürün Adı',
-                hintText: 'Örn: Süt, Ekmek, Yumurta...',
+                hintText: l10n.newProductHint,
                 autofocus: true,
               ),
               const SizedBox(height: AppSpacing.xl),
               PrimaryButton(
-                text: 'Listeye Ekle',
+                text: l10n.addToListBtn,
                 icon: Icons.add_shopping_cart_rounded,
                 onPressed: () async {
                   final text = controller.text.trim();
@@ -1342,7 +1323,7 @@ class HomeScreen extends ConsumerWidget {
                   await ref.read(shoppingNotifierProvider.notifier).addItem(name: text);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('"$text" alışveriş listesine eklendi! 🛒')),
+                      SnackBar(content: Text('"$text" ${l10n.itemAddedToast(text)}')),
                     );
                   }
                 },

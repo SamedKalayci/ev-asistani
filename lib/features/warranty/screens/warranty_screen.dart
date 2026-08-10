@@ -6,6 +6,7 @@ import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/providers/user_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_search_bar.dart';
@@ -84,20 +85,21 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
   // ── Silme Onayı ───────────────────────────────────────────────────────────
 
   Future<void> _confirmDelete(WarrantyModel item) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Garanti Kaydını Sil'),
-        content: Text('"${item.name}" adlı kayıt kalıcı olarak silinecek.'),
+        title: Text(l10n.deleteItem),
+        content: Text('"${item.name}" ${l10n.deleteConfirmDesc}'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: AppColors.error),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Sil'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -115,20 +117,21 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasFamily = ref.watch(hasRealFamilyProvider);
     final itemsAsync = ref.watch(warrantyItemsProvider);
 
     if (!hasFamily) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        appBar: const AppHeader(title: 'Ev Asistanı'),
+        appBar: AppHeader(title: l10n.appName),
         body: const SafeArea(child: NoFamilyEmptyState()),
       );
     }
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: const AppHeader(title: 'Ev Asistanı'),
+      appBar: AppHeader(title: l10n.appName),
       floatingActionButton: itemsAsync.maybeWhen(
         data: (allItems) => allItems.isEmpty
             ? null
@@ -143,7 +146,7 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
                 ),
                 icon: const Icon(Icons.add_rounded),
                 label: Text(
-                  'Garanti Ekle',
+                  l10n.addWarranty,
                   style: AppTypography.titleSmall.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
@@ -183,6 +186,7 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
   // ── Gövde ─────────────────────────────────────────────────────────────────
 
   Widget _buildBody(ColorScheme colorScheme, List<WarrantyModel> allItems) {
+    final l10n = AppLocalizations.of(context)!;
     final filteredList = _applyFilters(allItems);
 
     return SingleChildScrollView(
@@ -195,7 +199,7 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
         children: [
           // ── Başlık ────────────────────────────────────────────────────────
           Text(
-            'Garanti Takibi',
+            l10n.warrantyTrackingTitle,
             style: AppTypography.headlineLarge.copyWith(
               color: colorScheme.onSurface,
               fontWeight: FontWeight.bold,
@@ -203,7 +207,7 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Cihazlarınızın ve eşyalarınızın garanti sürelerini takip edin.',
+            l10n.warrantySubtitle,
             style: AppTypography.bodyLarge.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -213,7 +217,7 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
 
           // ── Arama ─────────────────────────────────────────────────────────
           AppSearchBar(
-            hintText: 'Cihaz, marka veya mağaza ara...',
+            hintText: l10n.searchDeviceBrandHint,
             onChanged: (query) => setState(() => _searchQuery = query),
             onClear: () => setState(() => _searchQuery = ''),
           ),
@@ -229,16 +233,16 @@ class _WarrantyScreenState extends ConsumerState<WarrantyScreen> {
           if (filteredList.isEmpty)
             EmptyState(
               title: allItems.isEmpty
-                  ? 'Henüz Garanti Kaydı Yok'
-                  : 'Garanti Kaydı Bulunamadı',
+                  ? l10n.noWarrantyRecordsYet
+                  : l10n.noWarrantyRecordsFound,
               description: allItems.isEmpty
-                  ? 'İlk garanti kaydınızı eklemek için "Garanti Ekle" butonuna basın.'
-                  : 'Arama veya filtreleme kriterlerinize uygun kayıt bulunmuyor.',
+                  ? l10n.addFirstWarrantyDesc
+                  : l10n.noMatchingWarrantiesDesc,
               icon: allItems.isEmpty
                   ? Icons.verified_outlined
                   : Icons.search_off_rounded,
               actionLabel:
-                  allItems.isEmpty ? 'Garanti Ekle' : 'Filtreleri Temizle',
+                  allItems.isEmpty ? l10n.addWarranty : l10n.clearFilters,
               onActionPressed: () {
                 if (allItems.isEmpty) {
                   _openAddForm();

@@ -23,24 +23,28 @@ ExpirationStatusInfo computeStatus(DateTime expirationDate) {
       status: ExpirationStatus.expired,
       statusText: 'Tarihi Geçti',
       statusColor: AppColors.error,
+      daysRemaining: null,
     );
   } else if (difference == 0) {
     return const ExpirationStatusInfo(
       status: ExpirationStatus.critical,
       statusText: 'Bugün Son',
       statusColor: AppColors.error,
+      daysRemaining: 0,
     );
   } else if (difference <= 7) {
     return ExpirationStatusInfo(
       status: ExpirationStatus.upcoming,
       statusText: '$difference Gün Kaldı',
       statusColor: AppColors.secondary,
+      daysRemaining: difference,
     );
   } else {
     return ExpirationStatusInfo(
       status: ExpirationStatus.safe,
       statusText: '$difference Gün Kaldı',
       statusColor: AppColors.primary,
+      daysRemaining: difference,
     );
   }
 }
@@ -51,11 +55,15 @@ class ExpirationStatusInfo {
     required this.status,
     required this.statusText,
     required this.statusColor,
+    this.daysRemaining,
   });
 
   final ExpirationStatus status;
+  /// Geriye dönük uyumluluk için Türkçe fallback metin.
   final String statusText;
   final Color statusColor;
+  /// null → tarihi geçmiş, 0 → bugün son, pozitif → kalan gün sayısı.
+  final int? daysRemaining;
 }
 
 // ── ExpirationModel ───────────────────────────────────────────────────────────

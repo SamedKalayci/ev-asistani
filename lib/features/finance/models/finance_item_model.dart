@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Finans işlem türü: Gelir (income) veya Gider (expense).
 enum FinanceType {
@@ -60,6 +61,39 @@ enum FinanceCategory {
     entertainmentSubscriptions,
     other,
   ];
+
+  String getLocalizedLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (this) {
+      case FinanceCategory.diningOut:
+        return l10n.categoryDiningOut;
+      case FinanceCategory.kitchenGrocery:
+      case FinanceCategory.food:
+      case FinanceCategory.grocery:
+        return l10n.categoryKitchenGrocery;
+      case FinanceCategory.homeBills:
+      case FinanceCategory.home:
+      case FinanceCategory.rent:
+      case FinanceCategory.bill:
+        return l10n.categoryHomeBills;
+      case FinanceCategory.shoppingPersonal:
+      case FinanceCategory.shopping:
+      case FinanceCategory.health:
+        return l10n.categoryShoppingPersonal;
+      case FinanceCategory.transport:
+        return l10n.categoryTransport;
+      case FinanceCategory.entertainmentSubscriptions:
+      case FinanceCategory.entertainment:
+      case FinanceCategory.subscription:
+      case FinanceCategory.pet:
+        return l10n.categoryEntertainmentSubscriptions;
+      case FinanceCategory.other:
+      case FinanceCategory.general:
+        return l10n.categoryOther;
+      case FinanceCategory.walletTotal:
+        return l10n.householdWalletTab;
+    }
+  }
 
   String get label {
     switch (this) {

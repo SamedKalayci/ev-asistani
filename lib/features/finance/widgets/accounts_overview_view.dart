@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../core/providers/user_provider.dart';
 import '../models/account_model.dart';
@@ -79,8 +80,10 @@ class AccountsOverviewView extends ConsumerWidget {
   ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).toString();
 
-    final formattedTitle = '${DateFormat('MMMM yyyy', 'tr_TR').format(selectedMonth)} Gelir/Gider Dengesi';
+    final formattedTitle = '${DateFormat.yMMMM(localeCode).format(selectedMonth)} ${l10n.incomeExpenseBalance}';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +107,7 @@ class AccountsOverviewView extends ConsumerWidget {
                 const Icon(Icons.arrow_upward_rounded, size: 16, color: AppColors.success),
                 const SizedBox(width: 4.0),
                 Text(
-                  'Toplam Gelir: +${_formatCurrency(monthlyIncome)}',
+                  '${l10n.totalIncome}: +${_formatCurrency(monthlyIncome)}',
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.success,
                     fontWeight: FontWeight.w600,
@@ -117,7 +120,7 @@ class AccountsOverviewView extends ConsumerWidget {
                 const Icon(Icons.arrow_downward_rounded, size: 16, color: AppColors.error),
                 const SizedBox(width: 4.0),
                 Text(
-                  'Toplam Gider: -${_formatCurrency(monthlyExpense)}',
+                  '${l10n.totalExpense}: -${_formatCurrency(monthlyExpense)}',
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.error,
                     fontWeight: FontWeight.w600,
@@ -132,7 +135,7 @@ class AccountsOverviewView extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              'Bireysel Harcamalar: -${_formatCurrency(monthlyPersonalExpense)}',
+              '${l10n.personalExpenses}: -${_formatCurrency(monthlyPersonalExpense)}',
               style: AppTypography.labelSmall.copyWith(
                 color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                 fontWeight: FontWeight.w500,
@@ -145,11 +148,12 @@ class AccountsOverviewView extends ConsumerWidget {
   }
 
   List<Widget> _buildAccountsList(BuildContext context, List<AccountModel> accounts) {
+    final l10n = AppLocalizations.of(context)!;
     if (accounts.isEmpty) {
       return [
-        const EmptyState(
+        EmptyState(
           icon: Icons.account_balance_wallet_outlined,
-          title: 'Henüz hesap eklenmedi.',
+          title: l10n.noAccountYet,
         )
       ];
     }
@@ -165,7 +169,7 @@ class AccountsOverviewView extends ConsumerWidget {
         widgets.add(Padding(
           padding: const EdgeInsets.only(bottom: AppSpacing.sm),
           child: Text(
-            type.label.toUpperCase(),
+            type.getLocalizedLabel(l10n).toUpperCase(),
             style: AppTypography.labelSmall.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.bold,
@@ -202,7 +206,7 @@ class AccountsOverviewView extends ConsumerWidget {
                 ),
                 title: Text(acc.title, style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.w600)),
                 subtitle: acc.type == AccountType.creditCard && acc.cutoffDay != null
-                    ? Text('Fatura kesim: ${acc.cutoffDay}', style: AppTypography.bodySmall)
+                    ? Text(l10n.statementCutoff(acc.cutoffDay!), style: AppTypography.bodySmall)
                     : null,
                 trailing: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +242,10 @@ class AccountsOverviewView extends ConsumerWidget {
   }
 
   Widget _buildPaymentSchedules(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedules) {
+    final l10n = AppLocalizations.of(context)!;
     final selectedMonth = ref.watch(selectedMonthProvider);
+    final localeCode = Localizations.localeOf(context).toString();
+    final formattedMonthYear = DateFormat.yMMMM(localeCode).format(selectedMonth);
     final now = DateTime.now();
     final isCurrentMonth = selectedMonth.year == now.year && selectedMonth.month == now.month;
 
@@ -268,7 +275,7 @@ class AccountsOverviewView extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Ödeme Takvimi', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+              Text(l10n.paymentSchedule, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
               Row(
                 children: [
                   IconButton(
@@ -282,7 +289,7 @@ class AccountsOverviewView extends ConsumerWidget {
                   ),
                   const SizedBox(width: AppSpacing.xs),
                   Text(
-                    '${_getFullMonthName(selectedMonth.month)} ${selectedMonth.year}',
+                    formattedMonthYear,
                     style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: AppSpacing.xs),
@@ -306,20 +313,20 @@ class AccountsOverviewView extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
               child: Center(
                 child: Text(
-                  'Bu ay için ödeme takvimi kaydı bulunmuyor.',
+                  l10n.paymentSchedule,
                   style: AppTypography.bodyMedium.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
               ),
             )
           else ...[
             if (pendingSchedules.isNotEmpty) ...[
-              Text('Bekleyenler', style: AppTypography.labelLarge.copyWith(color: Theme.of(context).colorScheme.primary)),
+              Text(l10n.paymentSchedule, style: AppTypography.labelLarge.copyWith(color: Theme.of(context).colorScheme.primary)),
               const SizedBox(height: AppSpacing.sm),
               _buildScheduleList(context, ref, pendingSchedules),
               if (realizedSchedules.isNotEmpty) const SizedBox(height: AppSpacing.lg),
             ],
             if (realizedSchedules.isNotEmpty) ...[
-              Text('Gerçekleşenler', style: AppTypography.labelLarge.copyWith(color: Colors.grey, decoration: TextDecoration.lineThrough)),
+              Text(l10n.realizedPayments, style: AppTypography.labelLarge.copyWith(color: Colors.grey, decoration: TextDecoration.lineThrough)),
               const SizedBox(height: AppSpacing.sm),
               _buildScheduleList(context, ref, realizedSchedules),
             ],
@@ -331,6 +338,7 @@ class AccountsOverviewView extends ConsumerWidget {
 
   Widget _buildScheduleList(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedulesList) {
     final now = DateTime.now();
+    final localeCode = Localizations.localeOf(context).toString();
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -371,12 +379,12 @@ class AccountsOverviewView extends ConsumerWidget {
                   margin: const EdgeInsets.only(right: AppSpacing.sm),
                 ),
                 SizedBox(
-                  width: 55,
+                  width: 60,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${s.date.day} ${_getMonthName(s.date.month)}',
+                        DateFormat.MMMd(localeCode).format(s.date),
                         style: AppTypography.bodyMedium.copyWith(
                           fontWeight: FontWeight.bold,
                           color: s.isPaid ? Theme.of(context).colorScheme.onSurfaceVariant : null,
@@ -384,7 +392,7 @@ class AccountsOverviewView extends ConsumerWidget {
                       ),
                       if (s.recurringGroupId != null)
                         Text(
-                          '🔄 Tekrar',
+                          '🔄',
                           style: AppTypography.labelSmall.copyWith(fontSize: 9, color: Colors.blue),
                         ),
                     ],
@@ -441,6 +449,7 @@ class AccountsOverviewView extends ConsumerWidget {
   Future<void> _handleDeleteSchedule(BuildContext context, WidgetRef ref, PaymentScheduleModel s) async {
     final repo = ref.read(financeRepositoryProvider);
     final familyId = ref.read(activeFamilyIdProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     if (s.recurringGroupId == null) {
       await repo.deletePaymentSchedule(familyId, s.id);
@@ -450,21 +459,21 @@ class AccountsOverviewView extends ConsumerWidget {
     final choice = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Tekrarlı Ödemeyi Sil'),
-        content: const Text('Bu kaydı nasıl silmek istersiniz?'),
+        title: Text(l10n.paymentSchedule),
+        content: const Text('...'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, 'single'),
-            child: const Text('Sadece Bu Ayı'),
+            child: Text(l10n.confirm),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, 'future'),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
-            child: const Text('Gelecek Tüm Tekrarları'),
+            child: Text(l10n.confirm),
           ),
         ],
       ),
@@ -475,15 +484,5 @@ class AccountsOverviewView extends ConsumerWidget {
     } else if (choice == 'future') {
       await repo.deleteRecurringPaymentSchedules(familyId, s.recurringGroupId!, s.date);
     }
-  }
-
-  String _getMonthName(int month) {
-    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
-    return months[month - 1];
-  }
-
-  String _getFullMonthName(int month) {
-    const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-    return months[month - 1];
   }
 }

@@ -5,6 +5,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/models/user_model.dart';
 import 'quick_add_expense_bottom_sheet.dart';
 import '../../profile/providers/family_provider.dart';
@@ -35,6 +36,7 @@ class HouseholdWalletView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     
     final budgetsAsync = ref.watch(budgetsProvider);
     final rawBudgets = budgetsAsync.valueOrNull ?? [];
@@ -82,7 +84,7 @@ class HouseholdWalletView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Kalan Serbest Bütçe',
+                  l10n.monthlyFreeBudget,
                   style: AppTypography.labelMedium.copyWith(
                     color: Colors.white70,
                   ),
@@ -112,7 +114,7 @@ class HouseholdWalletView extends ConsumerWidget {
                         ),
                       ),
                       icon: const Icon(Icons.track_changes_rounded, size: 20),
-                      label: const Text('Bütçeni Planla', style: TextStyle(fontWeight: FontWeight.w600)),
+                      label: Text(l10n.planBudget, style: const TextStyle(fontWeight: FontWeight.w600)),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.md),
@@ -127,7 +129,7 @@ class HouseholdWalletView extends ConsumerWidget {
                         shape: const RoundedRectangleBorder(borderRadius: AppRadius.borderFull),
                       ),
                       icon: const Icon(Icons.flash_on_rounded, size: 20, color: Colors.orange),
-                      label: const Text('Harcama Gir', style: TextStyle(fontWeight: FontWeight.w600)),
+                      label: Text(l10n.quickAddExpense, style: const TextStyle(fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],
@@ -140,7 +142,7 @@ class HouseholdWalletView extends ConsumerWidget {
 
         // ── 2. Kategori Bütçe İlerleme (Progress) ───────────────────────────
         Text(
-          'Kategori Bütçeleri',
+          l10n.categoryBudgets,
           style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: AppSpacing.md),
@@ -158,7 +160,7 @@ class HouseholdWalletView extends ConsumerWidget {
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Text(
-                    'Henüz bir bütçe hedefi belirlemediniz. "Bütçeni Planla" butonuna tıklayarak başlayın.',
+                    l10n.noBudgetsSet,
                     style: AppTypography.bodySmall,
                   ),
                 ),
@@ -188,7 +190,7 @@ class HouseholdWalletView extends ConsumerWidget {
                           Icon(category.icon, size: 16, color: colorScheme.primary),
                           const SizedBox(width: AppSpacing.xs),
                           Text(
-                            category.label,
+                            category.getLocalizedLabel(context),
                             style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ],
@@ -219,7 +221,7 @@ class HouseholdWalletView extends ConsumerWidget {
                      Align(
                        alignment: Alignment.centerRight,
                        child: Text(
-                         'Limit aşıldı!',
+                         l10n.limitExceeded,
                          style: AppTypography.labelSmall.copyWith(color: AppColors.error, fontSize: 10),
                        ),
                      ),
@@ -236,11 +238,11 @@ class HouseholdWalletView extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Bireysel Harcamalar',
+              l10n.personalExpenses,
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             Text(
-              'Toplam: ${_formatCurrency(totalWalletExpense)}',
+              '${l10n.totalExpense}: ${_formatCurrency(totalWalletExpense)}',
               style: AppTypography.titleSmall.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
@@ -254,7 +256,7 @@ class HouseholdWalletView extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
             child: Center(
               child: Text(
-                'Bu dönem hiç harcama yok.',
+                l10n.noExpensesPeriod,
                 style: AppTypography.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
               ),
             ),
@@ -266,12 +268,12 @@ class HouseholdWalletView extends ConsumerWidget {
 
         // ── 4. Kompakt Anlık Harcama Akışı ──────────────────────────────────
         Text(
-          'Harcama Geçmişi',
+          l10n.expenseHistory,
           style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: AppSpacing.md),
         if (expenses.isEmpty)
-          Text('Kayıt bulunmuyor.', style: AppTypography.bodySmall)
+          Text(l10n.noRecordsFound, style: AppTypography.bodySmall)
         else
           ListView.separated(
             shrinkWrap: true,
@@ -411,7 +413,7 @@ class HouseholdWalletView extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '$userName • ${item.category.label}',
+                    '$userName • ${item.category.getLocalizedLabel(context)}',
                     style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
                   ),
                 ],

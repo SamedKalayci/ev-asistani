@@ -1,41 +1,69 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/ad_service.dart';
-import 'user_provider.dart';
-import '../../features/profile/providers/family_provider.dart';
+import 'purchase_provider.dart';
+
+const String _kAdFreeKey = 'isAdFree';
+
+/// Reklamsız mod durumunu yöneten StateNotifier.
+class AdFreeNotifier extends StateNotifier<bool> {
+  AdFreeNotifier() : super(false) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final localAdFree = prefs.getBool(_kAdFreeKey) ?? false;
+      state = localAdFree;
+      AdService.instance.setPremium(localAdFree);
+    } catch (e) {
+      // SharedPreferences hatası durumunda false başla
+      state = false;
+    }
+  }
+
+  /// Reklamsız mod durumunu kalıcı olarak günceller.
+  Future<void> setAdFree(bool value) async {
+    state = value;
+    AdService.instance.setPremium(value);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_kAdFreeKey, value);
+    } catch (e) {
+      // Hata yönetimi
+    }
+  }
+}
+
+/// Reklamsız mod durumunu dinleyen temel provider.
+final isAdFreeProvider = StateNotifierProvider<AdFreeNotifier, bool>((ref) {
+  final notifier = AdFreeNotifier();
+  
+  // Ayrıca RevenueCat müşteri bilgilerini dinle ve 'remove_ads' paketini kontrol et
+  ref.listen(customerInfoProvider, (previous, next) {
+    final customerInfo = next.valueOrNull;
+    if (customerInfo != null) {
+      final activeEntitlements = customerInfo.entitlements.all;
+      final hasAdFreeEntitlement = (activeEntitlements['remove_ads']?.isActive ?? false) ||
+          (activeEntitlements['pro']?.isActive ?? false) ||
+          (activeEntitlements['premium']?.isActive ?? false);
+      if (hasAdFreeEntitlement) {
+        notifier.setAdFree(true);
+      }
+    }
+  });
+
+  return notifier;
+});
+
+/// Aile Boyu PRO Üyelik sağlayıcısı.
+/// Tüm özellik kısıtlamalarını kaldırdığımız için ARTIK HER ZAMAN TRUE döner.
+final isPremiumProvider = Provider<bool>((ref) {
+  return true;
+});
 
 /// [AdService] singleton'ını sunan provider.
 final adServiceProvider = Provider<AdService>((ref) {
   return AdService.instance;
-});
-
-/// Aile Boyu PRO Üyelik sağlayıcısı.
-///
-/// Kullanıcının bireysel `isPremium` bayrağı VEYA
-/// ailedeki herhangi bir üyenin `isPremium` bayrağı `true` ise `true` döner.
-///
-/// Bu provider Firestore'u gerçek zamanlı dinler; PRO satın alma anında
-/// ve uygulama açılışında otomatik olarak doğru değeri yansıtır.
-final isPremiumProvider = Provider<bool>((ref) {
-  // 1. Bireysel PRO kontrolü
-  final userAsync = ref.watch(userProvider);
-  final userIsPremium = userAsync.whenOrNull(data: (u) => u?.isPremium) ?? false;
-
-  // 2. Aile PRO kontrolü — families/{id}.isPremium alanı
-  final familyAsync = ref.watch(currentFamilyProvider);
-  final familyIsPremium =
-      familyAsync.whenOrNull(data: (f) => f?.isPremium) ?? false;
-
-  // 3. Aile üyelerinden herhangi biri PRO mu?
-  final membersAsync = ref.watch(familyMembersProvider);
-  final memberIsPremium = membersAsync.whenOrNull(
-        data: (members) => members.any((m) => m.isPremium),
-      ) ??
-      false;
-
-  final effective = userIsPremium || familyIsPremium || memberIsPremium;
-
-  // AdService'in local flag'ini de senkronize et
-  AdService.instance.setPremium(effective);
-
-  return effective;
 });

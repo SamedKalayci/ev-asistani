@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../router/app_router.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -29,6 +32,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _isPasswordObscure = true;
   bool _isConfirmPasswordObscure = true;
   bool _isLoading = false;
+  bool _isAccepted = false;
 
   @override
   void dispose() {
@@ -43,6 +47,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
+
+    if (!_isAccepted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.registerConsentError),
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
 
     setState(() => _isLoading = true);
 
@@ -261,6 +276,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       },
                     ),
 
+                    const SizedBox(height: AppSpacing.md),
+                    _buildConsentCheckboxRow(colorScheme),
                     const SizedBox(height: AppSpacing.xl),
 
                     // ── Kayıt Ol Butonu ────────────────────────────────────
@@ -302,6 +319,59 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildConsentCheckboxRow(ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 24,
+          height: 24,
+          child: Checkbox(
+            value: _isAccepted,
+            onChanged: (val) {
+              setState(() {
+                _isAccepted = val ?? false;
+              });
+            },
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: AppTypography.bodyMedium.copyWith(
+                color: colorScheme.onSurface,
+                height: 1.4,
+              ),
+              children: [
+                if (l10n.registerConsentPrefix.isNotEmpty)
+                  TextSpan(text: l10n.registerConsentPrefix),
+                TextSpan(
+                  text: l10n.consentTermsAndPrivacy,
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      final Uri url = Uri.parse('https://samedkalayci.github.io/ev-asistani-privacy/');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                      }
+                    },
+                ),
+                if (l10n.registerConsentSuffix.isNotEmpty)
+                  TextSpan(text: l10n.registerConsentSuffix),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

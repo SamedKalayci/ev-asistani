@@ -30,6 +30,16 @@ class AdService {
 
   // ── Ad Unit ID'leri ──────────────────────────────────────────────────────
 
+  static String get bannerAdUnitId {
+    if (kIsWeb) return '';
+    if (Platform.isAndroid) {
+      return EnvConfig.admobBannerIdAndroid;
+    } else if (Platform.isIOS) {
+      return EnvConfig.admobBannerIdIOS;
+    }
+    return '';
+  }
+
   static String get interstitialAdUnitId {
     if (kIsWeb) return '';
     if (Platform.isAndroid) {

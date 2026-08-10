@@ -18,6 +18,11 @@ class EnvConfig {
 
   // ── AdMob Unit IDs ───────────────────────────────────────────────────────
   
+  static String get admobBannerIdAndroid =>
+      dotenv.env['ADMOB_BANNER_ID_ANDROID'] ?? 'ca-app-pub-3940256099942544/6300978111';
+
+  static String get admobBannerIdIOS =>
+      dotenv.env['ADMOB_BANNER_ID_IOS'] ?? 'ca-app-pub-3940256099942544/2934735716';
 
   static String get admobInterstitialIdAndroid =>
       dotenv.env['ADMOB_INTERSTITIAL_ID_ANDROID'] ?? 'ca-app-pub-3940256099942544/1033173712';

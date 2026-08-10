@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
@@ -19,6 +20,7 @@ class VaultMaintenanceScreen extends ConsumerWidget {
   const VaultMaintenanceScreen({super.key});
 
   static Future<void> showAddModal(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final titleController = TextEditingController();
     final descController = TextEditingController();
     DateTime? dueDate = DateTime.now().add(const Duration(days: 30));
@@ -66,7 +68,7 @@ class VaultMaintenanceScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.lg),
                       Center(
                         child: Text(
-                          'Yeni Periyodik Bakım Görevi',
+                          l10n.newMaintenanceTask,
                           style: AppTypography.headlineSmall.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -74,34 +76,34 @@ class VaultMaintenanceScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       AppTextField(
-                        label: 'Bakım Adı',
-                        hintText: 'Örn: Kombi Yıllık Bakım, Klima Filtre Temizliği',
+                        label: l10n.maintenanceTitleLabel,
+                        hintText: l10n.maintenanceTitleHint,
                         controller: titleController,
                         validator: (v) =>
                             (v == null || v.trim().isEmpty) ? 'Bakım adı zorunludur.' : null,
                       ),
                       const SizedBox(height: AppSpacing.md),
                       AppTextField(
-                        label: 'Açıklama / Detaylar',
-                        hintText: 'Örn: Filtreler yıkanacak, servis çağrılacak.',
+                        label: l10n.descriptionLabel,
+                        hintText: l10n.descriptionHint,
                         controller: descController,
                       ),
                       const SizedBox(height: AppSpacing.md),
                       DatePickerField(
-                        label: 'Planlanan Bakım Tarihi',
+                        label: l10n.scheduledDateLabel,
                         selectedDate: dueDate,
                         onDateSelected: (date) => setState(() => dueDate = date),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       PrimaryButton(
-                        text: 'Görevi Kaydet',
+                        text: l10n.saveTask,
                         onPressed: () async {
                           if (!formKey.currentState!.validate()) return;
                           final familyId = ref.read(activeFamilyIdProvider);
                           final user = ref.read(userProvider).valueOrNull;
 
                           if (familyId.isNotEmpty && user != null) {
-                            final item = VaultItemModel(
+                            final newItem = VaultItemModel(
                               id: '',
                               familyId: familyId,
                               category: 'maintenance',
@@ -110,12 +112,22 @@ class VaultMaintenanceScreen extends ConsumerWidget {
                               dueDate: dueDate,
                               createdBy: user.uid,
                             );
+
                             await ref
                                 .read(vaultRepositoryProvider)
-                                .addVaultItem(familyId, item);
-                            await NotificationService.instance
-                                .scheduleMaintenanceNotifications(item);
-                            if (ctx.mounted) Navigator.pop(ctx);
+                                .addVaultItem(familyId, newItem);
+
+                            if (dueDate != null) {
+                              await NotificationService.instance.scheduleMaintenanceNotifications(newItem);
+                            }
+
+                            if (ctx.mounted) {
+                              Navigator.pop(ctx);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Bakım görevi eklendi! 🛠️')),
+                              );
+                            }
                           }
                         },
                       ),
@@ -134,6 +146,7 @@ class VaultMaintenanceScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final vaultItemsAsync = ref.watch(vaultItemsProvider);
 
     final items = (vaultItemsAsync.valueOrNull ?? [])
@@ -150,7 +163,7 @@ class VaultMaintenanceScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(
-        title: '🛠️ Periyodik Bakım Takvimi',
+        title: '🛠️ ${l10n.periodicMaintenance}',
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded),
@@ -162,9 +175,9 @@ class VaultMaintenanceScreen extends ConsumerWidget {
         onPressed: () => showAddModal(context, ref),
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.build_rounded, color: Colors.white),
-        label: const Text(
-          'Bakım Ekle',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        label: Text(
+          l10n.addMaintenanceTask,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -175,10 +188,9 @@ class VaultMaintenanceScreen extends ConsumerWidget {
               if (items.isEmpty)
                 EmptyState(
                   icon: Icons.build_circle_outlined,
-                  title: 'Bakım Görevi Bulunmuyor',
-                  description:
-                      'Kombi bakımı, baca temizliği veya filtre değişimlerini ekleyerek zamanı gelince hatırlatma alın.',
-                  actionLabel: 'İlk Bakım Görevini Ekle',
+                  title: l10n.noMaintenanceTasksTitle,
+                  description: l10n.noMaintenanceTasksDesc,
+                  actionLabel: l10n.addFirstMaintenanceTask,
                   onActionPressed: () => showAddModal(context, ref),
                 )
               else

@@ -6,6 +6,7 @@ import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/providers/user_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/empty_state.dart';
@@ -53,23 +54,23 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
   }
 
   Future<void> _clearCompleted() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Alınanları Temizle'),
-        content:
-            const Text('Alınan tüm ürünler listeden kaldırılacak. Devam et?'),
+        title: Text(l10n.clearCompletedConfirmTitle),
+        content: Text(l10n.clearCompletedConfirmDesc),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Temizle'),
+            child: Text(l10n.clearCompleted),
           ),
         ],
       ),
@@ -85,12 +86,13 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasFamily = ref.watch(hasRealFamilyProvider);
 
     if (!hasFamily) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        appBar: const AppHeader(title: 'Ev Asistanı'),
+        appBar: AppHeader(title: l10n.appName),
         body: const SafeArea(child: NoFamilyEmptyState()),
       );
     }
@@ -101,7 +103,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: const AppHeader(title: 'Ev Asistanı'),
+      appBar: AppHeader(title: l10n.appName),
       body: SafeArea(
         child: itemsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -141,7 +143,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Alışveriş Listesi',
+                            l10n.shoppingListTitle,
                             style: AppTypography.headlineLarge.copyWith(
                               color: colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
@@ -149,7 +151,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            'Alınacak ve alınan ürünleri kolayca takip edin.',
+                            l10n.shoppingListSubtitle,
                             style: AppTypography.bodyLarge.copyWith(
                               color: colorScheme.onSurfaceVariant,
                             ),
@@ -178,7 +180,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${allItems.length} Ürün',
+                            l10n.itemsCount(allItems.length),
                             style: AppTypography.labelMedium.copyWith(
                               color: colorScheme.onTertiaryContainer,
                               fontWeight: FontWeight.bold,
@@ -213,20 +215,16 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                     ),
                     cursorColor: colorScheme.primary,
                     decoration: InputDecoration(
-                      hintText: 'Yeni ürün ekle...',
+                      hintText: l10n.newProductHint,
                       hintStyle: AppTypography.bodyMedium.copyWith(
                         color: colorScheme.onSurfaceVariant
                             .withValues(alpha: 0.7),
                       ),
-                      prefixIcon: Icon(
-                        Icons.add_circle_rounded,
-                        color: colorScheme.primary,
-                        size: AppSpacing.xl,
-                      ),
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.arrow_upward_rounded),
+                        icon: const Icon(Icons.add_rounded, size: 26),
                         color: colorScheme.primary,
                         onPressed: () => _addItem(),
+                        tooltip: l10n.addToListBtn,
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
@@ -242,11 +240,10 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                 // ── Liste boşsa EmptyState ────────────────────────────────
                 if (allItems.isEmpty)
                   EmptyState(
-                    title: 'Alışveriş Listeniz Boş',
-                    description:
-                        'Ekmek, süt, meyve gibi ihtiyacınız olan ürünleri yukarıdaki arama/ekleme alanından ekleyebilirsiniz.',
+                    title: l10n.emptyShoppingList,
+                    description: l10n.emptyShoppingListDesc,
                     icon: Icons.shopping_cart_outlined,
-                    actionLabel: 'İlk Ürünü Ekle',
+                    actionLabel: l10n.addToListBtn,
                     onActionPressed: () => _inputFocusNode.requestFocus(),
                   )
                 else ...[
@@ -254,7 +251,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                   Row(
                     children: [
                       Text(
-                        'Alınacaklar',
+                        l10n.toBuyTab,
                         style: AppTypography.titleMedium.copyWith(
                           color: colorScheme.onSurface,
                           fontWeight: FontWeight.w700,
@@ -280,7 +277,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                         borderRadius: AppRadius.borderLg,
                       ),
                       child: Text(
-                        'Tüm ürünler alındı! 🎉',
+                        l10n.allPurchasedMessage,
                         style: AppTypography.bodyMedium.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -317,7 +314,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                         ),
                         const SizedBox(width: AppSpacing.xs),
                         Text(
-                          'Alınanlar',
+                          l10n.purchasedTab,
                           style: AppTypography.titleMedium.copyWith(
                             color: colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w700,
@@ -335,7 +332,7 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
                           onPressed: _clearCompleted,
                           icon: const Icon(Icons.delete_sweep_rounded,
                               size: 18),
-                          label: const Text('Temizle'),
+                          label: Text(l10n.clearCompleted),
                           style: TextButton.styleFrom(
                             foregroundColor: AppColors.error,
                           ),

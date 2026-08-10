@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../models/vault_item_model.dart';
@@ -19,6 +20,7 @@ class VaultGuideScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final vaultItemsAsync = ref.watch(vaultItemsProvider);
 
     final items = (vaultItemsAsync.valueOrNull ?? [])
@@ -28,11 +30,11 @@ class VaultGuideScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(
-        title: '📶 Ev Rehberi',
+        title: '📶 ${l10n.homeGuideWifi}',
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded),
-            tooltip: '+ Ev Bilgisi Ekle',
+            tooltip: l10n.addHomeInfo,
             onPressed: () => VaultGuideFormBottomSheet.show(context),
           ),
         ],
@@ -41,9 +43,9 @@ class VaultGuideScreen extends ConsumerWidget {
         onPressed: () => VaultGuideFormBottomSheet.show(context),
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.add_rounded, color: Colors.white),
-        label: const Text(
-          '+ Ev Bilgisi Ekle',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        label: Text(
+          l10n.addHomeInfo,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -54,10 +56,9 @@ class VaultGuideScreen extends ConsumerWidget {
               if (items.isEmpty)
                 EmptyState(
                   icon: Icons.info_outline_rounded,
-                  title: 'Rehber Bilgisi Bulunmuyor',
-                  description:
-                      'Wi-Fi şifresi, abonelik numaraları veya vanaların yerini ekleyerek ev halkı ile anlık paylaşın.',
-                  actionLabel: '+ Ev Bilgisi Ekle',
+                  title: l10n.noGuideTitle,
+                  description: l10n.noGuideDesc,
+                  actionLabel: l10n.addHomeInfo,
                   onActionPressed: () => VaultGuideFormBottomSheet.show(context),
                 )
               else

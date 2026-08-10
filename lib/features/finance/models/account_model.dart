@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../l10n/app_localizations.dart';
 
 enum AccountType {
   cash,
@@ -16,6 +17,19 @@ enum AccountType {
         return 'Kredi Kartı';
       case AccountType.debtCredit:
         return 'Cari (Borç/Alacak)';
+    }
+  }
+
+  String getLocalizedLabel(AppLocalizations l10n) {
+    switch (this) {
+      case AccountType.cash:
+        return l10n.accountTypeCash;
+      case AccountType.bank:
+        return l10n.accountTypeBank;
+      case AccountType.creditCard:
+        return l10n.accountTypeCreditCard;
+      case AccountType.debtCredit:
+        return l10n.accountTypeDebtCredit;
     }
   }
 

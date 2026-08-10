@@ -5,6 +5,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/no_family_empty_state.dart';
 import '../../expiration/screens/expiration_screen.dart';
@@ -73,10 +74,12 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
       _tabController.animateTo(currentTab.clamp(0, 2));
     }
 
+    final l10n = AppLocalizations.of(context)!;
+
     if (!hasFamily) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        appBar: const AppHeader(title: 'Ev Asistanı'),
+        appBar: AppHeader(title: l10n.appName),
         body: const SafeArea(child: NoFamilyEmptyState()),
       );
     }
@@ -84,7 +87,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(
-        title: 'Ev Asistanı',
+        title: l10n.appName,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56.0),
           child: Padding(
@@ -109,6 +112,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
 
   // ── Soft 3'lü Segmented TabBar (Taşmasız Ekran Uyumlu) ─────────────────────
   Widget _buildTopTabBar(ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: 44,
       padding: const EdgeInsets.all(3),
@@ -136,36 +140,28 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
           fontWeight: FontWeight.w500,
           fontSize: 12,
         ),
-        tabs: const [
+        tabs: [
           Tab(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('Son Kullanma'),
+              child: Text(l10n.expirationTab),
             ),
           ),
           Tab(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('Garantiler'),
+              child: Text(l10n.warrantyTab),
             ),
           ),
           Tab(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('👑', style: TextStyle(fontSize: 12)),
-                  SizedBox(width: 2),
-                  Text(
-                    'Ev Kasası',
-                    style: TextStyle(
-                      color: Color(0xFF006E28),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              child: Text(
+                l10n.vaultTab,
+                style: const TextStyle(
+                  color: Color(0xFF006E28),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

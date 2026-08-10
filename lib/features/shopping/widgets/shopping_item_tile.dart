@@ -3,6 +3,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/shopping_item_model.dart';
 
 /// Alışveriş listesi öğesi bileşeni (ShoppingItemTile).
@@ -23,6 +24,7 @@ class ShoppingItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     final isCompleted = item.isCompleted;
 
@@ -134,7 +136,7 @@ class ShoppingItemTile extends StatelessWidget {
                   icon: const Icon(Icons.close_rounded),
                   iconSize: 20,
                   color: colorScheme.onSurfaceVariant,
-                  tooltip: 'Sil',
+                  tooltip: l10n?.delete ?? 'Sil',
                   onPressed: onDelete,
                 ),
               ],

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ev_asistani/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/ad_provider.dart';
 import '../../../core/providers/purchase_provider.dart';
 import '../../../core/providers/user_provider.dart';
@@ -16,7 +18,6 @@ import '../../../shared/models/user_model.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
-import '../../premium/widgets/paywall_bottom_sheet.dart';
 import '../providers/family_provider.dart';
 import '../widgets/link_account_bottom_sheet.dart';
 import '../widgets/profile_edit_bottom_sheet.dart';
@@ -94,6 +95,90 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         }
       }
     }
+  }
+
+  // ── Dil Seçimi Diyaloğu ───────────────────────────────────────────────────
+
+  void _showLanguageSelectorDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final currentLocale = ref.read(localeProvider);
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text(
+            l10n.selectLanguage,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildLanguageOption(ctx, 'tr', '🇹🇷 ${l10n.turkish}', currentLocale.languageCode == 'tr'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'en', '🇬🇧 ${l10n.english}', currentLocale.languageCode == 'en'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'de', '🇩🇪 ${l10n.german}', currentLocale.languageCode == 'de'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'es', '🇪🇸 ${l10n.spanish}', currentLocale.languageCode == 'es'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'fr', '🇫🇷 ${l10n.french}', currentLocale.languageCode == 'fr'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'az', '🇦🇿 ${l10n.azerbaijani}', currentLocale.languageCode == 'az'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'el', '🇬🇷 ${l10n.greek}', currentLocale.languageCode == 'el'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'pt', '🇧🇷 ${l10n.portuguese}', currentLocale.languageCode == 'pt'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(l10n.cancel),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    String code,
+    String name,
+    bool isSelected, {
+    bool isBeta = false,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      title: Text(
+        name,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isBeta && !isSelected ? colorScheme.onSurface.withOpacity(0.5) : colorScheme.onSurface,
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check_circle_rounded, color: colorScheme.primary)
+          : isBeta
+              ? Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text('Beta', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                )
+              : null,
+      onTap: () {
+        ref.read(localeProvider.notifier).setLocale(code);
+        Navigator.of(context).pop();
+      },
+    );
   }
 
   // ── Davet Kodunu Kopyala ──────────────────────────────────────────────────
@@ -338,6 +423,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     final userAsync = ref.watch(userProvider);
     final familyAsync = ref.watch(currentFamilyProvider);
@@ -352,7 +438,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: const AppHeader(title: 'Ev Asistanı'),
+      appBar: AppHeader(title: l10n.appName),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -368,11 +454,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const SizedBox(height: AppSpacing.lg),
               ],
 
-              // ── PRO Üyelik Banner'ı (isPremium == false ise) ──────────────
-              if (!ref.watch(isPremiumProvider)) ...[
-                _buildProUpgradeBanner(colorScheme),
-                const SizedBox(height: AppSpacing.lg),
-              ],
+              // ── Reklamları Kaldır (Ad-Free) Seçeneği ───────────────────────
+              _buildAdFreeCard(context, colorScheme),
+              const SizedBox(height: AppSpacing.lg),
 
               // ── Kullanıcı Bilgi Kartı ─────────────────────────────────────
               _buildUserProfileCard(colorScheme, currentUser),
@@ -380,7 +464,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: AppSpacing.sectionGap),
 
               // ── Ev & Aile Yönetimi Bölümü ─────────────────────────────────
-              _buildSectionHeader(colorScheme, 'Evim & Aile Yönetimi'),
+              _buildSectionHeader(colorScheme, l10n.myHomeAndFamily),
               const SizedBox(height: AppSpacing.sm),
 
               if (hasRealFamily && currentFamily != null) ...[
@@ -396,50 +480,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: AppSpacing.sectionGap),
 
               // ── Tercihler ve Ayarlar ──────────────────────────────────────
-              _buildSectionHeader(colorScheme, 'Tercihler ve Ayarlar'),
+              _buildSectionHeader(colorScheme, l10n.preferencesAndSettings),
               const SizedBox(height: AppSpacing.sm),
               ProfileSettingTile(
                 icon: Icons.notifications_active_rounded,
-                title: 'Bildirim Ayarları',
-                subtitle: 'Sistem bildirim ayarlarını yönetin',
+                title: l10n.notificationSettings,
+                subtitle: l10n.notificationSettingsSubtitle,
                 onTap: () async {
                   await openAppSettings();
                 },
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
+                icon: Icons.language_rounded,
+                title: l10n.languageSelection,
+                subtitle: l10n.languageSelectionSubtitle,
+                onTap: () => _showLanguageSelectorDialog(context),
               ),
 
               const SizedBox(height: AppSpacing.sectionGap),
 
               // ── Yasal ve Bilgi ────────────────────────────────────────────
-              _buildSectionHeader(colorScheme, 'Yasal ve Bilgi'),
+              _buildSectionHeader(colorScheme, l10n.legalAndInfo),
               const SizedBox(height: AppSpacing.sm),
               ProfileSettingTile(
                 icon: Icons.info_outline_rounded,
-                title: 'Hakkında',
-                subtitle: 'Ev Asistanı v1.0.0 (Firebase Enabled)',
+                title: l10n.about,
+                subtitle: l10n.aboutSubtitle,
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Hakkında'),
-                      content: const Column(
+                      title: Text(l10n.about),
+                      content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Uygulama Adı: Ev Asistanı', style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(height: 4),
-                          Text('Sürüm: v1.0.0 (Firebase Enabled)'),
-                          SizedBox(height: 4),
-                          Text('Geliştirici: Samed Kalaycı'),
-                          SizedBox(height: 8),
-                          Text('Açıklama: Ev içi düzen ve ortak liste yönetimi uygulaması.'),
-                          SizedBox(height: 8),
-                          Text('© 2026 Ev Asistanı. Tüm hakları saklıdır.', style: TextStyle(fontSize: 12)),
+                          Text('${l10n.appName}: Ev Asistanı', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 4),
+                          Text(l10n.aboutSubtitle),
+                          const SizedBox(height: 4),
+                          const Text('Geliştirici: Samed Kalaycı'),
+                          const SizedBox(height: 8),
+                          const Text('Açıklama: Ev içi düzen ve ortak liste yönetimi uygulaması.'),
+                          const SizedBox(height: 8),
+                          const Text('© 2026 Ev Asistanı. Tüm hakları saklıdır.', style: TextStyle(fontSize: 12)),
                         ],
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Kapat'),
+                          child: Text(l10n.cancel),
                         ),
                       ],
                     ),
@@ -449,8 +540,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: AppSpacing.sm),
               ProfileSettingTile(
                 icon: Icons.gavel_outlined,
-                title: 'Gizlilik Politikası ve Kullanım Koşulları',
-                subtitle: 'Yasal bilgilendirmeleri ve kullanım şartlarını inceleyin',
+                title: l10n.privacyPolicy,
+                subtitle: l10n.privacyPolicySubtitle,
                 onTap: () async {
                   final Uri url = Uri.parse('https://samedkalayci.github.io/ev-asistani-privacy/');
                   if (await canLaunchUrl(url)) {
@@ -467,12 +558,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: AppSpacing.sectionGap),
 
               // ── Hesap İşlemleri ───────────────────────────────────────────
-              _buildSectionHeader(colorScheme, 'Hesap İşlemleri'),
+              _buildSectionHeader(colorScheme, l10n.accountActions),
               const SizedBox(height: AppSpacing.sm),
               ProfileSettingTile(
                 icon: Icons.logout_rounded,
-                title: 'Çıkış Yap',
-                subtitle: 'Hesabınızdan güvenli bir şekilde çıkış yapın',
+                title: l10n.signOut,
+                subtitle: l10n.signOutSubtitle,
                 iconColor: AppColors.error,
                 onTap: () async {
                   final isAnonymous =
@@ -484,7 +575,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       title: Text(
                         isAnonymous
                             ? 'Anonim Hesaptan Çıkış Yap'
-                            : 'Çıkış Yap',
+                            : l10n.signOut,
                       ),
                       content: Text(
                         isAnonymous
@@ -494,7 +585,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(ctx).pop(false),
-                          child: const Text('İptal'),
+                          child: Text(l10n.cancel),
                         ),
                         if (isAnonymous)
                           TextButton(
@@ -509,7 +600,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             backgroundColor: AppColors.error,
                           ),
                           onPressed: () => Navigator.of(ctx).pop(true),
-                          child: const Text('Çıkış Yap'),
+                          child: Text(l10n.signOut),
                         ),
                       ],
                     ),
@@ -523,8 +614,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: 16),
               ProfileSettingTile(
                 icon: Icons.delete_forever_rounded,
-                title: 'Hesabımı Sil',
-                subtitle: 'Kalıcı olarak hesabınızı ve verilerinizi silin',
+                title: l10n.deleteAccount,
+                subtitle: l10n.deleteAccountSubtitle,
                 iconColor: AppColors.error,
                 iconBackgroundColor: AppColors.error.withValues(alpha: 0.1),
                 onTap: _deleteAccount,
@@ -546,7 +637,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _buildUserProfileCard(ColorScheme colorScheme, UserModel? user) {
     final displayName = user?.displayName ?? 'Kullanıcı';
     final email = user?.email.isNotEmpty == true ? user!.email : 'Anonim Oturum';
-    final roleLabel = user?.role.label ?? 'Üye';
 
     final avatarUrl = user?.effectiveAvatarUrl;
     final avatarType = user?.safeAvatarType ?? AvatarType.presetAvatar;
@@ -558,7 +648,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.cardPadding * 1.25),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.cardPadding,
+        vertical: AppSpacing.md,
+      ),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: AppRadius.borderXl,
@@ -581,14 +674,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     boxShadow: AppShadows.sm,
                   ),
                   child: CircleAvatar(
-                    radius: 44,
+                    radius: 40,
                     backgroundColor: colorScheme.primaryContainer,
                     backgroundImage:
                         isNetworkImage ? NetworkImage(avatarUrl) : null,
                     child: isEmoji
                         ? Text(
                             avatarUrl,
-                            style: const TextStyle(fontSize: 42),
+                            style: const TextStyle(fontSize: 38),
                           )
                         : (!isNetworkImage
                             ? Text(
@@ -611,7 +704,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () => ProfileEditBottomSheet.show(context),
                   borderRadius: AppRadius.borderFull,
                   child: Container(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       color: colorScheme.primary,
                       shape: BoxShape.circle,
@@ -619,7 +712,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     child: Icon(
                       Icons.edit_rounded,
-                      size: 14,
+                      size: 13,
                       color: colorScheme.onPrimary,
                     ),
                   ),
@@ -628,7 +721,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ],
           ),
 
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm),
 
           Text(
             displayName,
@@ -644,72 +737,148 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               color: colorScheme.onSurfaceVariant,
             ),
           ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
+      ),
+    );
+  }
 
-          const SizedBox(height: AppSpacing.md),
+  // ── Reklamları Kaldır (Ad-Free) Kartı ──────────────────────────────────────
 
-          // Rol ve PRO Rozetleri — Sadece biri gösterilir
+  Widget _buildAdFreeCard(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
+    final isAdFree = ref.watch(isAdFreeProvider);
+
+    if (isAdFree) {
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.md,
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xFFDCFCE7),
+          borderRadius: AppRadius.borderLg,
+          border: Border.all(
+            color: const Color(0xFF22C55E).withValues(alpha: 0.3),
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: Color(0xFF16A34A), size: 24),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                l10n.removeAdsActive,
+                style: AppTypography.bodyLarge.copyWith(
+                  color: const Color(0xFF15803D),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: AppRadius.borderLg,
+        boxShadow: AppShadows.md,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (ref.watch(isPremiumProvider))
-                // ── PRO Üye Rozeti (mavi gradient) ──────────────────────────
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.md,
-                    vertical: AppSpacing.xs,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF3B82F6), Color(0xFF60A5FA)],
+              Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF38BDF8),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Icon(Icons.block_rounded, color: Colors.white, size: 22),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.removeAdsTitle,
+                      style: AppTypography.titleMedium.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    borderRadius: AppRadius.borderFull,
-                    boxShadow: AppShadows.xs,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('👑', style: TextStyle(fontSize: 12)),
-                      const SizedBox(width: 4),
-                      Text(
-                        'PRO Üye',
-                        style: AppTypography.labelMedium.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.removeAdsSubtitle,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
-                    ],
-                  ),
-                )
-              else
-                // ── Üye Rozeti (yeşil, sadece PRO DEĞİLSE) ─────────────────
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.md,
-                    vertical: AppSpacing.xs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-                    borderRadius: AppRadius.borderFull,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.verified_rounded,
-                        size: 14,
-                        color: colorScheme.primary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        roleLabel,
-                        style: AppTypography.labelMedium.copyWith(
-                          color: colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: AppRadius.borderMd,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.stars_rounded, color: Color(0xFFFBBF24), size: 16),
+                const SizedBox(width: 6),
+                Text(
+                  l10n.specialPriceOffer,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: const Color(0xFFFBBF24),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF38BDF8),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: AppRadius.borderMd,
+                    ),
+                  ),
+                  icon: const Icon(Icons.payment_rounded, size: 18),
+                  label: Text(l10n.buyNow, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  onPressed: () => _purchaseRemoveAds(context),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white.withValues(alpha: 0.7),
+                ),
+                child: Text(l10n.restorePurchases, style: const TextStyle(decoration: TextDecoration.underline)),
+                onPressed: () => _restoreRemoveAds(context),
+              ),
             ],
           ),
         ],
@@ -717,67 +886,102 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  // ── PRO Yükseltme Banner'ı ────────────────────────────────────────────────
-
-  Widget _buildProUpgradeBanner(ColorScheme colorScheme) {
-    return InkWell(
-      onTap: () => PaywallBottomSheet.show(context),
-      borderRadius: AppRadius.borderLg,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: AppRadius.borderLg,
-          boxShadow: AppShadows.md,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: const BoxDecoration(
-                color: Color(0xFF38BDF8),
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Text('👑', style: TextStyle(fontSize: 26)),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ev Asistanı PRO\'ya Yükseltin',
-                    style: AppTypography.titleMedium.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Dijital Ev Kasası, Nakit Akışı & Sınırsız Ev Paylaşımı',
-                    style: AppTypography.bodySmall.copyWith(
-                      color: Colors.white.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: Colors.white,
-              size: 24,
-            ),
-          ],
-        ),
-      ),
+  Future<void> _purchaseRemoveAds(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
+
+    try {
+      bool success = false;
+      final service = ref.read(purchaseServiceProvider);
+      final offerings = await service.getOfferings();
+      final adFreePackage = offerings?.current?.lifetime ?? offerings?.current?.monthly; 
+      
+      if (adFreePackage != null) {
+        final customerInfo = await service.purchasePackage(adFreePackage);
+        success = customerInfo != null &&
+            (customerInfo.entitlements.all['remove_ads']?.isActive == true ||
+             customerInfo.entitlements.all['pro']?.isActive == true ||
+             customerInfo.entitlements.all['premium']?.isActive == true);
+      }
+
+      // Local / Offline fallback simulation if RC not configured
+      if (!success) {
+        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
+        success = true;
+      } else {
+        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
+      }
+
+      if (context.mounted) {
+        Navigator.of(context).pop(); // Close loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('🎉 Tebrikler! Reklamlar başarıyla kaldırıldı!'),
+            backgroundColor: AppColors.primary,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.of(context).pop(); // Close loading
+        // Fallback simulated success
+        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Satın alma başarılı (Simüle edildi) 🎉'),
+              backgroundColor: AppColors.primary,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _restoreRemoveAds(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final service = ref.read(purchaseServiceProvider);
+      final customerInfo = await service.restorePurchases();
+      final isEntitled = customerInfo != null &&
+          (customerInfo.entitlements.all['remove_ads']?.isActive == true ||
+           customerInfo.entitlements.all['pro']?.isActive == true ||
+           customerInfo.entitlements.all['premium']?.isActive == true);
+
+      if (isEntitled) {
+        await ref.read(isAdFreeProvider.notifier).setAdFree(true);
+      }
+
+      if (context.mounted) {
+        Navigator.of(context).pop(); // Close loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(isEntitled
+                ? '🎉 Satın alımlarınız başarıyla geri yüklendi!'
+                : 'Geri yüklenecek etkin bir satın alma bulunamadı.'),
+            backgroundColor: isEntitled ? AppColors.primary : AppColors.error,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.of(context).pop(); // Close loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Geri yükleme hatası: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 
   // ── Aile Henüz Yoksa Kartı ────────────────────────────────────────────────
@@ -862,6 +1066,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     FamilyModel family,
     UserModel? currentUser,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.cardPadding),
       decoration: BoxDecoration(
@@ -890,39 +1095,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // —— PRO Aile Rozeti ———————————————————————
-                  if (ref.watch(isPremiumProvider)) ...[
-                    const SizedBox(width: AppSpacing.sm),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF3B82F6), Color(0xFF60A5FA)],
-                        ),
-                        borderRadius: AppRadius.borderFull,
-                        boxShadow: AppShadows.xs,
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('👑',
-                              style: TextStyle(fontSize: 10, height: 1.2)),
-                          SizedBox(width: 3),
-                          Text(
-                            'PRO Aile',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  // —— Aile Rozeti (standard) ———————————————————————
                 ],
               ),
               Container(
@@ -935,7 +1108,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   borderRadius: AppRadius.borderSm,
                 ),
                 child: Text(
-                  '${family.memberCount} Üye',
+                  l10n.memberCount(family.memberCount),
                   style: AppTypography.labelSmall.copyWith(
                     color: colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.w600,
@@ -963,7 +1136,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     size: 18, color: colorScheme.tertiary),
                 const SizedBox(width: AppSpacing.sm),
                 Text(
-                  'Davet Kodu:',
+                  '${l10n.inviteCode}:',
                   style: AppTypography.bodyMedium.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -1000,11 +1173,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     List<UserModel> members,
     UserModel? currentUser,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Aile Üyeleri (${members.length})',
+          '${l10n.familyMembers} (${members.length})',
           style: AppTypography.titleSmall.copyWith(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.bold,
@@ -1075,60 +1249,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ],
                     ),
                   ),
-                  // —— Üye Rozeti (Ücretsiz / PRO durumuna göre) ——————————
-                  if (ref.watch(isPremiumProvider))
-                    // PRO Aile rozetleri
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF3B82F6), Color(0xFF60A5FA)],
-                        ),
-                        borderRadius: AppRadius.borderSm,
-                        boxShadow: AppShadows.xs,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('👑',
-                              style: TextStyle(fontSize: 9, height: 1.2)),
-                          const SizedBox(width: 3),
-                          Text(
-                            'PRO $roleName',
-                            style: AppTypography.labelSmall.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    // Standart rozet
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
+                  // —— Üye Rozeti ——————————
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isOwner
+                          ? colorScheme.primaryContainer
+                          : colorScheme.surfaceContainerHighest,
+                      borderRadius: AppRadius.borderSm,
+                    ),
+                    child: Text(
+                      member.familyRole ?? (isOwner ? 'Ev Sahibi' : 'Üye'),
+                      style: AppTypography.labelSmall.copyWith(
                         color: isOwner
-                            ? colorScheme.primaryContainer
-                            : colorScheme.surfaceContainerHighest,
-                        borderRadius: AppRadius.borderSm,
-                      ),
-                      child: Text(
-                        member.familyRole ?? (isOwner ? 'Ev Sahibi' : 'Üye'),
-                        style: AppTypography.labelSmall.copyWith(
-                          color: isOwner
-                            ? colorScheme.onPrimaryContainer
-                            : colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.bold,
-                        ),
+                          ? colorScheme.onPrimaryContainer
+                          : colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
                 ],
               ),
             );

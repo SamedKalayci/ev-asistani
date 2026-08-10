@@ -6,6 +6,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/finance_item_model.dart';
 import '../models/payment_schedule_model.dart';
 import '../providers/finance_provider.dart';
@@ -46,6 +47,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final selectedMonth = ref.watch(selectedMonthProvider);
 
     final schedulesAsync = ref.watch(paymentSchedulesProvider);
@@ -133,11 +135,11 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
 
     final limitedTransactions = recentTransactions.take(15).toList();
 
-    String periodTitle = "Net Durum";
-    if (_selectedPeriodIndex == 0) periodTitle = "Yıllık Net Durum";
-    if (_selectedPeriodIndex == 1) periodTitle = "Aylık Net Durum";
-    if (_selectedPeriodIndex == 2) periodTitle = "Haftalık Net Durum";
-    if (_selectedPeriodIndex == 3) periodTitle = "Günlük Net Durum";
+    String periodTitle = l10n.netStatus;
+    if (_selectedPeriodIndex == 0) periodTitle = l10n.yearlyNetStatus;
+    if (_selectedPeriodIndex == 1) periodTitle = l10n.monthlyNetStatus;
+    if (_selectedPeriodIndex == 2) periodTitle = l10n.weeklyNetStatus;
+    if (_selectedPeriodIndex == 3) periodTitle = l10n.dailyNetStatus;
 
     return Container(
       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.80),
@@ -178,7 +180,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
           const SizedBox(height: AppSpacing.xs),
 
           Text(
-            '📊 Finansal Durum',
+            '📊 ${l10n.financialStatus}',
             style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -194,11 +196,11 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
 
             // ── Dönem Filtresi (SegmentedButton) ─────────────────────────
             SegmentedButton<int>(
-              segments: const [
-                ButtonSegment(value: 0, label: Text('Yıllık')),
-                ButtonSegment(value: 1, label: Text('Aylık')),
-                ButtonSegment(value: 2, label: Text('Haftalık')),
-                ButtonSegment(value: 3, label: Text('Günlük')),
+              segments: [
+                ButtonSegment(value: 0, label: Text(l10n.periodYearly)),
+                ButtonSegment(value: 1, label: Text(l10n.periodMonthly)),
+                ButtonSegment(value: 2, label: Text(l10n.periodWeekly)),
+                ButtonSegment(value: 3, label: Text(l10n.periodDaily)),
               ],
               selected: {_selectedPeriodIndex},
               onSelectionChanged: (Set<int> newSelection) {
@@ -250,7 +252,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
                                 children: [
                                   const Icon(Icons.arrow_upward_rounded, size: 16, color: Colors.blue),
                                   const SizedBox(width: AppSpacing.xs),
-                                  Text('Toplam Gelir', style: AppTypography.labelSmall.copyWith(color: Colors.blue, fontWeight: FontWeight.bold)),
+                                  Text(l10n.totalIncome, style: AppTypography.labelSmall.copyWith(color: Colors.blue, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                               const SizedBox(height: AppSpacing.xs),
@@ -275,7 +277,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
                                 children: [
                                   const Icon(Icons.arrow_downward_rounded, size: 16, color: AppColors.error),
                                   const SizedBox(width: AppSpacing.xs),
-                                  Text('Toplam Gider', style: AppTypography.labelSmall.copyWith(color: AppColors.error, fontWeight: FontWeight.bold)),
+                                  Text(l10n.totalExpense, style: AppTypography.labelSmall.copyWith(color: AppColors.error, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                               const SizedBox(height: AppSpacing.xs),
@@ -293,7 +295,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
 
             // ── Bekleyen İşlemler ──────────────────────────────────────────
             if (pendingSchedules.isNotEmpty) ...[
-              Text('Yaklaşan Bekleyen İşlemler', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+              Text(l10n.upcomingPendingTransactions, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: AppSpacing.md),
               SizedBox(
                 height: 80,
@@ -339,7 +341,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  isIncome ? "Gelecek Gelir" : "Yaklaşan Ödeme",
+                                  isIncome ? l10n.futureIncome : l10n.upcomingPayment,
                                   style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
                                 ),
                               ],
@@ -362,13 +364,13 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
             ],
 
             // ── Son İşlemler / Harcamalar ──────────────────────────────────────────
-            Text('Son İşlemler', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+            Text(l10n.recentTransactions, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: AppSpacing.md),
             if (limitedTransactions.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
                 child: Center(
-                  child: Text('Bu dönemde gerçekleşen işlem yok.', style: AppTypography.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant)),
+                  child: Text(l10n.noTransactionsPeriod, style: AppTypography.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant)),
                 ),
               )
             else
@@ -394,7 +396,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
                     return _buildTransactionTile(
                       context,
                       title: item.title,
-                      subtitle: item.category.label,
+                      subtitle: item.category.getLocalizedLabel(context),
                       amount: item.amount,
                       isIncome: item.type == FinanceType.income,
                       date: date,
@@ -451,7 +453,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  '${DateFormat('d MMM', 'tr_TR').format(date)} • $subtitle',
+                  '${DateFormat('d MMM', Localizations.localeOf(context).toString()).format(date)} • $subtitle',
                   style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
               ],

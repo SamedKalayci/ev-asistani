@@ -6,6 +6,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_search_bar.dart';
@@ -88,22 +89,23 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
   // ── Silme Onayı ───────────────────────────────────────────────────────────
 
   Future<void> _confirmDelete(ExpirationModel item) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Ürünü Sil'),
-        content: Text('"${item.title}" adlı ürün kalıcı olarak silinecek.'),
+        title: Text(l10n.deleteItem),
+        content: Text('"${item.title}" ${l10n.deleteConfirmDesc}'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Sil'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -115,6 +117,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
   }
 
   Future<void> _confirmBatchDelete() async {
+    final l10n = AppLocalizations.of(context)!;
     final items = ref.read(expirationItemsProvider).valueOrNull ?? [];
     final expiredCount = items.where((i) => i.status == ExpirationStatus.expired).length;
     
@@ -123,19 +126,19 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Toplu Silme'),
-        content: Text('Süresi dolmuş $expiredCount ürünü kalıcı olarak silmek istediğininize emin misiniz?'),
+        title: Text(l10n.clearExpired),
+        content: Text('Süresi dolmuş $expiredCount ürünü kalıcı olarak silmek istediğinizden emin misiniz?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Sil'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -152,12 +155,13 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasFamily = ref.watch(hasRealFamilyProvider);
 
     if (!hasFamily) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        appBar: const AppHeader(title: 'Ev Asistanı'),
+        appBar: AppHeader(title: l10n.appName),
         body: const SafeArea(child: NoFamilyEmptyState()),
       );
     }
@@ -166,7 +170,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: const AppHeader(title: 'Ev Asistanı'),
+      appBar: AppHeader(title: l10n.appName),
       floatingActionButton: itemsAsync.maybeWhen(
         data: (allItems) => allItems.isEmpty
             ? null
@@ -181,7 +185,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
                 ),
                 icon: const Icon(Icons.add_rounded),
                 label: Text(
-                  'Ürün Ekle',
+                  l10n.addProduct,
                   style: AppTypography.titleSmall.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
@@ -233,6 +237,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
   // ── Gövde (data geldiğinde) ───────────────────────────────────────────────
 
   Widget _buildBody(ColorScheme colorScheme, List<ExpirationModel> allItems) {
+    final l10n = AppLocalizations.of(context)!;
     final filteredList = _applyFilters(allItems);
 
     return SingleChildScrollView(
@@ -245,7 +250,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
         children: [
           // ── Başlık Alanı ──────────────────────────────────────────────────
           Text(
-            'Son Kullanma Tarihleri',
+            l10n.expirationTitle,
             style: AppTypography.headlineLarge.copyWith(
               color: colorScheme.onSurface,
               fontWeight: FontWeight.bold,
@@ -253,7 +258,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Envanterinizdeki ürünlerin tazelik durumunu takip edin.',
+            l10n.freshnessSubtitle,
             style: AppTypography.bodyLarge.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -263,7 +268,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
 
           // ── Arama Alanı ───────────────────────────────────────────────────
           AppSearchBar(
-            hintText: 'Ürün adı veya konum ara...',
+            hintText: l10n.searchProductLocationHint,
             onChanged: (query) => setState(() => _searchQuery = query),
             onClear: () => setState(() => _searchQuery = ''),
           ),
@@ -291,9 +296,9 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.delete_sweep_rounded),
-                  label: const Text(
-                    'Süresi Dolanları Temizle',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  label: Text(
+                    l10n.clearExpired,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -302,14 +307,14 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
           // ── Ürün Listesi / Grid ───────────────────────────────────────────
           if (filteredList.isEmpty)
             EmptyState(
-              title: allItems.isEmpty ? 'Henüz Ürün Yok' : 'Ürün Bulunamadı',
+              title: allItems.isEmpty ? l10n.noProductsYet : l10n.noProductsFound,
               description: allItems.isEmpty
-                  ? 'İlk ürününüzü eklemek için "Ürün Ekle" butonuna basın.'
-                  : 'Arama veya filtreleme kriterlerinize uygun ürün bulunmuyor.',
+                  ? l10n.addFirstProductDesc
+                  : l10n.noMatchingProductsDesc,
               icon: allItems.isEmpty
                   ? Icons.add_circle_outline_rounded
                   : Icons.search_off_rounded,
-              actionLabel: allItems.isEmpty ? 'Ürün Ekle' : 'Filtreleri Temizle',
+              actionLabel: allItems.isEmpty ? l10n.addProduct : l10n.clearFilters,
               onActionPressed: () {
                 if (allItems.isEmpty) {
                   _openAddForm();
@@ -369,6 +374,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
   // ── Kart ─────────────────────────────────────────────────────────────────
 
   Widget _buildCard(ExpirationModel item, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Dismissible(
       key: ValueKey(item.id),
       direction: DismissDirection.endToStart,
@@ -393,8 +399,8 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
         title: item.title,
         subtitle: item.location,
         dateText: item.expirationDateText,
-        dateLabel: 'Son Kullanma',
-        statusText: item.statusText,
+        dateLabel: l10n.expirationDateLabel,
+        statusText: _localizedStatusText(item, l10n),
         statusColor: item.statusColor,
         icon: item.icon,
         imageUrl: item.imageUrl,
@@ -420,7 +426,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
                 icon: const Icon(Icons.add_shopping_cart_rounded, size: 18),
-                label: const Text('Çöpe At & Alışverişe Ekle'),
+                label: Text(l10n.trashAndShopping),
               )
             : null,
       ),
@@ -429,24 +435,32 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
 
   // ── Filtre Çipleri ────────────────────────────────────────────────────────
 
+  String _localizedStatusText(ExpirationModel item, AppLocalizations l10n) {
+    final info = item.statusInfo;
+    if (info.daysRemaining == null) return l10n.statusExpired;
+    if (info.daysRemaining == 0) return l10n.statusToday;
+    return l10n.daysLeft(info.daysRemaining!);
+  }
+
   Widget _buildFilterChips(
     ColorScheme colorScheme,
     List<ExpirationModel> allItems,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           _buildFilterChip(
             filter: ExpirationStatusFilter.all,
-            label: 'Tümü (${_countByStatus(allItems, ExpirationStatusFilter.all)})',
+            label: '${l10n.statusAll} (${_countByStatus(allItems, ExpirationStatusFilter.all)})',
             colorScheme: colorScheme,
           ),
           const SizedBox(width: AppSpacing.sm),
           _buildFilterChip(
             filter: ExpirationStatusFilter.expired,
             label:
-                'Süresi Dolanlar (${_countByStatus(allItems, ExpirationStatusFilter.expired)})',
+                '${l10n.statusExpiredChip} (${_countByStatus(allItems, ExpirationStatusFilter.expired)})',
             colorScheme: colorScheme,
             accentColor: AppColors.error,
           ),
@@ -454,7 +468,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
           _buildFilterChip(
             filter: ExpirationStatusFilter.critical,
             label:
-                'Kritik (${_countByStatus(allItems, ExpirationStatusFilter.critical)})',
+                '${l10n.statusCriticalChip} (${_countByStatus(allItems, ExpirationStatusFilter.critical)})',
             colorScheme: colorScheme,
             accentColor: AppColors.error,
           ),
@@ -462,7 +476,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
           _buildFilterChip(
             filter: ExpirationStatusFilter.upcoming,
             label:
-                'Yaklaşan (${_countByStatus(allItems, ExpirationStatusFilter.upcoming)})',
+                '${l10n.statusUpcomingChip} (${_countByStatus(allItems, ExpirationStatusFilter.upcoming)})',
             colorScheme: colorScheme,
             accentColor: AppColors.secondary,
           ),
@@ -470,7 +484,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
           _buildFilterChip(
             filter: ExpirationStatusFilter.safe,
             label:
-                'Güvenli (${_countByStatus(allItems, ExpirationStatusFilter.safe)})',
+                '${l10n.statusSafeChip} (${_countByStatus(allItems, ExpirationStatusFilter.safe)})',
             colorScheme: colorScheme,
             accentColor: AppColors.primary,
           ),

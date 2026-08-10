@@ -6,6 +6,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../models/budget_model.dart';
@@ -89,9 +90,10 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
       }
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Bütçe hedefleri güncellendi!')),
+          SnackBar(content: Text(l10n.budgetPlanUpdated)),
         );
       }
     } catch (e) {
@@ -110,6 +112,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -142,7 +145,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'Bütçeni Planla',
+            l10n.planBudget,
             style: AppTypography.headlineSmall.copyWith(
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurface,
@@ -150,7 +153,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Aylık harcama hedeflerinizi belirleyin. İstemediğiniz kategorileri boş bırakabilirsiniz.',
+            l10n.budgetPlanDescription,
             style: AppTypography.bodyMedium.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -177,7 +180,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
                         Expanded(
                           flex: 3,
                           child: Text(
-                            cat.label,
+                            cat.getLocalizedLabel(context),
                             style: AppTypography.titleMedium.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -188,7 +191,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
                           child: AppTextField(
                             controller: _controllers[cat],
                             keyboardType: TextInputType.number,
-                            hintText: 'Limit (₺)',
+                            hintText: l10n.limitAmountHint,
                             prefixIcon: const Icon(Icons.currency_lira_rounded, size: 16),
                           ),
                         ),
@@ -201,7 +204,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.xxl),
           PrimaryButton(
-            text: 'Hedefleri Kaydet',
+            text: l10n.saveBudgets,
             onPressed: _isLoading ? null : _saveBudgets,
             isLoading: _isLoading,
             icon: Icons.save_rounded,

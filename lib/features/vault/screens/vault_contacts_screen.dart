@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/empty_state.dart';
@@ -194,6 +195,7 @@ class VaultContactsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final vaultItemsAsync = ref.watch(vaultItemsProvider);
 
     final items = (vaultItemsAsync.valueOrNull ?? [])
@@ -203,7 +205,7 @@ class VaultContactsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(
-        title: '📞 Servis & Acil Numaralar',
+        title: '📞 ${l10n.serviceAndEmergencyNumbers}',
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded),
@@ -215,9 +217,9 @@ class VaultContactsScreen extends ConsumerWidget {
         onPressed: () => showContactModal(context, ref),
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.person_add_alt_1_rounded, color: Colors.white),
-        label: const Text(
-          'Numara Ekle',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        label: Text(
+          l10n.addNumber,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -228,10 +230,9 @@ class VaultContactsScreen extends ConsumerWidget {
               if (items.isEmpty)
                 EmptyState(
                   icon: Icons.phone_in_talk_rounded,
-                  title: 'Kayıtlı Numara Bulunmuyor',
-                  description:
-                      'Elektrikçi, tesisatçı veya acil durum kişilerini ekleyerek tek tıkla arama yapın.',
-                  actionLabel: 'İlk Numarayı Ekle',
+                  title: l10n.noEmergencyContactsTitle,
+                  description: l10n.noEmergencyContactsDesc,
+                  actionLabel: l10n.addFirstNumber,
                   onActionPressed: () => showContactModal(context, ref),
                 )
               else
@@ -259,6 +260,7 @@ class VaultContactsScreen extends ConsumerWidget {
     ColorScheme colorScheme,
     VaultItemModel item,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final phone = item.phoneNumber ?? '';
 
     return InkWell(
@@ -314,7 +316,7 @@ class VaultContactsScreen extends ConsumerWidget {
             // Kopyala Butonu
             IconButton(
               icon: const Icon(Icons.copy_rounded, size: 18),
-              tooltip: 'Kopyala',
+              tooltip: l10n.copy,
               color: colorScheme.primary,
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: phone));
@@ -333,7 +335,7 @@ class VaultContactsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               ),
               icon: const Icon(Icons.phone, size: 14),
-              label: const Text('Ara', style: TextStyle(fontSize: 12)),
+              label: Text(l10n.call, style: const TextStyle(fontSize: 12)),
             ),
 
             // Sil Butonu

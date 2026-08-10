@@ -6,14 +6,14 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/pro_blur_overlay.dart';
 import 'vault_contacts_screen.dart';
 import 'vault_documents_screen.dart';
 import 'vault_guide_screen.dart';
 import 'vault_maintenance_screen.dart';
 
-/// Dijital Ev Kasası PRO Ekranı.
-/// Ücretsiz kullanıcılar için ProBlurOverlay ile korunur.
+/// Dijital Ev Kasası Ekranı.
 class VaultScreen extends ConsumerWidget {
   const VaultScreen({super.key});
 
@@ -21,6 +21,7 @@ class VaultScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final isPremium = ref.watch(isPremiumProvider);
 
     final content = SingleChildScrollView(
@@ -34,7 +35,7 @@ class VaultScreen extends ConsumerWidget {
           Row(
             children: [
               Text(
-                'Dijital Ev Kasası PRO',
+                l10n.vaultTab,
                 style: AppTypography.headlineSmall.copyWith(
                   color: colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
@@ -44,7 +45,7 @@ class VaultScreen extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Evinizle ilgili tüm kritik belgeler, rehberler ve acil durum numaraları şifreli olarak güvenle saklanır.',
+            l10n.digitalVaultSubtitle,
             style: AppTypography.bodyMedium.copyWith(
               color: colorScheme.onSurfaceVariant,
               height: 1.4,
@@ -65,7 +66,7 @@ class VaultScreen extends ConsumerWidget {
               _buildVaultCard(
                 context,
                 colorScheme,
-                title: 'Belgeler &\nGarantiler',
+                title: l10n.documentsAndWarranties,
                 icon: Icons.description_outlined,
                 iconBgColor: const Color(0xFFDCFCE7),
                 iconColor: AppColors.primary,
@@ -81,7 +82,7 @@ class VaultScreen extends ConsumerWidget {
               _buildVaultCard(
                 context,
                 colorScheme,
-                title: 'Servis & Acil\nNumaralar',
+                title: l10n.serviceAndEmergencyNumbers,
                 icon: Icons.phone_in_talk_rounded,
                 iconBgColor: const Color(0xFFFEE2E2),
                 iconColor: const Color(0xFFDC2626),
@@ -97,7 +98,7 @@ class VaultScreen extends ConsumerWidget {
               _buildVaultCard(
                 context,
                 colorScheme,
-                title: 'Periyodik Bakım\nTakvimi',
+                title: l10n.periodicMaintenance,
                 icon: Icons.build_circle_outlined,
                 iconBgColor: const Color(0xFFDBEAFE),
                 iconColor: const Color(0xFF2563EB),
@@ -113,7 +114,7 @@ class VaultScreen extends ConsumerWidget {
               _buildVaultCard(
                 context,
                 colorScheme,
-                title: 'Ev Rehberi &\nWi-Fi',
+                title: l10n.homeGuideWifi,
                 icon: Icons.wifi_rounded,
                 iconBgColor: const Color(0xFFFEF3C7),
                 iconColor: const Color(0xFFD97706),
@@ -136,9 +137,9 @@ class VaultScreen extends ConsumerWidget {
 
     return ProBlurOverlay(
       isLocked: !isPremium,
-      title: 'Dijital Ev Kasası PRO',
+      title: l10n.vaultTab,
       subtitle:
-          'Evinizle ilgili tüm kritik belgeler, rehberler ve acil durum numaraları şifreli olarak güvenle saklanır.',
+          l10n.digitalVaultSubtitle,
       child: content,
     );
   }

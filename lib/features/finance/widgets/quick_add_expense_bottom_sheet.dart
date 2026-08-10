@@ -184,7 +184,7 @@ class _QuickAddExpenseBottomSheetState extends ConsumerState<QuickAddExpenseBott
                     children: [
                       Icon(cat.icon, size: 18, color: colorScheme.onSurfaceVariant),
                       const SizedBox(width: AppSpacing.sm),
-                      Text(cat.label, style: AppTypography.bodyMedium),
+                      Text(cat.getLocalizedLabel(context), style: AppTypography.bodyMedium),
                     ],
                   ),
                 );

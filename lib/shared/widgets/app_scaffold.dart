@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'custom_bottom_navigation.dart';
+import 'persistent_banner_ad.dart';
 
 /// Tüm sekme ekranlarını saran ortak Scaffold iskelet.
 class AppScaffold extends StatelessWidget {
@@ -17,8 +18,15 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: CustomBottomNavigation(
-        navigationShell: navigationShell,
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          CustomBottomNavigation(
+            navigationShell: navigationShell,
+          ),
+          const PersistentBannerAdWidget(),
+        ],
       ),
     );
   }

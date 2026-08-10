@@ -21,9 +21,11 @@ Future<void> main() async {
     debugPrint('dotenv yüklenemedi (muhtemelen test ortamı veya dosya yok): $e');
   }
   
-  // intl Türkçe tarih verilerini başlat
+  // intl tarih verilerini tüm desteklenen diller için başlat
   try {
-    await initializeDateFormatting('tr_TR', null);
+    for (final lang in ['tr', 'en', 'de', 'es', 'fr', 'az', 'el', 'pt']) {
+      await initializeDateFormatting(lang, null);
+    }
   } catch (e) {
     debugPrint('initializeDateFormatting hatası: $e');
   }

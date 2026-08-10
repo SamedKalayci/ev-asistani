@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/no_family_empty_state.dart';
@@ -116,13 +117,14 @@ class VaultDocumentsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final hasFamily = ref.watch(hasRealFamilyProvider);
     final vaultItemsAsync = ref.watch(vaultItemsProvider);
 
     if (!hasFamily) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        appBar: const AppHeader(title: 'Ev Asistanı'),
+        appBar: AppHeader(title: l10n.appName),
         body: const SafeArea(child: NoFamilyEmptyState()),
       );
     }
@@ -134,7 +136,7 @@ class VaultDocumentsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(
-        title: '📄 Belgeler & Garantiler',
+        title: '📄 ${l10n.documentsAndWarranties}',
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded),
@@ -146,9 +148,9 @@ class VaultDocumentsScreen extends ConsumerWidget {
         onPressed: () => VaultDocumentFormBottomSheet.show(context),
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.upload_file_rounded, color: Colors.white),
-        label: const Text(
-          'Belge Yükle',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        label: Text(
+          l10n.uploadDocument,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
@@ -159,10 +161,9 @@ class VaultDocumentsScreen extends ConsumerWidget {
               if (items.isEmpty)
                 EmptyState(
                   icon: Icons.folder_open_rounded,
-                  title: 'Belge Bulunmuyor',
-                  description:
-                      'Tapu, sigorta poliçesi veya önemli evraklarınızı Dijital Ev Kasası\'na güvenle kaydedin.',
-                  actionLabel: 'İlk Belgeyi Yükle',
+                  title: l10n.noDocumentsTitle,
+                  description: l10n.noDocumentsDesc,
+                  actionLabel: l10n.uploadFirstDocument,
                   onActionPressed: () => VaultDocumentFormBottomSheet.show(context),
                 )
               else
