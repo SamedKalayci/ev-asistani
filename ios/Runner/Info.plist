@@ -87,7 +87,7 @@
 		<false/>
 		<!-- Privacy Permissions -->
 		<key>NSCameraUsageDescription</key>
-		<string>Fiş, fatura veya profil fotoğrafı çekmek için kameranıza erişim gereklidir.</string>
+		<string>Evrak ve belge fotoğrafı çekebilmek için kamera izni gereklidir.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Fiş, fatura veya profil fotoğrafı yüklemek için fotoğraf galerinize erişim gereklidir.</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>

@@ -97,23 +97,40 @@ class _VaultDocumentFormBottomSheetState
   Future<void> _pickImage(ImageSource source) async {
     try {
       if (!kIsWeb) {
-        final status = await PermissionUtils.requestImagePermission(source);
-
-        if (status.isPermanentlyDenied) {
-          if (mounted) {
-            await _showPermissionDeniedDialog(
-              'İzin Gerekli',
-              source == ImageSource.camera
-                  ? 'Fotoğraf çekebilmek için kamera izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.'
-                  : 'Galeriye erişim izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.',
-            );
-          }
-          return;
-        } else if (!status.isGranted && !status.isLimited) {
-          // Galeri için isRestricted (iOS Limited'ın bazı sürümlerde görünümü) de geçerlidir
-          if (source == ImageSource.gallery && status.isRestricted) {
-            // isRestricted durumunda galeri erişimine izin ver — devam et
+        if (source == ImageSource.camera) {
+          final status = await Permission.camera.request();
+          if (status.isGranted) {
+            // Kamera izni verildi, devam et
+          } else if (status.isPermanentlyDenied) {
+            if (mounted) {
+              await _showPermissionDeniedDialog(
+                'İzin Gerekli',
+                'Fotoğraf çekebilmek için kamera izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.',
+              );
+            }
+            return;
           } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Fotoğraf çekebilmek için kamera izni gereklidir.'),
+                  backgroundColor: AppColors.error,
+                ),
+              );
+            }
+            return;
+          }
+        } else {
+          final status = await PermissionUtils.requestImagePermission(source);
+          if (status.isPermanentlyDenied) {
+            if (mounted) {
+              await _showPermissionDeniedDialog(
+                'İzin Gerekli',
+                'Galeriye erişim izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.',
+              );
+            }
+            return;
+          } else if (!status.isGranted && !status.isLimited && !status.isRestricted) {
             return;
           }
         }
