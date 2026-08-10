@@ -2,7 +2,7 @@ name: ev_asistani
 description: "Ev içerisindeki önemli bilgileri takip etmenizi sağlayan Türkçe mobil asistan."
 publish_to: "none"
 
-version: 1.0.0+6
+version: 1.0.0+7
 
 environment:
   sdk: ^3.12.2
