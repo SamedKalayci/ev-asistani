@@ -44,8 +44,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get developerLabel => 'Προγραμματιστής: Samed Kalaycı';
 
   @override
-  String get aboutDescription =>
-      'Περιγραφή: Εφαρμογή οργάνωσης σπιτιού και διαχείρισης κοινόχρηστων λιστών.';
+  String get aboutDescription => 'Περιγραφή: Έξυπνη οργάνωση σπιτιού.';
 
   @override
   String get allRightsReserved =>
@@ -1025,4 +1024,46 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Γενικές Πληροφορίες Σπιτιού';
+
+  @override
+  String get themeSelection => 'Επιλογή Θέματος';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Επιλέξτε εμφάνιση εφαρμογής (Σύστημα / Φωτεινό / Σκούρο)';
+
+  @override
+  String get themeSystem => 'Σύστημα (Προεπιλογή)';
+
+  @override
+  String get themeLight => 'Φωτεινό Θέμα';
+
+  @override
+  String get themeDark => 'Σκούρο Θέμα';
+
+  @override
+  String get editHomeNameTitle => 'Επεξεργασία Ονόματος Σπιτιού';
+
+  @override
+  String get editHomeNameLabel => 'Όνομα Σπιτιού';
+
+  @override
+  String get editHomeNameHint => 'π.χ. Σπίτι Παπαδόπουλου';
+
+  @override
+  String get homeNameUpdatedToast =>
+      'Το όνομα σπιτιού ενημερώθηκε επιτυχώς! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Προσαρμοσμένος Ρόλος...';
+
+  @override
+  String get customRoleHint => 'Πληκτρολογήστε ρόλο...';
+
+  @override
+  String get aboutDeveloper => 'Δημιουργός: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright =>
+      '© 2026 Ev Asistanı. Με την επιφύλαξη παντός δικαιώματος.';
 }

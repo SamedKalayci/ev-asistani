@@ -384,14 +384,14 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
       },
       background: Container(
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: AppSpacing.lg),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         decoration: BoxDecoration(
-          color: AppColors.error.withValues(alpha: 0.15),
+          color: AppColors.error,
           borderRadius: AppRadius.borderLg,
         ),
         child: const Icon(
           Icons.delete_outline_rounded,
-          color: AppColors.error,
+          color: Colors.white,
           size: 28,
         ),
       ),

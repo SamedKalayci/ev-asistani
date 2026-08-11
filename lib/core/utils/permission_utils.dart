@@ -9,14 +9,8 @@ class PermissionUtils {
   /// Mantık:
   ///   1. granted / limited → direkt izinli say, devam et.
   ///   2. notDetermined      → request() çağır; sistem diyaloğu gösterir.
-  ///   3. denied             → iOS'ta tekrar sormak mümkün değil; permanentlyDenied gibi davran.
-  ///   4. permanentlyDenied / restricted → openAppSettings gerekir.
-  ///
-  /// - Kamera kaynağı: yalnızca [Permission.camera] kontrol edilir.
-  /// - Galeri kaynağı: yalnızca [Permission.photos] (iOS) veya [Permission.storage]
-  ///   (Android API < 33) kontrol edilir.
-  ///
-  /// iOS 14+ "Sınırlı Erişim" (Limited/Özel Erişim) durumu geçerli kabul edilir.
+  ///   3. denied (iOS)       → permanentlyDenied gibi davran (sistem tekrar sormaz).
+  ///   4. Android galeri      → Android Photo Picker / SAF izinsiz çalıştığı için sorunsuz devam et.
   static Future<PermissionStatus> requestImagePermission(ImageSource source) async {
     if (kIsWeb) return PermissionStatus.granted;
 
@@ -26,23 +20,31 @@ class PermissionUtils {
     }
 
     // ── GALERİ ────────────────────────────────────────────────────────────────
+    if (Platform.isAndroid) {
+      // Android: API 33+ Photo Picker ve SAF (Storage Access Framework)
+      // runtime storage izni gerektirmeden ImagePicker çalıştığı için erişime izin ver.
+      final photosStatus = await Permission.photos.status;
+      if (_isAllowed(photosStatus, isPhotos: true)) return photosStatus;
+      final storageStatus = await Permission.storage.status;
+      if (_isAllowed(storageStatus, isPhotos: true)) return storageStatus;
+
+      // İzin henüz istenmemişse bir kez sor (notDetermined durumunda)
+      if (!photosStatus.isPermanentlyDenied && !storageStatus.isPermanentlyDenied) {
+        final req = await Permission.photos.request();
+        if (_isAllowed(req, isPhotos: true)) return req;
+      }
+      return PermissionStatus.granted;
+    }
+
     // iOS: Permission.photos kullanılır; Limited (Özel Erişim) geçerlidir.
     if (Platform.isIOS) {
       return _requestSingle(Permission.photos, isPhotos: true);
     }
 
-    // Android: API 33+ için photos, daha eski sürümler için storage yedeğine geç.
-    final requestedPhotos = await _requestSingle(Permission.photos, isPhotos: true);
-    if (_isAllowed(requestedPhotos, isPhotos: true)) return requestedPhotos;
-
-    // Android API < 33 yedeği: Permission.storage
-    return _requestSingle(Permission.storage, isPhotos: true);
+    return PermissionStatus.granted;
   }
 
   /// Tek bir [Permission] için doğru sırayla izin ister:
-  ///   notDetermined → request()
-  ///   denied (iOS) → direkt permanentlyDenied döndür (sistem bir daha sormaz)
-  ///   granted / limited → olduğu gibi döndür
   static Future<PermissionStatus> _requestSingle(
     Permission permission, {
     required bool isPhotos,
@@ -59,8 +61,6 @@ class PermissionUtils {
     final requested = await permission.request();
 
     // iOS'ta 'denied' durumunda request() tekrar 'denied' döndürür;
-    // bu, kullanıcının bir kez "İzin Verme" dediği anlamına gelir.
-    // iOS sistemi bir daha sormayacaktır → permanentlyDenied gibi davran.
     if (Platform.isIOS && requested.isDenied) {
       return PermissionStatus.permanentlyDenied;
     }
@@ -71,15 +71,11 @@ class PermissionUtils {
   /// İzin durumunun "geçerli" (devam edilebilir) olup olmadığını döndürür.
   static bool _isAllowed(PermissionStatus status, {required bool isPhotos}) {
     if (isPhotos) {
-      // Galeri: granted ve limited (Özel Erişim) her ikisi de geçerlidir.
       return status.isGranted || status.isLimited;
     }
-    // Kamera: yalnızca tam erişim
     return status.isGranted;
   }
 
-  // ── Geriye dönük uyumluluk için tutuldu ──────────────────────────────────
-  /// @deprecated Lütfen `_isAllowed` kullanın.
   static bool isPhotosAllowed(PermissionStatus status) =>
       status.isGranted || status.isLimited;
 }

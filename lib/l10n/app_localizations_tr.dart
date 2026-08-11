@@ -1027,4 +1027,44 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Genel Ev Bilgisi';
+
+  @override
+  String get themeSelection => 'Tema Seçimi';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Uygulama görünümünü seçin (Sistem / Açık / Koyu)';
+
+  @override
+  String get themeSystem => 'Sistem (Varsayılan)';
+
+  @override
+  String get themeLight => 'Açık Tema';
+
+  @override
+  String get themeDark => 'Koyu Tema';
+
+  @override
+  String get editHomeNameTitle => 'Ev Adını Düzenle';
+
+  @override
+  String get editHomeNameLabel => 'Ev Adı';
+
+  @override
+  String get editHomeNameHint => 'Örn: Kalaycı Home, Güneş Apt. No:4';
+
+  @override
+  String get homeNameUpdatedToast => 'Ev adı başarıyla güncellendi! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Özel Rol...';
+
+  @override
+  String get customRoleHint => 'Rol adını yazın (örn. Amca, Misafir)...';
+
+  @override
+  String get aboutDeveloper => 'Geliştirici: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright => '© 2026 Ev Asistanı. Tüm hakları saklıdır.';
 }

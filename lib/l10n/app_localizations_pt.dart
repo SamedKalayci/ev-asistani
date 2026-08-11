@@ -44,8 +44,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get developerLabel => 'Desenvolvedor: Samed Kalaycı';
 
   @override
-  String get aboutDescription =>
-      'Descrição: Aplicativo de organização doméstica e gerenciamento de listas compartilhadas.';
+  String get aboutDescription => 'Descrição: Organização inteligente da casa.';
 
   @override
   String get allRightsReserved =>
@@ -1024,4 +1023,45 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Informação Geral da Casa';
+
+  @override
+  String get themeSelection => 'Seleção do Tema';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Escolha a aparência da aplicação (Sistema / Claro / Escuro)';
+
+  @override
+  String get themeSystem => 'Sistema (Predefinido)';
+
+  @override
+  String get themeLight => 'Tema Claro';
+
+  @override
+  String get themeDark => 'Tema Escuro';
+
+  @override
+  String get editHomeNameTitle => 'Editar Nome da Casa';
+
+  @override
+  String get editHomeNameLabel => 'Nome da Casa';
+
+  @override
+  String get editHomeNameHint => 'ex: Casa Silva';
+
+  @override
+  String get homeNameUpdatedToast => 'Nome da casa atualizado com sucesso! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Função Personalizada...';
+
+  @override
+  String get customRoleHint => 'Escreva a função...';
+
+  @override
+  String get aboutDeveloper => 'Desenvolvedor: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright =>
+      '© 2026 Ev Asistanı. Todos os direitos reservados.';
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../core/utils/icon_helper.dart';
 
 /// Dijital Ev Kasası (Vault) döküman modeli.
 class VaultItemModel {
@@ -39,8 +40,7 @@ class VaultItemModel {
 
   IconData get icon {
     if (iconCode != null) {
-      // ignore: non_const_argument_for_const_parameter
-      return IconData(iconCode!, fontFamily: 'MaterialIcons');
+      return getSafeIconData(iconCode);
     }
     switch (category) {
       case 'emergency':

@@ -342,5 +342,20 @@
   "categoryWifi": "📶 Wi-Fi və Şəbəkə",
   "categoryInstallation": "⚡ Quraşdırma və Xidmətlər",
   "categoryPasswords": "🔑 Parollar və Kodlar",
-  "categoryGeneralHome": "ℹ️ Ümumi Ev Məlumatı"
+  "categoryGeneralHome": "ℹ️ Ümumi Ev Məlumatı",
+  "themeSelection": "Tema Seçimi",
+  "themeSelectionSubtitle": "Tətbiq görünüşünü seçin (Sistem / Açıq / Tünd)",
+  "themeSystem": "Sistem (Defolt)",
+  "themeLight": "Açıq Tema",
+  "themeDark": "Tünd Tema",
+  "editHomeNameTitle": "Ev Adını Redaktə Et",
+  "editHomeNameLabel": "Ev Adı",
+  "editHomeNameHint": "Məs: Əliyevlər Evi",
+  "homeNameRequired": "Ev adı mütləqdir.",
+  "homeNameUpdatedToast": "Ev adı uğurla yeniləndi! 🏠",
+  "customRoleOption": "✏️ Xüsusi Rol...",
+  "customRoleHint": "Rol adını yazın...",
+  "aboutDeveloper": "Tərtibatçı: Samed Kalaycı",
+  "aboutDescription": "Təsvir: Ağıllı ev təşkilatı.",
+  "aboutCopyright": "© 2026 Ev Asistanı. Bütün hüquqlar qorunur."
 }

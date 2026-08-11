@@ -14,6 +14,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/permission_utils.dart';
+import '../../../core/utils/icon_helper.dart';
 import '../../../l10n/app_localizations.dart';
 import '../models/warranty_model.dart';
 import '../providers/warranty_provider.dart';
@@ -316,8 +317,7 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
           store: _storeCtrl.text.trim(),
           purchaseDate: _purchaseDate,
           warrantyEndDate: _warrantyEndDate,
-          // ignore: non_const_argument_for_const_parameter
-          icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
+          icon: getSafeIconData(_selectedIconCodePoint),
           hasInvoice: _hasInvoice,
           invoiceNumber: _hasInvoice && _invoiceCtrl.text.trim().isNotEmpty
               ? _invoiceCtrl.text.trim()
@@ -335,8 +335,7 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
           store: _storeCtrl.text.trim(),
           purchaseDate: _purchaseDate!,
           warrantyEndDate: _warrantyEndDate!,
-          // ignore: non_const_argument_for_const_parameter
-          icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
+          icon: getSafeIconData(_selectedIconCodePoint),
           createdBy: uid,
           hasInvoice: _hasInvoice,
           invoiceNumber: _hasInvoice && _invoiceCtrl.text.trim().isNotEmpty

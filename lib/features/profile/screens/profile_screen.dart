@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/currency_provider.dart';
+import '../../../core/providers/theme_provider.dart';
 import '../../../core/providers/ad_provider.dart';
 import '../../../core/providers/purchase_provider.dart';
 import '../../../core/providers/user_provider.dart';
@@ -39,6 +40,152 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+
+  // ── Ev Adını Düzenle Diyaloğu ──────────────────────────────────────────
+
+  Future<void> _showEditHomeNameDialog(String currentName) async {
+    final l10n = AppLocalizations.of(context)!;
+    final controller = TextEditingController(text: currentName);
+    final formKey = GlobalKey<FormState>();
+
+    final newName = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.editHomeNameTitle),
+        content: Form(
+          key: formKey,
+          child: AppTextField(
+            label: l10n.editHomeNameLabel,
+            hintText: l10n.editHomeNameHint,
+            controller: controller,
+            validator: (v) => (v == null || v.trim().isEmpty)
+                ? l10n.homeNameRequired
+                : null,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(null),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                Navigator.of(ctx).pop(controller.text.trim());
+              }
+            },
+            child: Text(l10n.save),
+          ),
+        ],
+      ),
+    );
+
+    if (newName != null && newName.isNotEmpty && mounted) {
+      await ref
+          .read(familyNotifierProvider.notifier)
+          .updateFamilyName(newName);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.homeNameUpdatedToast),
+            backgroundColor: AppColors.primary,
+          ),
+        );
+      }
+    }
+  }
+
+  // ── Tema Seçimi Diyaloğu ─────────────────────────────────────────────
+
+  void _showThemeSelectorDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final currentThemeMode = ref.read(themeModeProvider);
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text(
+            l10n.themeSelection,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildThemeOption(ctx, ThemeMode.system, l10n.themeSystem, currentThemeMode == ThemeMode.system),
+              const Divider(height: 1),
+              _buildThemeOption(ctx, ThemeMode.light, l10n.themeLight, currentThemeMode == ThemeMode.light),
+              const Divider(height: 1),
+              _buildThemeOption(ctx, ThemeMode.dark, l10n.themeDark, currentThemeMode == ThemeMode.dark),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(l10n.cancel),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildThemeOption(
+    BuildContext context,
+    ThemeMode mode,
+    String label,
+    bool isSelected,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: colorScheme.onSurface,
+        ),
+      ),
+      trailing: isSelected
+          ? Icon(Icons.check_circle_rounded, color: colorScheme.primary)
+          : null,
+      onTap: () {
+        ref.read(themeModeProvider.notifier).setThemeMode(mode);
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  String _translateRole(BuildContext context, String? rawRole, bool isOwner) {
+    final l10n = AppLocalizations.of(context)!;
+    if (rawRole == null || rawRole.isEmpty) {
+      return isOwner ? l10n.roleHouseOwner : l10n.userRoleLabel;
+    }
+    String cleanRole = rawRole;
+    if (cleanRole.contains(' ')) {
+      final parts = cleanRole.split(' ');
+      if (parts.length > 1 && !RegExp(r'^[a-zA-ZğüşıöçĞÜŞİÖÇ]').hasMatch(parts.first)) {
+        cleanRole = parts.sublist(1).join(' ');
+      }
+    }
+    final lower = cleanRole.toLowerCase();
+    if (lower.contains('ev sahibi') || lower.contains('house owner') || lower == 'owner') {
+      return l10n.roleHouseOwner;
+    } else if (lower.contains('anne') || lower.contains('mother')) {
+      return l10n.roleMother;
+    } else if (lower.contains('baba') || lower.contains('father')) {
+      return l10n.roleFather;
+    } else if (lower.contains('çocuk') || lower.contains('child')) {
+      return l10n.roleChild;
+    } else if (lower.contains('arkadaşı') || lower.contains('roommate')) {
+      return l10n.roleRoommate;
+    } else if (lower.contains('sakini') || lower.contains('other') || lower.contains('diğer')) {
+      return l10n.roleOtherResident;
+    }
+    return cleanRole;
+  }
 
   // ── Hesabımı Sil ──────────────────────────────────────────────────────────
 
@@ -514,7 +661,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppHeader(title: l10n.appName),
+      appBar: AppHeader(title: l10n.appName, showNotificationBell: false),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -608,6 +755,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               _buildSectionHeader(colorScheme, l10n.preferencesAndSettings),
               const SizedBox(height: AppSpacing.sm),
               ProfileSettingTile(
+                icon: Icons.palette_outlined,
+                title: l10n.themeSelection,
+                subtitle: l10n.themeSelectionSubtitle,
+                onTap: () => _showThemeSelectorDialog(context),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
                 icon: Icons.notifications_active_rounded,
                 title: l10n.notificationSettings,
                 subtitle: l10n.notificationSettingsSubtitle,
@@ -648,15 +802,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${l10n.appName}: Ev Asistanı', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          Text(l10n.appName, style: const TextStyle(fontWeight: FontWeight.bold)),
                           const SizedBox(height: 4),
                           Text(l10n.aboutSubtitle),
                           const SizedBox(height: 4),
-                          const Text('Geliştirici: Samed Kalaycı'),
+                          Text(l10n.aboutDeveloper),
                           const SizedBox(height: 8),
-                          const Text('Açıklama: Ev içi düzen ve ortak liste yönetimi uygulaması.'),
+                          Text(l10n.aboutDescription),
                           const SizedBox(height: 8),
-                          const Text('© 2026 Ev Asistanı. Tüm hakları saklıdır.', style: TextStyle(fontSize: 12)),
+                          Text(l10n.aboutCopyright, style: const TextStyle(fontSize: 12)),
                         ],
                       ),
                       actions: [
@@ -1268,7 +1422,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // —— Aile Rozeti (standard) ———————————————————————
+                  const SizedBox(width: 4),
+                  InkWell(
+                    onTap: () => _showEditHomeNameDialog(family.name),
+                    borderRadius: AppRadius.borderFull,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Icon(
+                        Icons.edit_rounded,
+                        size: 16,
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Container(
@@ -1367,14 +1533,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             final member = members[index];
             final isOwner = family.createdBy == member.uid;
 
-            // Rol ismini belirle (Emojileri temizle)
-            String roleName = member.familyRole ?? (isOwner ? 'Ev Sahibi' : 'Üye');
-            if (roleName.contains(' ')) {
-              final parts = roleName.split(' ');
-              if (parts.length > 1 && !RegExp(r'^[a-zA-ZğüşıöçĞÜŞİÖÇ]').hasMatch(parts.first)) {
-                 roleName = parts.sublist(1).join(' ');
-              }
-            }
+            final displayRole = _translateRole(context, member.familyRole, isOwner);
 
             return Container(
               padding: const EdgeInsets.symmetric(
@@ -1435,7 +1594,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       borderRadius: AppRadius.borderSm,
                     ),
                     child: Text(
-                      member.familyRole ?? (isOwner ? 'Ev Sahibi' : 'Üye'),
+                      displayRole,
                       style: AppTypography.labelSmall.copyWith(
                         color: isOwner
                           ? colorScheme.onPrimaryContainer

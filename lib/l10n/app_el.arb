@@ -342,5 +342,20 @@
   "categoryWifi": "📶 Wi-Fi & Δίκτυο",
   "categoryInstallation": "⚡ Εγκατάσταση & Υπηρεσίες",
   "categoryPasswords": "🔑 Κωδικοί & Πρόσβαση",
-  "categoryGeneralHome": "ℹ️ Γενικές Πληροφορίες Σπιτιού"
+  "categoryGeneralHome": "ℹ️ Γενικές Πληροφορίες Σπιτιού",
+  "themeSelection": "Επιλογή Θέματος",
+  "themeSelectionSubtitle": "Επιλέξτε εμφάνιση εφαρμογής (Σύστημα / Φωτεινό / Σκούρο)",
+  "themeSystem": "Σύστημα (Προεπιλογή)",
+  "themeLight": "Φωτεινό Θέμα",
+  "themeDark": "Σκούρο Θέμα",
+  "editHomeNameTitle": "Επεξεργασία Ονόματος Σπιτιού",
+  "editHomeNameLabel": "Όνομα Σπιτιού",
+  "editHomeNameHint": "π.χ. Σπίτι Παπαδόπουλου",
+  "homeNameRequired": "Το όνομα σπιτιού είναι υποχρεωτικό.",
+  "homeNameUpdatedToast": "Το όνομα σπιτιού ενημερώθηκε επιτυχώς! 🏠",
+  "customRoleOption": "✏️ Προσαρμοσμένος Ρόλος...",
+  "customRoleHint": "Πληκτρολογήστε ρόλο...",
+  "aboutDeveloper": "Δημιουργός: Samed Kalaycı",
+  "aboutDescription": "Περιγραφή: Έξυπνη οργάνωση σπιτιού.",
+  "aboutCopyright": "© 2026 Ev Asistanı. Με την επιφύλαξη παντός δικαιώματος."
 }

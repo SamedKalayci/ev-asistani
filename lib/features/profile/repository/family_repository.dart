@@ -184,4 +184,18 @@ class FamilyRepository {
   }) async {
     await leaveFamily(familyId: familyId, userUid: memberUid);
   }
+
+  /// Ev/Aile adını günceller.
+  Future<void> updateFamilyName({
+    required String familyId,
+    required String newName,
+  }) async {
+    final trimmedName = newName.trim();
+    if (trimmedName.isEmpty) return;
+    await _familiesRef.doc(familyId).update({
+      'familyName': trimmedName,
+      'name': trimmedName,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
 }

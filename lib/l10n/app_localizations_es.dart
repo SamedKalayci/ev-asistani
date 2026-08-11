@@ -46,7 +46,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutDescription =>
-      'Descripción: Aplicación de organización del hogar y gestión de listas compartidas.';
+      'Descripción: Organización inteligente del hogar.';
 
   @override
   String get allRightsReserved =>
@@ -1026,4 +1026,45 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Información General del Hogar';
+
+  @override
+  String get themeSelection => 'Selección de Tema';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Elige la apariencia de la app (Sistema / Claro / Oscuro)';
+
+  @override
+  String get themeSystem => 'Sistema (Predeterminado)';
+
+  @override
+  String get themeLight => 'Tema Claro';
+
+  @override
+  String get themeDark => 'Tema Oscuro';
+
+  @override
+  String get editHomeNameTitle => 'Editar Nombre del Hogar';
+
+  @override
+  String get editHomeNameLabel => 'Nombre del Hogar';
+
+  @override
+  String get editHomeNameHint => 'Ej: Casa García';
+
+  @override
+  String get homeNameUpdatedToast => '¡Nombre del hogar actualizado! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Rol Personalizado...';
+
+  @override
+  String get customRoleHint => 'Escribe el rol...';
+
+  @override
+  String get aboutDeveloper => 'Desarrollador: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright =>
+      '© 2026 Ev Asistanı. Todos los derechos reservados.';
 }

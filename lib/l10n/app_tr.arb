@@ -367,6 +367,21 @@
   "categoryWifi": "📶 Wi-Fi & Ağ",
   "categoryInstallation": "⚡ Tesisat & Abonelik",
   "categoryPasswords": "🔑 Şifre & Kodlar",
-  "categoryGeneralHome": "ℹ️ Genel Ev Bilgisi"
+  "categoryGeneralHome": "ℹ️ Genel Ev Bilgisi",
+  "themeSelection": "Tema Seçimi",
+  "themeSelectionSubtitle": "Uygulama görünümünü seçin (Sistem / Açık / Koyu)",
+  "themeSystem": "Sistem (Varsayılan)",
+  "themeLight": "Açık Tema",
+  "themeDark": "Koyu Tema",
+  "editHomeNameTitle": "Ev Adını Düzenle",
+  "editHomeNameLabel": "Ev Adı",
+  "editHomeNameHint": "Örn: Kalaycı Home, Güneş Apt. No:4",
+  "homeNameRequired": "Ev adı zorunludur.",
+  "homeNameUpdatedToast": "Ev adı başarıyla güncellendi! 🏠",
+  "customRoleOption": "✏️ Özel Rol...",
+  "customRoleHint": "Rol adını yazın (örn. Amca, Misafir)...",
+  "aboutDeveloper": "Geliştirici: Samed Kalaycı",
+  "aboutDescription": "Açıklama: Ev içi düzen ve ortak liste yönetimi uygulaması.",
+  "aboutCopyright": "© 2026 Ev Asistanı. Tüm hakları saklıdır."
 }
 

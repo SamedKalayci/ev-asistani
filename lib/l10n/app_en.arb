@@ -342,6 +342,21 @@
   "categoryWifi": "📶 Wi-Fi & Network",
   "categoryInstallation": "⚡ Installation & Utilities",
   "categoryPasswords": "🔑 Passwords & Codes",
-  "categoryGeneralHome": "ℹ️ General Home Info"
+  "categoryGeneralHome": "ℹ️ General Home Info",
+  "themeSelection": "Theme Selection",
+  "themeSelectionSubtitle": "Choose app appearance (System / Light / Dark)",
+  "themeSystem": "System (Default)",
+  "themeLight": "Light Theme",
+  "themeDark": "Dark Theme",
+  "editHomeNameTitle": "Edit Home Name",
+  "editHomeNameLabel": "Home Name",
+  "editHomeNameHint": "e.g. Smith Home, Apartment #4",
+  "homeNameRequired": "Home name is required.",
+  "homeNameUpdatedToast": "Home name updated successfully! 🏠",
+  "customRoleOption": "✏️ Custom Role...",
+  "customRoleHint": "Type role name (e.g. Guest, Uncle)...",
+  "aboutDeveloper": "Developer: Samed Kalaycı",
+  "aboutDescription": "Description: Smart home organization & family management app.",
+  "aboutCopyright": "© 2026 Ev Asistanı. All rights reserved."
 }
 

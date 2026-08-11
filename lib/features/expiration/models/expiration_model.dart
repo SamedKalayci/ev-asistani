@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/icon_helper.dart';
 
 // ── Enums (UI katmanı da import eder) ────────────────────────────────────────
 
@@ -133,11 +134,9 @@ class ExpirationModel {
       location: (map['location'] as String?) ?? '',
       expirationDate:
           (map['expirationDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      // ignore: non_const_argument_for_const_parameter
-      icon: IconData(
-        // ignore: non_const_argument_for_const_parameter
-        (map['iconCodePoint'] as int?) ?? Icons.label_rounded.codePoint,
-        fontFamily: 'MaterialIcons',
+      icon: getSafeIconData(
+        map['iconCodePoint'] as int?,
+        fallback: Icons.label_rounded,
       ),
       createdBy: (map['createdBy'] as String?) ?? '',
       imageUrl: map['imageUrl'] as String?,

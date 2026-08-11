@@ -342,5 +342,20 @@
   "categoryWifi": "📶 WLAN & Netzwerk",
   "categoryInstallation": "⚡ Installation & Abos",
   "categoryPasswords": "🔑 Passwörter & Codes",
-  "categoryGeneralHome": "ℹ️ Allgemeine Hausinfo"
+  "categoryGeneralHome": "ℹ️ Allgemeine Hausinfo",
+  "themeSelection": "Themenauswahl",
+  "themeSelectionSubtitle": "Erscheinungsbild wählen (System / Hell / Dunkel)",
+  "themeSystem": "System (Standard)",
+  "themeLight": "Helles Thema",
+  "themeDark": "Dunkles Thema",
+  "editHomeNameTitle": "Hausnamen bearbeiten",
+  "editHomeNameLabel": "Hausname",
+  "editHomeNameHint": "z. B. Familie Müller, Haus 4",
+  "homeNameRequired": "Hausname ist erforderlich.",
+  "homeNameUpdatedToast": "Hausname erfolgreich aktualisiert! 🏠",
+  "customRoleOption": "✏️ Eigene Rolle...",
+  "customRoleHint": "Rollenname eingeben...",
+  "aboutDeveloper": "Entwickler: Samed Kalaycı",
+  "aboutDescription": "Beschreibung: Intelligente Haushaltsorganisation.",
+  "aboutCopyright": "© 2026 Ev Asistanı. Alle Rechte vorbehalten."
 }

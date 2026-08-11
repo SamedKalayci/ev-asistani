@@ -13,6 +13,33 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../shared/widgets/primary_button.dart';
 
 import '../../../core/controllers/purchase_controller.dart';
+import '../../../core/providers/purchase_provider.dart';
+
+// ─── Trial Eligibility Provider ────────────────────────────────────────────────
+/// RevenueCat üzerinden aylık plan için tanıtıcı teklif / ücretsiz deneme
+/// uygunluğunu kontrol eder. Web / başlatılmamış durumlarda false döner.
+final monthlyTrialEligibleProvider = FutureProvider<bool>((ref) async {
+  if (kIsWeb) return false;
+  try {
+    final service = ref.read(purchaseServiceProvider);
+    final offerings = await service.getOfferings();
+    if (offerings == null) return false;
+
+    // "monthly" package'ını tüm offering'lerde ara
+    for (final offering in offerings.all.values) {
+      for (final pkg in offering.availablePackages) {
+        // Aylık paketi identifier ile tanımla (örn. "$rc_monthly", "monthly_plan")
+        final isMonthly = pkg.identifier.toLowerCase().contains('monthly');
+        if (isMonthly) {
+          // RevenueCat'ta introductoryPrice varsa kullanıcı denemeye uygun
+          final intro = pkg.storeProduct.introductoryPrice;
+          return intro != null;
+        }
+      }
+    }
+  } catch (_) {}
+  return false;
+});
 
 /// Modern ve yüksek dönüşüm odaklı Paywall BottomSheet bileşeni.
 class PaywallBottomSheet extends ConsumerStatefulWidget {
@@ -32,7 +59,8 @@ class PaywallBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
-  int _selectedPlanIndex = 0; // 0: Yıllık, 1: Aylık
+  // 0: Yıllık, 1: Aylık — Aylık varsayılan olarak seçili (ücretsiz deneme vurgusu için)
+  int _selectedPlanIndex = 1;
   bool _isLoading = false;
 
   Future<void> _handlePurchase() async {
@@ -129,6 +157,20 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
     final cancelNoticeText = isIOS
         ? 'İstediğiniz zaman App Store / Apple ID ayarlarınızdan iptal edebilirsiniz.'
         : 'İstediğiniz zaman Google Play Store ayarlarınızdan iptal edebilirsiniz.';
+
+    // Aylık plan deneme uygunluğu — RevenueCat'tan async olarak gelir
+    final trialAsync = ref.watch(monthlyTrialEligibleProvider);
+    final isTrialEligible = trialAsync.valueOrNull ?? true; // varsayılan: göster
+
+    // ── CTA Buton Metni ──────────────────────────────────────────────────────
+    final String ctaLabel;
+    if (_selectedPlanIndex == 1) {
+      ctaLabel = isTrialEligible
+          ? '3 Günlük Ücretsiz Denemeyi Başlat'
+          : 'Aylık PRO Üyeliği Başlat';
+    } else {
+      ctaLabel = 'Aboneliği Başlat';
+    }
 
     return Container(
       constraints: BoxConstraints(
@@ -243,22 +285,27 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
 
             const SizedBox(height: AppSpacing.xl),
 
-            // ── Plan Seçenekleri (Yıllık / Aylık) ───────────────────────────
+            // ── Plan Seçenekleri ─────────────────────────────────────────────
+            // Aylık plan üstte — ücretsiz deneme vurgusu için
+            _buildPlanOptionTile(
+              index: 1,
+              title: 'Aylık Plan',
+              priceText: '₺29.99 / Ay',
+              subPriceText: isTrialEligible
+                  ? '3 Gün Ücretsiz, sonra ₺29.99/ay'
+                  : 'İstediğin zaman iptal et',
+              badgeText: isTrialEligible ? '3 GÜN ÜCRETSİZ' : null,
+              badgeIsTrialBadge: true,
+              colorScheme: colorScheme,
+            ),
+            const SizedBox(height: AppSpacing.sm),
             _buildPlanOptionTile(
               index: 0,
               title: 'Yıllık Plan (Önerilen)',
               priceText: '₺249.99 / Yıl',
               subPriceText: 'Sadece ₺20.83 / ay',
               badgeText: '%40 TASARRUF',
-              colorScheme: colorScheme,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            _buildPlanOptionTile(
-              index: 1,
-              title: 'Aylık Plan',
-              priceText: '₺29.99 / Ay',
-              subPriceText: 'İstediğin zaman iptal et',
-              badgeText: null,
+              badgeIsTrialBadge: false,
               colorScheme: colorScheme,
             ),
 
@@ -268,13 +315,24 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
             SizedBox(
               width: double.infinity,
               child: PrimaryButton(
-                text: _selectedPlanIndex == 0
-                    ? 'PRO\'yu Ücretsiz Deneyin (7 Gün)'
-                    : 'PRO Üyeliği Başlat',
+                text: ctaLabel,
                 isLoading: _isLoading,
                 onPressed: _handlePurchase,
               ),
             ),
+
+            // ── Aylık plan için deneme süre sonu notu ───────────────────────
+            if (_selectedPlanIndex == 1 && isTrialEligible) ...[  
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                '3 günlük ücretsiz deneme bitiminde ücretlendirilirsiniz.',
+                textAlign: TextAlign.center,
+                style: AppTypography.labelSmall.copyWith(
+                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.75),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
             const SizedBox(height: AppSpacing.sm),
             Text(
               cancelNoticeText,
@@ -393,14 +451,21 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
     required String priceText,
     required String subPriceText,
     required String? badgeText,
+    required bool badgeIsTrialBadge,
     required ColorScheme colorScheme,
   }) {
     final isSelected = _selectedPlanIndex == index;
 
+    // Rozet renk şeması
+    final badgeColors = badgeIsTrialBadge
+        ? const [Color(0xFF10B981), Color(0xFF059669)] // Yeşil — ücretsiz deneme
+        : [AppColors.primary, AppColors.primary.withValues(alpha: 0.85)]; // Mavi — tasarruf
+
     return InkWell(
       onTap: () => setState(() => _selectedPlanIndex = index),
       borderRadius: AppRadius.borderLg,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           color: isSelected
@@ -414,6 +479,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
         ),
         child: Row(
           children: [
+            // Radio indicator
             Container(
               width: 20,
               height: 20,
@@ -430,6 +496,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Başlık + rozet
                   Row(
                     children: [
                       Flexible(
@@ -444,14 +511,18 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
                         ),
                       ),
                       if (badgeText != null) ...[
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 6),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 1.5,
+                            horizontal: 6,
+                            vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary,
+                            gradient: LinearGradient(
+                              colors: badgeColors,
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                             borderRadius: AppRadius.borderSm,
                           ),
                           child: Text(
@@ -460,21 +531,30 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
+                              letterSpacing: 0.3,
                             ),
                           ),
                         ),
                       ],
                     ],
                   ),
+                  const SizedBox(height: 2),
+                  // Alt fiyat / açıklama metni
                   Text(
                     subPriceText,
                     style: AppTypography.bodySmall.copyWith(
-                      color: colorScheme.onSurfaceVariant,
+                      color: badgeIsTrialBadge && badgeText != null
+                          ? const Color(0xFF10B981) // Yeşil vurgu — deneme aktif
+                          : colorScheme.onSurfaceVariant,
+                      fontWeight: badgeIsTrialBadge && badgeText != null
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                   ),
                 ],
               ),
             ),
+            // Sağdaki fiyat etiketi
             Text(
               priceText,
               style: AppTypography.titleMedium.copyWith(

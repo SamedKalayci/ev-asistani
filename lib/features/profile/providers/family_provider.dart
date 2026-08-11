@@ -136,6 +136,21 @@ class FamilyNotifier extends AsyncNotifier<void> {
       }
     });
   }
+
+  /// Ev/Aile adını günceller.
+  Future<void> updateFamilyName(String newName) async {
+    final familyId = ref.read(activeFamilyIdProvider);
+    if (familyId.isEmpty) return;
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await _familyRepo.updateFamilyName(
+        familyId: familyId,
+        newName: newName,
+      );
+      _refreshProviders();
+    });
+  }
 }
 
 final familyNotifierProvider =

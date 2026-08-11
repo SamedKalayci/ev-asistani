@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/icon_helper.dart';
 
 // ── Enums ─────────────────────────────────────────────────────────────────────
 
@@ -158,11 +159,9 @@ class WarrantyModel {
           (map['purchaseDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       warrantyEndDate:
           (map['warrantyEndDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      // ignore: non_const_argument_for_const_parameter
-      icon: IconData(
-        // ignore: non_const_argument_for_const_parameter
-        (map['iconCodePoint'] as int?) ?? Icons.devices_rounded.codePoint,
-        fontFamily: 'MaterialIcons',
+      icon: getSafeIconData(
+        map['iconCodePoint'] as int?,
+        fallback: Icons.devices_rounded,
       ),
       createdBy: (map['createdBy'] as String?) ?? '',
       hasInvoice: (map['hasInvoice'] as bool?) ?? false,

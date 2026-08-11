@@ -2029,6 +2029,84 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'ℹ️ Genel Ev Bilgisi'**
   String get categoryGeneralHome;
+
+  /// No description provided for @themeSelection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tema Seçimi'**
+  String get themeSelection;
+
+  /// No description provided for @themeSelectionSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama görünümünü seçin (Sistem / Açık / Koyu)'**
+  String get themeSelectionSubtitle;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sistem (Varsayılan)'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık Tema'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koyu Tema'**
+  String get themeDark;
+
+  /// No description provided for @editHomeNameTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev Adını Düzenle'**
+  String get editHomeNameTitle;
+
+  /// No description provided for @editHomeNameLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev Adı'**
+  String get editHomeNameLabel;
+
+  /// No description provided for @editHomeNameHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Kalaycı Home, Güneş Apt. No:4'**
+  String get editHomeNameHint;
+
+  /// No description provided for @homeNameUpdatedToast.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev adı başarıyla güncellendi! 🏠'**
+  String get homeNameUpdatedToast;
+
+  /// No description provided for @customRoleOption.
+  ///
+  /// In tr, this message translates to:
+  /// **'✏️ Özel Rol...'**
+  String get customRoleOption;
+
+  /// No description provided for @customRoleHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rol adını yazın (örn. Amca, Misafir)...'**
+  String get customRoleHint;
+
+  /// No description provided for @aboutDeveloper.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geliştirici: Samed Kalaycı'**
+  String get aboutDeveloper;
+
+  /// No description provided for @aboutCopyright.
+  ///
+  /// In tr, this message translates to:
+  /// **'© 2026 Ev Asistanı. Tüm hakları saklıdır.'**
+  String get aboutCopyright;
 }
 
 class _AppLocalizationsDelegate

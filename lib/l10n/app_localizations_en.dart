@@ -46,7 +46,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutDescription =>
-      'Description: Household organization and shared list management app.';
+      'Description: Smart home organization & family management app.';
 
   @override
   String get allRightsReserved => '© 2026 Home Assistant. All rights reserved.';
@@ -1025,4 +1025,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ General Home Info';
+
+  @override
+  String get themeSelection => 'Theme Selection';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Choose app appearance (System / Light / Dark)';
+
+  @override
+  String get themeSystem => 'System (Default)';
+
+  @override
+  String get themeLight => 'Light Theme';
+
+  @override
+  String get themeDark => 'Dark Theme';
+
+  @override
+  String get editHomeNameTitle => 'Edit Home Name';
+
+  @override
+  String get editHomeNameLabel => 'Home Name';
+
+  @override
+  String get editHomeNameHint => 'e.g. Smith Home, Apartment #4';
+
+  @override
+  String get homeNameUpdatedToast => 'Home name updated successfully! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Custom Role...';
+
+  @override
+  String get customRoleHint => 'Type role name (e.g. Guest, Uncle)...';
+
+  @override
+  String get aboutDeveloper => 'Developer: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright => '© 2026 Ev Asistanı. All rights reserved.';
 }

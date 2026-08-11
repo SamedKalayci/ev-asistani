@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ev_asistani/l10n/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
+import 'core/providers/theme_provider.dart';
 import 'core/providers/user_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'router/app_router.dart';
@@ -17,13 +18,14 @@ class EvAsistaniApp extends ConsumerWidget {
 
     final router = ref.watch(appRouterProvider);
     final currentLocale = ref.watch(localeProvider);
+    final currentThemeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       title: 'Ev Asistanı',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: currentThemeMode,
       routerConfig: router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

@@ -45,7 +45,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aboutDescription =>
-      'Beschreibung: App zur Haushaltsorganisation und gemeinsamen Listenverwaltung.';
+      'Beschreibung: Intelligente Haushaltsorganisation.';
 
   @override
   String get allRightsReserved =>
@@ -729,7 +729,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeNameHint => 'z.B. Familie Müller';
 
   @override
-  String get homeNameRequired => 'Name des Zuhauses ist erforderlich.';
+  String get homeNameRequired => 'Hausname ist erforderlich.';
 
   @override
   String get roleInHomeLabel => 'Ihre Rolle im Hause';
@@ -1017,4 +1017,44 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Allgemeine Hausinfo';
+
+  @override
+  String get themeSelection => 'Themenauswahl';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Erscheinungsbild wählen (System / Hell / Dunkel)';
+
+  @override
+  String get themeSystem => 'System (Standard)';
+
+  @override
+  String get themeLight => 'Helles Thema';
+
+  @override
+  String get themeDark => 'Dunkles Thema';
+
+  @override
+  String get editHomeNameTitle => 'Hausnamen bearbeiten';
+
+  @override
+  String get editHomeNameLabel => 'Hausname';
+
+  @override
+  String get editHomeNameHint => 'z. B. Familie Müller, Haus 4';
+
+  @override
+  String get homeNameUpdatedToast => 'Hausname erfolgreich aktualisiert! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Eigene Rolle...';
+
+  @override
+  String get customRoleHint => 'Rollenname eingeben...';
+
+  @override
+  String get aboutDeveloper => 'Entwickler: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright => '© 2026 Ev Asistanı. Alle Rechte vorbehalten.';
 }

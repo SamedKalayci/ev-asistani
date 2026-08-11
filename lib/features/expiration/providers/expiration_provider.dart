@@ -9,6 +9,7 @@ import '../../../core/providers/notification_provider.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/notification_service.dart';
+import '../../../core/utils/icon_helper.dart';
 import '../models/expiration_model.dart';
 import '../repository/expiration_repository.dart';
 
@@ -164,8 +165,7 @@ class ExpirationNotifier extends AsyncNotifier<void> {
   // ── Özel Yardımcı ─────────────────────────────────────────────────────────
 
   static IconData _codePointToIcon(int codePoint) =>
-      // ignore: non_const_argument_for_const_parameter
-      IconData(codePoint, fontFamily: 'MaterialIcons');
+      getSafeIconData(codePoint, fallback: Icons.label_rounded);
 }
 
 /// [ExpirationNotifier] provider'ı.

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
@@ -273,37 +275,37 @@ class _LinkAccountBottomSheetState
           ),
           const SizedBox(height: AppSpacing.md),
 
-          // Apple Button
-          FilledButton.icon(
-            style: FilledButton.styleFrom(
-              backgroundColor: colorScheme.onSurface,
-              foregroundColor: colorScheme.surface,
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-              shape: const RoundedRectangleBorder(
-                borderRadius: AppRadius.borderFull,
+          if (!kIsWeb && Platform.isIOS) ...[
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: colorScheme.onSurface,
+                foregroundColor: colorScheme.surface,
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: AppRadius.borderFull,
+                ),
               ),
-            ),
-            icon: _isLinkingApple
-                ? SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: colorScheme.surface,
-                    ),
-                  )
-                : const Icon(Icons.apple_rounded, size: 24),
-            label: Text(
-              _isLinkingApple ? 'Bağlanıyor...' : 'Apple ile Bağla',
-              style: AppTypography.titleSmall.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.surface,
+              icon: _isLinkingApple
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: colorScheme.surface,
+                      ),
+                    )
+                  : const Icon(Icons.apple_rounded, size: 24),
+              label: Text(
+                _isLinkingApple ? 'Bağlanıyor...' : 'Apple ile Bağla',
+                style: AppTypography.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.surface,
+                ),
               ),
+              onPressed: isBusy ? null : _handleAppleLink,
             ),
-            onPressed: isBusy ? null : _handleAppleLink,
-          ),
-          
-          const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.md),
+          ],
           
           // E-posta Button
           OutlinedButton.icon(

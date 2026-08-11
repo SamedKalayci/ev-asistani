@@ -62,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
     if (!hasFamily) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
-        appBar: const AppHeader(title: 'Ev Asistanı'),
+        appBar: AppHeader(title: l10n.appName),
         body: const SafeArea(child: NoFamilyEmptyState()),
       );
     }
@@ -122,7 +122,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: const AppHeader(title: 'Ev Asistanı'),
+      appBar: AppHeader(title: l10n.appName),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showQuickAddBottomSheet(context, ref),
         elevation: 4,
@@ -416,22 +416,35 @@ class HomeScreen extends ConsumerWidget {
     String currencySymbol,
   ) {
     final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final gradientColors = isDark
+        ? [
+            colorScheme.surfaceContainerHigh,
+            colorScheme.surfaceContainerLow,
+          ]
+        : const [
+            Color(0xFFE8F5E9),
+            Color(0xFFDCFCE7),
+          ];
+
+    final borderColor = isDark
+        ? colorScheme.outlineVariant.withValues(alpha: 0.3)
+        : AppColors.primaryContainer.withValues(alpha: 0.4);
+
     final innerContent = Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFE8F5E9),
-            Color(0xFFDCFCE7),
-          ],
+          colors: gradientColors,
         ),
         borderRadius: AppRadius.borderXl,
         boxShadow: AppShadows.xs,
         border: Border.all(
-          color: AppColors.primaryContainer.withValues(alpha: 0.4),
+          color: borderColor,
           width: 1,
         ),
       ),

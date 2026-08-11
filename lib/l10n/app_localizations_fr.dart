@@ -44,7 +44,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aboutDescription =>
-      'Description : Application d\'organisation du foyer et de gestion de listes partagées.';
+      'Description : Organisation intelligente du foyer.';
 
   @override
   String get allRightsReserved =>
@@ -1026,4 +1026,44 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Infos Générales du Logement';
+
+  @override
+  String get themeSelection => 'Sélection du Thème';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Choisissez l\'apparence de l\'application (Système / Clair / Sombre)';
+
+  @override
+  String get themeSystem => 'Système (Par défaut)';
+
+  @override
+  String get themeLight => 'Thème Clair';
+
+  @override
+  String get themeDark => 'Thème Sombre';
+
+  @override
+  String get editHomeNameTitle => 'Modifier le Nom du Foyer';
+
+  @override
+  String get editHomeNameLabel => 'Nom du Foyer';
+
+  @override
+  String get editHomeNameHint => 'ex: Maison Dupont';
+
+  @override
+  String get homeNameUpdatedToast => 'Nom du foyer mis à jour avec succès ! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Rôle Personnalisé...';
+
+  @override
+  String get customRoleHint => 'Saisissez le rôle...';
+
+  @override
+  String get aboutDeveloper => 'Développeur : Samed Kalaycı';
+
+  @override
+  String get aboutCopyright => '© 2026 Ev Asistanı. Tous droits réservés.';
 }

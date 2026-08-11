@@ -342,5 +342,20 @@
   "categoryWifi": "📶 Wi-Fi & Réseau",
   "categoryInstallation": "⚡ Installation & Services",
   "categoryPasswords": "🔑 Mots de Passe & Codes",
-  "categoryGeneralHome": "ℹ️ Infos Générales du Logement"
+  "categoryGeneralHome": "ℹ️ Infos Générales du Logement",
+  "themeSelection": "Sélection du Thème",
+  "themeSelectionSubtitle": "Choisissez l'apparence de l'application (Système / Clair / Sombre)",
+  "themeSystem": "Système (Par défaut)",
+  "themeLight": "Thème Clair",
+  "themeDark": "Thème Sombre",
+  "editHomeNameTitle": "Modifier le Nom du Foyer",
+  "editHomeNameLabel": "Nom du Foyer",
+  "editHomeNameHint": "ex: Maison Dupont",
+  "homeNameRequired": "Le nom du foyer est obligatoire.",
+  "homeNameUpdatedToast": "Nom du foyer mis à jour avec succès ! 🏠",
+  "customRoleOption": "✏️ Rôle Personnalisé...",
+  "customRoleHint": "Saisissez le rôle...",
+  "aboutDeveloper": "Développeur : Samed Kalaycı",
+  "aboutDescription": "Description : Organisation intelligente du foyer.",
+  "aboutCopyright": "© 2026 Ev Asistanı. Tous droits réservés."
 }

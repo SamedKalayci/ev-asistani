@@ -6,10 +6,12 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/models/user_model.dart';
 import '../../../shared/widgets/primary_button.dart';
+import '../providers/family_provider.dart';
 
-/// Profil Görseli & Kullanıcı Adı Düzenleme Modalı (`image_e88bc4.png` tasarımına tam uyumlu).
+/// Profil Görseli, Kullanıcı Adı, Ev Adı & Rol Düzenleme Modalı.
 class ProfileEditBottomSheet extends ConsumerStatefulWidget {
   const ProfileEditBottomSheet({super.key});
 
@@ -30,57 +32,57 @@ class ProfileEditBottomSheet extends ConsumerStatefulWidget {
 class _ProfileEditBottomSheetState
     extends ConsumerState<ProfileEditBottomSheet> {
   late TextEditingController _nameController;
+  late TextEditingController _roleController;
+  late TextEditingController _homeNameController;
   String? _selectedAvatarUrl;
-  AvatarType _selectedAvatarType = AvatarType.presetAvatar;
-  String? _selectedFamilyRole;
   bool _isLoading = false;
 
-  // Aile içi rol seçenekleri
-  static const List<String> _familyRoles = [
+  // Hızlı Seçim Rol Önerileri
+  static const List<String> _roleSuggestions = [
     '👑 Ev Sahibi',
     '👨‍👩‍👧 Anne',
     '👨‍👩‍👦 Baba',
     '👶 Çocuk',
     '🏠 Ev Arkadaşı',
-    '🐾 Diğer/Ev Sakini',
+    '🐾 Ev Sakini',
   ];
 
-  // Tasarımdaki Hazır 3D / Vektör Avatar Örnekleri
+  // Yerel Assets PNG Avatar Listesi
   static const List<String> _presetAvatars = [
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150',
-    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
-    'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150',
-  ];
-
-  // Tasarımdaki Eğlenceli Emojiler
-  static const List<String> _emojis = [
-    '😊',
-    '😎',
-    '🥳',
-    '🚀',
-    '⭐',
-    '👑',
-    '🦊',
-    '🏡',
+    'assets/avatars/critters-1786448610540.png',
+    'assets/avatars/critters-1786448624909.png',
+    'assets/avatars/critters-1786448628488.png',
+    'assets/avatars/critters-1786448632066.png',
+    'assets/avatars/critters-1786448635139.png',
+    'assets/avatars/critters-1786448638050.png',
+    'assets/avatars/critters-1786448641398.png',
+    'assets/avatars/critters-1786448645288.png',
+    'assets/avatars/critters-1786449230352.png',
+    'assets/avatars/critters-1786449238167.png',
+    'assets/avatars/critters-1786449241376.png',
+    'assets/avatars/critters-1786449246792.png',
+    'assets/avatars/critters-1786449254090.png',
+    'assets/avatars/dylan-1786448716806.png',
+    'assets/avatars/dylan-1786448728280.png',
   ];
 
   @override
   void initState() {
     super.initState();
     final user = ref.read(userProvider).valueOrNull;
+    final family = ref.read(currentFamilyProvider).valueOrNull;
+
     _nameController = TextEditingController(text: user?.displayName ?? '');
+    _roleController = TextEditingController(text: user?.familyRole ?? '');
+    _homeNameController = TextEditingController(text: family?.name ?? '');
     _selectedAvatarUrl = user?.effectiveAvatarUrl;
-    _selectedAvatarType = user?.safeAvatarType ?? AvatarType.presetAvatar;
-    _selectedFamilyRole = user?.familyRole;
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _roleController.dispose();
+    _homeNameController.dispose();
     super.dispose();
   }
 
@@ -96,19 +98,31 @@ class _ProfileEditBottomSheetState
       return;
     }
 
+    final newRole = _roleController.text.trim();
+    final newHomeName = _homeNameController.text.trim();
+
     setState(() => _isLoading = true);
 
     try {
       final firestoreService = ref.read(firestoreServiceProvider);
 
+      // Kullanıcı profilini güncelle
       await firestoreService.updateUserProfile(user.uid, {
         'name': newName,
         'displayName': newName,
         'avatarUrl': _selectedAvatarUrl,
-        'avatarType': _selectedAvatarType.name,
+        'avatarType': AvatarType.presetAvatar.name,
         'photoUrl': _selectedAvatarUrl,
-        if (_selectedFamilyRole != null) 'familyRole': _selectedFamilyRole,
+        'familyRole': newRole,
       });
+
+      // Ev adını da güncelle (varsa)
+      final hasFamily = ref.read(hasRealFamilyProvider);
+      if (hasFamily && newHomeName.isNotEmpty) {
+        await ref
+            .read(familyNotifierProvider.notifier)
+            .updateFamilyName(newHomeName);
+      }
 
       if (mounted) {
         Navigator.pop(context);
@@ -127,15 +141,53 @@ class _ProfileEditBottomSheetState
     }
   }
 
+  Widget _buildAvatarImage(String? url, {required double size}) {
+    if (url == null || url.isEmpty) {
+      return Icon(Icons.person_rounded, size: size * 0.6, color: AppColors.primary);
+    }
+
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return ClipOval(
+        child: Image.network(
+          url,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => Icon(
+            Icons.person_rounded,
+            size: size * 0.55,
+            color: AppColors.primary,
+          ),
+        ),
+      );
+    }
+
+    return ClipOval(
+      child: Image.asset(
+        url,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          Icons.person_rounded,
+          size: size * 0.55,
+          color: AppColors.primary,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final hasFamily = ref.watch(hasRealFamilyProvider);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.88,
+        maxHeight: MediaQuery.of(context).size.height * 0.90,
       ),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
@@ -169,7 +221,7 @@ class _ProfileEditBottomSheetState
             // Başlık
             Center(
               child: Text(
-                'Profil Düzenle',
+                'Profil ve Ev Bilgilerini Düzenle',
                 style: AppTypography.headlineSmall.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -179,42 +231,28 @@ class _ProfileEditBottomSheetState
 
             // ── Üst Avatar Önizlemesi ─────────────────────────────────────────
             Center(
-              child: Stack(
-                children: [
-                  Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryContainer,
-                      boxShadow: AppShadows.md,
-                      border: Border.all(
-                        color: AppColors.primary,
-                        width: 3,
-                      ),
-                    ),
-                    child: Center(
-                      child: _selectedAvatarType == AvatarType.emoji
-                          ? Text(
-                              _selectedAvatarUrl ?? '😊',
-                              style: const TextStyle(fontSize: 48),
-                            )
-                          : CircleAvatar(
-                              radius: 46,
-                              backgroundColor: Colors.transparent,
-                              backgroundImage: NetworkImage(
-                                _selectedAvatarUrl ?? _presetAvatars.first,
-                              ),
-                            ),
-                    ),
+              child: Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: colorScheme.surfaceContainerLow,
+                  boxShadow: AppShadows.md,
+                  border: Border.all(
+                    color: AppColors.primary,
+                    width: 3,
                   ),
-                ],
+                ),
+                child: _buildAvatarImage(
+                  _selectedAvatarUrl ?? _presetAvatars.first,
+                  size: 90,
+                ),
               ),
             ),
             const SizedBox(height: AppSpacing.xl),
 
-            // ── 1. KULLANICI BİLGİLERİ ───────────────────────────────────────
-            _buildSectionTitle(colorScheme, 'KULLANICI BİLGİLERİ'),
+            // ── 1. KULLANICI & EV BİLGİLERİ ─────────────────────────────────
+            _buildSectionTitle(colorScheme, 'KULLANICI VE EV BİLGİLERİ'),
             const SizedBox(height: AppSpacing.md),
 
             // İsim Girişi
@@ -235,11 +273,32 @@ class _ProfileEditBottomSheetState
             ),
             const SizedBox(height: AppSpacing.md),
 
-            // Aile İçi Rol Seçimi
-            DropdownButtonFormField<String>(
-              value: _selectedFamilyRole,
+            // Ev Adı Girişi (Aileye bağlıysa göster)
+            if (hasFamily) ...[
+              TextFormField(
+                controller: _homeNameController,
+                decoration: InputDecoration(
+                  labelText: l10n.editHomeNameLabel,
+                  hintText: l10n.editHomeNameHint,
+                  prefixIcon: const Icon(Icons.home_work_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: AppRadius.borderLg,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.md,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+
+            // Aile İçi Rol Girişi (TextFormField)
+            TextFormField(
+              controller: _roleController,
               decoration: InputDecoration(
                 labelText: 'Aile İçi Rolünüz',
+                hintText: 'Örn: Ev Sahibi, Anne, Baba, Ağabey...',
                 prefixIcon: const Icon(Icons.badge_outlined),
                 border: OutlineInputBorder(
                   borderRadius: AppRadius.borderLg,
@@ -249,100 +308,87 @@ class _ProfileEditBottomSheetState
                   vertical: AppSpacing.md,
                 ),
               ),
-              items: _familyRoles.map((role) {
-                return DropdownMenuItem<String>(
-                  value: role,
-                  child: Text(role),
-                );
-              }).toList(),
-              onChanged: (val) {
-                setState(() => _selectedFamilyRole = val);
-              },
             ),
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(height: AppSpacing.xs + 2),
 
-            // ── 2. HAZIR AVATARLAR ───────────────────────────────────────────
-            _buildSectionTitle(colorScheme, 'HAZIR AVATARLAR'),
-            const SizedBox(height: AppSpacing.md),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: _presetAvatars.map((url) {
-                final isSelected = _selectedAvatarType == AvatarType.presetAvatar &&
-                    _selectedAvatarUrl == url;
-
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedAvatarUrl = url;
-                      _selectedAvatarType = AvatarType.presetAvatar;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isSelected ? AppColors.primary : Colors.transparent,
-                        width: 2.5,
-                      ),
-                      boxShadow: isSelected ? AppShadows.xs : null,
-                    ),
-                    child: CircleAvatar(
-                      radius: 28,
-                      backgroundColor: colorScheme.surfaceContainerLow,
-                      backgroundImage: NetworkImage(url),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-
-            const SizedBox(height: AppSpacing.xl),
-
-            // ── 3. EMOJİLER ──────────────────────────────────────────────────
-            _buildSectionTitle(colorScheme, 'EMOJİLER'),
-            const SizedBox(height: AppSpacing.md),
+            // Hızlı Seçim Rol Çipleri
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: _emojis.map((emoji) {
-                  final isSelected = _selectedAvatarType == AvatarType.emoji &&
-                      _selectedAvatarUrl == emoji;
+                children: _roleSuggestions.map((role) {
+                  final isSelected = _roleController.text.trim() == role;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: ChoiceChip(
+                      label: Text(
+                        role,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          color: isSelected
+                              ? colorScheme.onPrimaryContainer
+                              : colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      selected: isSelected,
+                      selectedColor: colorScheme.primaryContainer,
+                      backgroundColor: colorScheme.surfaceContainerLow,
+                      onSelected: (_) {
+                        setState(() {
+                          _roleController.text = role;
+                        });
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.xl),
+
+            // ── 2. YEREL AVATAR SEÇENEKLERİ (YATAY KAYDIRMA) ────────────────
+            _buildSectionTitle(colorScheme, 'AVATAR SEÇENEKLERİ'),
+            const SizedBox(height: AppSpacing.md),
+
+            SizedBox(
+              height: 76,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _presetAvatars.length,
+                itemBuilder: (context, index) {
+                  final url = _presetAvatars[index];
+                  final isSelected = _selectedAvatarUrl == url;
 
                   return Padding(
-                    padding: const EdgeInsets.only(right: AppSpacing.sm),
+                    padding: const EdgeInsets.only(right: 12),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _selectedAvatarUrl = emoji;
-                          _selectedAvatarType = AvatarType.emoji;
+                          _selectedAvatarUrl = url;
                         });
                       },
-                      child: Container(
-                        width: 52,
-                        height: 52,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 72,
+                        height: 72,
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primaryContainer
-                              : colorScheme.surfaceContainerLow,
                           shape: BoxShape.circle,
+                          color: colorScheme.surfaceContainerLow,
                           border: Border.all(
                             color: isSelected
                                 ? AppColors.primary
-                                : Colors.transparent,
-                            width: 2,
+                                : colorScheme.outlineVariant.withValues(alpha: 0.3),
+                            width: isSelected ? 3 : 1.5,
                           ),
+                          boxShadow: isSelected ? AppShadows.sm : null,
                         ),
                         child: Center(
-                          child: Text(
-                            emoji,
-                            style: const TextStyle(fontSize: 26),
-                          ),
+                          child: _buildAvatarImage(url, size: 66),
                         ),
                       ),
                     ),
                   );
-                }).toList(),
+                },
               ),
             ),
 

@@ -43,8 +43,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get developerLabel => 'İnkişafçı: Samed Kalaycı';
 
   @override
-  String get aboutDescription =>
-      'Təsvir: Ev təşkilatı və ortaq siyahı idarəetmə proqramı.';
+  String get aboutDescription => 'Təsvir: Ağıllı ev təşkilatı.';
 
   @override
   String get allRightsReserved =>
@@ -1017,4 +1016,44 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get categoryGeneralHome => 'ℹ️ Ümumi Ev Məlumatı';
+
+  @override
+  String get themeSelection => 'Tema Seçimi';
+
+  @override
+  String get themeSelectionSubtitle =>
+      'Tətbiq görünüşünü seçin (Sistem / Açıq / Tünd)';
+
+  @override
+  String get themeSystem => 'Sistem (Defolt)';
+
+  @override
+  String get themeLight => 'Açıq Tema';
+
+  @override
+  String get themeDark => 'Tünd Tema';
+
+  @override
+  String get editHomeNameTitle => 'Ev Adını Redaktə Et';
+
+  @override
+  String get editHomeNameLabel => 'Ev Adı';
+
+  @override
+  String get editHomeNameHint => 'Məs: Əliyevlər Evi';
+
+  @override
+  String get homeNameUpdatedToast => 'Ev adı uğurla yeniləndi! 🏠';
+
+  @override
+  String get customRoleOption => '✏️ Xüsusi Rol...';
+
+  @override
+  String get customRoleHint => 'Rol adını yazın...';
+
+  @override
+  String get aboutDeveloper => 'Tərtibatçı: Samed Kalaycı';
+
+  @override
+  String get aboutCopyright => '© 2026 Ev Asistanı. Bütün hüquqlar qorunur.';
 }

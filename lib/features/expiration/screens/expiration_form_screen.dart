@@ -13,6 +13,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/permission_utils.dart';
+import '../../../core/utils/icon_helper.dart';
 import '../models/expiration_model.dart';
 import '../providers/expiration_provider.dart';
 
@@ -252,8 +253,7 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
           title: _titleCtrl.text.trim(),
           location: _locationCtrl.text.trim(),
           expirationDate: _selectedDate,
-          // ignore: non_const_argument_for_const_parameter
-          icon: IconData(_selectedIconCodePoint, fontFamily: 'MaterialIcons'),
+          icon: getSafeIconData(_selectedIconCodePoint),
           imageUrl: imageUrl,
           notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
         );

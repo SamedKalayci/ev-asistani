@@ -342,5 +342,20 @@
   "categoryWifi": "📶 Wi-Fi y Red",
   "categoryInstallation": "⚡ Instalación y Servicios",
   "categoryPasswords": "🔑 Contraseñas y Códigos",
-  "categoryGeneralHome": "ℹ️ Información General del Hogar"
+  "categoryGeneralHome": "ℹ️ Información General del Hogar",
+  "themeSelection": "Selección de Tema",
+  "themeSelectionSubtitle": "Elige la apariencia de la app (Sistema / Claro / Oscuro)",
+  "themeSystem": "Sistema (Predeterminado)",
+  "themeLight": "Tema Claro",
+  "themeDark": "Tema Oscuro",
+  "editHomeNameTitle": "Editar Nombre del Hogar",
+  "editHomeNameLabel": "Nombre del Hogar",
+  "editHomeNameHint": "Ej: Casa García",
+  "homeNameRequired": "El nombre del hogar es obligatorio.",
+  "homeNameUpdatedToast": "¡Nombre del hogar actualizado! 🏠",
+  "customRoleOption": "✏️ Rol Personalizado...",
+  "customRoleHint": "Escribe el rol...",
+  "aboutDeveloper": "Desarrollador: Samed Kalaycı",
+  "aboutDescription": "Descripción: Organización inteligente del hogar.",
+  "aboutCopyright": "© 2026 Ev Asistanı. Todos los derechos reservados."
 }

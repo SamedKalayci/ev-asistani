@@ -2,7 +2,7 @@ name: ev_asistani
 description: "Ev içerisindeki önemli bilgileri takip etmenizi sağlayan Türkçe mobil asistan."
 publish_to: "none"
 
-version: 1.0.0+11
+version: 1.0.0+12
 
 environment:
   sdk: ^3.12.2
@@ -104,4 +104,5 @@ flutter:
   assets:
     - assets/images/
     - assets/icon/
+    - assets/avatars/
     - .env

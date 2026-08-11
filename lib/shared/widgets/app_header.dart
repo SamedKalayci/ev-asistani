@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../l10n/app_localizations.dart';
 import '../../router/app_router.dart';
 
 /// Her ekranda kullanılacak ortak üst başlık (AppHeader) bileşeni.
 /// Minimalist tasarım dili, dairesel profil avatarı ve bildirim zili/badge desteğine sahip.
 class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
-  /// Başlık metni (varsayılan: "Ev Asistanı")
+  /// Başlık metni (null veya varsayılan ise localized appName kullanılır)
   final String? title;
 
   /// Özel başlık widget'ı (title metni yerine geçer)
@@ -58,13 +58,13 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
 
   const AppHeader({
     super.key,
-    this.title = 'Ev Asistanı',
+    this.title,
     this.titleWidget,
     this.leading,
     this.showUserAvatar = true,
     this.onAvatarTap,
     this.actions,
-    this.showNotificationBell = true,
+    this.showNotificationBell = false,
     this.hasNotificationBadge = false,
     this.onNotificationTap,
     this.centerTitle = false,
@@ -84,6 +84,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     // ── Sol Taraf (Leading) ──────────────────────────────────────────────────
     Widget? effectiveLeading = leading;
@@ -121,9 +122,13 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
     Widget? effectiveTitle;
     if (titleWidget != null) {
       effectiveTitle = titleWidget;
-    } else if (title != null) {
+    } else {
+      final String displayTitle = (title != null && title != 'Ev Asistanı')
+          ? title!
+          : (l10n?.appName ?? 'Ev Asistanı');
+
       effectiveTitle = Text(
-        title!,
+        displayTitle,
         style: AppTypography.titleLarge.copyWith(
           color: AppColors.primary,
           fontWeight: FontWeight.bold,
@@ -136,12 +141,6 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
     List<Widget> effectiveActions = [];
     if (actions != null) {
       effectiveActions.addAll(actions!);
-    } else if (showNotificationBell) {
-      effectiveActions.add(
-        _buildNotificationBell(context, colorScheme),
-      );
-    }
-    if (effectiveActions.isNotEmpty) {
       effectiveActions.add(const SizedBox(width: AppSpacing.sm));
     }
 
@@ -187,48 +186,6 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                   ),
                 )
               : null),
-    );
-  }
-
-  Widget _buildNotificationBell(BuildContext context, ColorScheme colorScheme) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        InkWell(
-          onTap: onNotificationTap ?? () {},
-          borderRadius: AppRadius.borderFull,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerLow,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.notifications_none_rounded,
-              color: colorScheme.onSurfaceVariant,
-              size: 22,
-            ),
-          ),
-        ),
-        if (hasNotificationBadge)
-          Positioned(
-            top: 6,
-            right: 6,
-            child: Container(
-              width: 9,
-              height: 9,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: colorScheme.surface,
-                  width: 1.5,
-                ),
-              ),
-            ),
-          ),
-      ],
     );
   }
 }
