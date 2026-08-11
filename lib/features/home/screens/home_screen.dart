@@ -30,6 +30,7 @@ import '../../finance/providers/finance_provider.dart';
 import '../../finance/models/payment_schedule_model.dart';
 import '../../vault/providers/vault_provider.dart';
 import '../../vault/models/vault_item_model.dart';
+import '../../vault/screens/vault_maintenance_screen.dart';
 
 /// Ana Sayfa ekranı — Freemium kısıtları, Serbest Bütçe Banner'ı ve Hızlı Ekle FAB entegreli.
 class HomeScreen extends ConsumerWidget {
@@ -486,35 +487,21 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
           SizedBox(
             width: double.infinity,
-            child: Row(
-              children: [
-                Expanded(
-                  child: PrimaryButton(
-                    text: l10n.viewDetails,
-                    onPressed: () => context.go(AppRoutes.finance),
-                    icon: Icons.account_balance_wallet_outlined,
-                  ),
+            child: ElevatedButton.icon(
+              onPressed: () => QuickAddExpenseBottomSheet.show(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: AppRadius.borderLg,
                 ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => QuickAddExpenseBottomSheet.show(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: AppRadius.borderLg,
-                      ),
-                    ),
-                    icon: const Icon(Icons.flash_on_rounded, size: 18),
-                    label: Text(
-                      l10n.quickAddExpense,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
+              ),
+              icon: const Icon(Icons.flash_on_rounded, size: 18),
+              label: Text(
+                l10n.quickAddExpense,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
@@ -1062,7 +1049,11 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
             TextButton(
-              onPressed: () => context.go(AppRoutes.vault),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const VaultMaintenanceScreen(),
+                ),
+              ),
               child: Text(
                 l10n.viewAll,
                 style: AppTypography.labelLarge.copyWith(
@@ -1081,9 +1072,13 @@ class HomeScreen extends ConsumerWidget {
           separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
           itemBuilder: (context, index) {
             final item = maintenanceItems[index];
-            // Kart tıklaması: Ev Kasası sekmesine git (Bakım Takvimi sekmesi)
+            // Kart tıklaması: Doğrudan Periyodik Bakım ekranını aç
             return InkWell(
-              onTap: () => context.go(AppRoutes.vault),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const VaultMaintenanceScreen(),
+                ),
+              ),
               borderRadius: AppRadius.borderLg,
               child: Container(
                 padding: const EdgeInsets.all(AppSpacing.md),

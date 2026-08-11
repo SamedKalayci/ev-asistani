@@ -199,6 +199,7 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
 
             // ── Dönem Filtresi (SegmentedButton) ─────────────────────────
             SegmentedButton<int>(
+              showSelectedIcon: false,
               segments: [
                 ButtonSegment(value: 0, label: Text(l10n.periodYearly)),
                 ButtonSegment(value: 1, label: Text(l10n.periodMonthly)),
@@ -294,6 +295,93 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
                 ],
               ),
             ),
+            const SizedBox(height: AppSpacing.xl),
+
+            // ── Kart & Nakit Harcamaları Özet Kutuları ──────────────────────────
+            Builder(
+              builder: (context) {
+                final creditCardExpense = filteredWalletExpenses
+                    .where((i) => i.type == FinanceType.expense && (i.accountName?.startsWith('Kredi Kartı') ?? false))
+                    .fold(0.0, (sum, i) => sum + i.amount);
+                final cashExpense = filteredWalletExpenses
+                    .where((i) => i.type == FinanceType.expense && (i.accountName == null || !i.accountName!.startsWith('Kredi Kartı')))
+                    .fold(0.0, (sum, i) => sum + i.amount);
+
+                return Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerLowest,
+                          borderRadius: AppRadius.borderLg,
+                          border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.credit_card_rounded, size: 16, color: colorScheme.primary),
+                                const SizedBox(width: AppSpacing.xs),
+                                Expanded(
+                                  child: Text(
+                                    l10n.creditCardExpenses,
+                                    style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              _formatCurrency(creditCardExpense),
+                              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerLowest,
+                          borderRadius: AppRadius.borderLg,
+                          border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.payments_outlined, size: 16, color: const Color(0xFF10B981)),
+                                const SizedBox(width: AppSpacing.xs),
+                                Expanded(
+                                  child: Text(
+                                    l10n.cashExpenses,
+                                    style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              _formatCurrency(cashExpense),
+                              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: colorScheme.onSurface),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
             const SizedBox(height: AppSpacing.xxl),
 
             // ── Kategori Pasta Grafiği (yalnızca aylık mod) ────────────────────
@@ -310,78 +398,11 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
               const SizedBox(height: AppSpacing.xxl),
             ],
 
-            // ── Bekleyen İşlemler ─────────────────────────────────────────────────────────────
-            if (pendingSchedules.isNotEmpty) ...[
-              Text(l10n.upcomingPendingTransactions, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: AppSpacing.md),
-              SizedBox(
-                height: 80,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: pendingSchedules.length,
-                  separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
-                  itemBuilder: (context, index) {
-                    final item = pendingSchedules[index];
-                    final isIncome = item.isIncome;
-                    return Container(
-                      width: 220,
-                      padding: const EdgeInsets.all(AppSpacing.md),
-                      decoration: BoxDecoration(
-                        color: isIncome ? Colors.blue.withValues(alpha: 0.05) : Colors.orange.withValues(alpha: 0.05),
-                        borderRadius: AppRadius.borderLg,
-                        border: Border.all(color: isIncome ? Colors.blue.withValues(alpha: 0.3) : Colors.orange.withValues(alpha: 0.3)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: isIncome ? Colors.blue.withValues(alpha: 0.1) : Colors.orange.withValues(alpha: 0.1),
-                              borderRadius: AppRadius.borderMd,
-                            ),
-                            child: Icon(
-                              isIncome ? Icons.download_rounded : Icons.warning_amber_rounded,
-                              size: 20,
-                              color: isIncome ? Colors.blue : Colors.orange,
-                            ),
-                          ),
-                          const SizedBox(width: AppSpacing.md),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  item.title,
-                                  style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  isIncome ? l10n.futureIncome : l10n.upcomingPayment,
-                                  style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            _formatCurrency(item.amount),
-                            style: AppTypography.bodyMedium.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: isIncome ? Colors.blue : Colors.orange,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxl),
-            ],
-
-            // ── Son İşlemler / Harcamalar ──────────────────────────────────────────
-            Text(l10n.recentTransactions, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+            // ── Hızlı Harcamalar ──────────────────────────────────────────
+            Text(
+              '${l10n.quickExpenses} - ${_formatCurrency(totalWalletExpense)}',
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: AppSpacing.md),
             if (limitedTransactions.isEmpty)
               Padding(

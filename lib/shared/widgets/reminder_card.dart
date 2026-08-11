@@ -128,13 +128,13 @@ class ReminderCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.cardPadding,
-            vertical: AppSpacing.md,
+            vertical: AppSpacing.xs + 2,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (leadingContent != null) ...[
                     leadingContent,
@@ -144,6 +144,7 @@ class ReminderCard extends StatelessWidget {
                     flex: 5,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           title,
@@ -155,7 +156,7 @@ class ReminderCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         if (subtitle != null) ...[
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 1),
                           Text(
                             subtitle!,
                             style: AppTypography.bodySmall.copyWith(
@@ -171,6 +172,7 @@ class ReminderCard extends StatelessWidget {
                   const SizedBox(width: AppSpacing.sm),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       if (dateLabel != null)
                         Text(
@@ -182,7 +184,7 @@ class ReminderCard extends StatelessWidget {
                           ),
                         ),
                       if (dateText != null) ...[
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 1),
                         Text(
                           dateText!,
                           style: AppTypography.bodySmall.copyWith(
@@ -192,11 +194,11 @@ class ReminderCard extends StatelessWidget {
                         ),
                       ],
                       if (statusText != null) ...[
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 2),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.sm,
-                            vertical: 2,
+                            horizontal: AppSpacing.xs + 2,
+                            vertical: 1,
                           ),
                           decoration: BoxDecoration(
                             color: effectiveStatusColor.withValues(alpha: 0.12),
@@ -211,6 +213,7 @@ class ReminderCard extends StatelessWidget {
                             style: AppTypography.labelSmall.copyWith(
                               color: effectiveStatusColor,
                               fontWeight: FontWeight.bold,
+                              fontSize: 10,
                             ),
                           ),
                         ),
@@ -231,7 +234,7 @@ class ReminderCard extends StatelessWidget {
                 ],
               ),
               if (bottomAction != null) ...[
-                const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: AppSpacing.xs),
                 bottomAction!,
               ],
             ],

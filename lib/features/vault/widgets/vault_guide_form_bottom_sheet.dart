@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../models/vault_item_model.dart';
@@ -41,12 +42,22 @@ class _VaultGuideFormBottomSheetState
   late TextEditingController _descController;
   late String _selectedSubCategory;
 
-  static const List<Map<String, String>> _categories = [
-    {'id': 'wifi', 'label': '📶 Wi-Fi & Ağ'},
-    {'id': 'installation', 'label': '⚡ Tesisat & Abonelik'},
-    {'id': 'passwords', 'label': '🔑 Şifre & Kodlar'},
-    {'id': 'general', 'label': 'ℹ️ Genel Ev Bilgisi'},
+  static const List<String> _categoryIds = [
+    'wifi',
+    'installation',
+    'passwords',
+    'general',
   ];
+
+  String _getCategoryLabel(String id, AppLocalizations l10n) {
+    return switch (id) {
+      'wifi' => l10n.categoryWifi,
+      'installation' => l10n.categoryInstallation,
+      'passwords' => l10n.categoryPasswords,
+      'general' => l10n.categoryGeneralHome,
+      _ => l10n.categoryGeneralHome,
+    };
+  }
 
   @override
   void initState() {
@@ -87,9 +98,6 @@ class _VaultGuideFormBottomSheetState
       });
       if (mounted) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Ev bilgisi güncellendi! ✅')),
-        );
       }
     } else {
       final newItem = VaultItemModel(
@@ -107,9 +115,6 @@ class _VaultGuideFormBottomSheetState
       await repo.addVaultItem(familyId, newItem);
       if (mounted) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Yeni ev bilgisi eklendi! ✅')),
-        );
       }
     }
   }
@@ -118,6 +123,7 @@ class _VaultGuideFormBottomSheetState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final isEditing = widget.item != null;
 
@@ -155,7 +161,7 @@ class _VaultGuideFormBottomSheetState
               const SizedBox(height: AppSpacing.lg),
               Center(
                 child: Text(
-                  isEditing ? 'Ev Bilgisini Düzenle' : 'Yeni Ev Bilgisi Ekle',
+                  isEditing ? l10n.editHomeInfo : l10n.addNewHomeInfo,
                   style: AppTypography.headlineSmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -165,7 +171,7 @@ class _VaultGuideFormBottomSheetState
 
               // ── Kategori Seçimi Chips ──────────────────────────────────────
               Text(
-                'Kategori Seçimi',
+                l10n.categorySelection,
                 style: AppTypography.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -174,14 +180,14 @@ class _VaultGuideFormBottomSheetState
               Wrap(
                 spacing: 8,
                 runSpacing: 4,
-                children: _categories.map((cat) {
-                  final isSelected = _selectedSubCategory == cat['id'];
+                children: _categoryIds.map((catId) {
+                  final isSelected = _selectedSubCategory == catId;
                   return ChoiceChip(
-                    label: Text(cat['label']!),
+                    label: Text(_getCategoryLabel(catId, l10n)),
                     selected: isSelected,
                     onSelected: (selected) {
                       if (selected) {
-                        setState(() => _selectedSubCategory = cat['id']!);
+                        setState(() => _selectedSubCategory = catId);
                       }
                     },
                     selectedColor: AppColors.primaryContainer,
@@ -197,19 +203,19 @@ class _VaultGuideFormBottomSheetState
 
               // ── Başlık ─────────────────────────────────────────────────────
               AppTextField(
-                label: 'Rehber Başlığı',
-                hintText: 'Örn: Doğalgaz Aboneliği, Su Vanası, Wi-Fi Şifresi',
+                label: l10n.guideTitle,
+                hintText: l10n.guideTitleHint,
                 controller: _titleController,
                 validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Başlık zorunludur.' : null,
+                    (v == null || v.trim().isEmpty) ? l10n.titleRequired : null,
               ),
 
               const SizedBox(height: AppSpacing.md),
 
               // ── Önemli Bilgi / Değer (Kopyalanabilir Alan) ──────────────────
               AppTextField(
-                label: 'Önemli Bilgi / Değer (Tek Tıkla Kopyalanabilir)',
-                hintText: 'Örn: Abone No: 123456, Şifre: xyz123, Mavi Vana',
+                label: l10n.importantValueLabel,
+                hintText: l10n.importantValueHint,
                 controller: _valueController,
               ),
 
@@ -217,8 +223,8 @@ class _VaultGuideFormBottomSheetState
 
               // ── Açıklama / Detaylı Not ─────────────────────────────────────
               AppTextField(
-                label: 'Açıklama / Detaylı Not',
-                hintText: 'Örn: Sayaç balkondaki dolabın sağ iç kısmındadır.',
+                label: l10n.detailedNotesLabel,
+                hintText: l10n.detailedNotesHint,
                 controller: _descController,
               ),
 
@@ -226,7 +232,7 @@ class _VaultGuideFormBottomSheetState
 
               // ── Kaydet / Güncelle Butonu ──────────────────────────────────
               PrimaryButton(
-                text: isEditing ? 'Bilgiyi Güncelle' : '+ Ev Bilgisi Ekle',
+                text: isEditing ? l10n.updateInfoBtn : l10n.addHomeInfo,
                 onPressed: _submit,
               ),
             ],
@@ -236,3 +242,4 @@ class _VaultGuideFormBottomSheetState
     );
   }
 }
+

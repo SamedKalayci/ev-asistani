@@ -14,6 +14,7 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/permission_utils.dart';
+import '../../../l10n/app_localizations.dart';
 import '../models/warranty_model.dart';
 import '../providers/warranty_provider.dart';
 
@@ -270,14 +271,17 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
 
   // ── Submit ────────────────────────────────────────────────────────────────
 
+  // ── Submit ────────────────────────────────────────────────────────────────
+
   Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_purchaseDate == null) {
-      _showError('Lütfen alış tarihini seçin.');
+      _showError(l10n.selectPurchaseDateWarning);
       return;
     }
     if (_warrantyEndDate == null) {
-      _showError('Lütfen garanti bitiş tarihini seçin.');
+      _showError(l10n.selectWarrantyEndDateWarning);
       return;
     }
 
@@ -351,7 +355,7 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
         if (mounted) Navigator.of(context).pop();
       }
     } catch (e) {
-      if (mounted) _showError('Fatura/Görsel yüklenirken hata oluştu: $e');
+      if (mounted) _showError('$e');
     } finally {
       if (mounted) setState(() => _isUploading = false);
     }
@@ -372,13 +376,14 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final isLoading = ref.watch(warrantyNotifierProvider).isLoading;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          _isEditMode ? 'Garanti Kaydını Düzenle' : 'Garanti Ekle',
+          _isEditMode ? l10n.editWarranty : l10n.addWarranty,
           style: AppTypography.titleLarge.copyWith(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.w700,
@@ -404,41 +409,41 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppTextField(
-                  label: 'Ürün / Cihaz Adı',
-                  hintText: 'Örn: Buzdolabı, Laptop...',
+                  label: l10n.productDeviceName,
+                  hintText: l10n.productDeviceNameHint,
                   controller: _nameCtrl,
                   textInputAction: TextInputAction.next,
                   validator: (v) => (v == null || v.trim().isEmpty)
-                      ? 'Ürün adı zorunludur.'
+                      ? l10n.productNameRequired
                       : null,
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
                 AppTextField(
-                  label: 'Marka',
-                  hintText: 'Örn: Samsung, Apple...',
+                  label: l10n.brand,
+                  hintText: l10n.brandHint,
                   controller: _brandCtrl,
                   textInputAction: TextInputAction.next,
                   validator: (v) => (v == null || v.trim().isEmpty)
-                      ? 'Marka zorunludur.'
+                      ? l10n.brandRequired
                       : null,
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
                 AppTextField(
-                  label: 'Satın Alınan Mağaza',
-                  hintText: 'Örn: MediaMarkt, Trendyol...',
+                  label: l10n.store,
+                  hintText: l10n.storeHint,
                   controller: _storeCtrl,
                   textInputAction: TextInputAction.next,
                   validator: (v) => (v == null || v.trim().isEmpty)
-                      ? 'Mağaza adı zorunludur.'
+                      ? l10n.storeRequired
                       : null,
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
                 DatePickerField(
-                  label: 'Alış Tarihi',
-                  hintText: 'Tarih Seçiniz',
+                  label: l10n.purchaseDate,
+                  hintText: l10n.selectDateHint,
                   selectedDate: _purchaseDate,
                   onDateSelected: (d) => setState(() => _purchaseDate = d),
                   lastDate: DateTime.now(),
@@ -446,8 +451,8 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 DatePickerField(
-                  label: 'Garanti Bitiş Tarihi',
-                  hintText: 'Tarih Seçiniz',
+                  label: l10n.warrantyEndDate,
+                  hintText: l10n.selectDateHint,
                   selectedDate: _warrantyEndDate,
                   onDateSelected: (d) => setState(() => _warrantyEndDate = d),
                   firstDate: DateTime.now().subtract(
@@ -466,7 +471,7 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                     ),
                     const SizedBox(width: AppSpacing.xs),
                     Text(
-                      'Fatura / Belge Mevcut',
+                      l10n.hasInvoice,
                       style: AppTypography.bodyLarge.copyWith(
                         color: colorScheme.onSurface,
                       ),
@@ -477,8 +482,8 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                 if (_hasInvoice) ...[
                   const SizedBox(height: AppSpacing.md),
                   AppTextField(
-                    label: 'Fatura Numarası (İsteğe Bağlı)',
-                    hintText: 'Örn: AMZ-2024-12345',
+                    label: l10n.invoiceNumberOptional,
+                    hintText: l10n.invoiceNumberHint,
                     controller: _invoiceCtrl,
                     textInputAction: TextInputAction.next,
                   ),
@@ -522,8 +527,8 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                     onPressed: _showFilePickerOptions,
                     icon: const Icon(Icons.upload_file_rounded),
                     label: Text(_pickedFileName != null
-                        ? 'Fatura Dosyasını Değiştir'
-                        : '📸 Fatura Görseli / PDF Yükle'),
+                        ? l10n.changeInvoiceFile
+                        : l10n.uploadInvoiceFile),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 44),
                       side: BorderSide(color: colorScheme.outlineVariant),
@@ -534,13 +539,13 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 // ── İkon Seçici ───────────────────────────────────────────
-                _buildIconPicker(colorScheme),
+                _buildIconPicker(colorScheme, l10n),
 
                 const SizedBox(height: AppSpacing.lg),
 
                 AppTextField(
-                  label: 'Notlar (İsteğe Bağlı)',
-                  hintText: 'Ek bilgi...',
+                  label: l10n.optionalNotes,
+                  hintText: l10n.optionalNotesHint,
                   controller: _notesCtrl,
                   maxLines: 3,
                   textInputAction: TextInputAction.done,
@@ -549,8 +554,7 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
                 const SizedBox(height: AppSpacing.xxl),
 
                 PrimaryButton(
-                  text:
-                      _isEditMode ? 'Değişiklikleri Kaydet' : 'Garanti Ekle',
+                  text: _isEditMode ? l10n.saveChanges : l10n.addWarranty,
                   icon: _isEditMode
                       ? Icons.check_rounded
                       : Icons.verified_outlined,
@@ -569,12 +573,12 @@ class _WarrantyFormScreenState extends ConsumerState<WarrantyFormScreen> {
 
   // ── İkon Seçici ───────────────────────────────────────────────────────────
 
-  Widget _buildIconPicker(ColorScheme colorScheme) {
+  Widget _buildIconPicker(ColorScheme colorScheme, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'İkon',
+          l10n.icon,
           style: AppTypography.labelMedium.copyWith(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.w600,

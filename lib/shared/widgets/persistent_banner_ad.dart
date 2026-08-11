@@ -78,14 +78,15 @@ class _PersistentBannerAdWidgetState extends ConsumerState<PersistentBannerAdWid
 
     final theme = Theme.of(context);
 
-    // 3. Reklam alanını SafeArea en altında şık bir şekilde göster
-    return SafeArea(
-      top: false,
-      child: Container(
+    // 3. Reklam alanını şık ve dikeyde dikey çakışma olmadan göster
+    return Container(
+      width: double.infinity,
+      height: _bannerAd!.size.height.toDouble(),
+      alignment: Alignment.center,
+      color: theme.colorScheme.surfaceContainerLow,
+      child: SizedBox(
         width: _bannerAd!.size.width.toDouble(),
         height: _bannerAd!.size.height.toDouble(),
-        alignment: Alignment.center,
-        color: theme.colorScheme.surfaceContainerLow,
         child: AdWidget(ad: _bannerAd!),
       ),
     );

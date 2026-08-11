@@ -16,17 +16,26 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
       body: child,
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          CustomBottomNavigation(
-            navigationShell: navigationShell,
+      bottomNavigationBar: Container(
+        color: theme.colorScheme.surface,
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CustomBottomNavigation(
+                navigationShell: navigationShell,
+              ),
+              const PersistentBannerAdWidget(),
+            ],
           ),
-          const PersistentBannerAdWidget(),
-        ],
+        ),
       ),
     );
   }

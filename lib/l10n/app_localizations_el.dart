@@ -681,212 +681,348 @@ class AppLocalizationsEl extends AppLocalizations {
   String get budgetPlanUpdated => 'Οι στόχοι του προϋπολογισμού ενημερώθηκαν!';
 
   @override
-  String get linkAccountTitle => 'Hesabınızı Bağlayın';
+  String get linkAccountTitle => 'Σύνδεση του Λογαριασμού σας';
 
   @override
   String get guestModeDesc =>
-      'Misafir modundasınız. Verilerinizi kaybetmeden hesabınızı kalıcı yapın.';
+      'Βρίσκεστε σε λειτουργία επισκέπτη. Κάντε το λογαριασμό σας μόνιμο χωρίς να χάσετε δεδομένα.';
 
   @override
   String get guestModeBottomSheetDesc =>
-      'Misafir modundasınız. Verilerinizi kaybetmemek için bir giriş yöntemi seçerek kalıcı bir hesap oluşturun.';
+      'Βρίσκεστε σε λειτουργία επισκέπτη. Επιλέξτε μια μέθοδο σύνδεσης για να δημιουργήσετε μόνιμο λογαριασμό.';
 
   @override
-  String get connectionOptions => 'Bağlantı Seçenekleri';
+  String get connectionOptions => 'Επιλογές Σύνδεσης';
 
   @override
-  String get userRoleLabel => 'Kullanıcı';
+  String get userRoleLabel => 'Χρήστης';
 
   @override
-  String get anonymousSession => 'Anonim Oturum';
+  String get anonymousSession => 'Ανώνυμη Συνεδρία';
 
   @override
-  String get notMemberOfFamilyYet => 'Henüz Bir Aileye Bağlı Değilsiniz';
+  String get notMemberOfFamilyYet => 'Δεν έχετε συνδεθεί ακόμα σε οικογένεια';
 
   @override
-  String get notMemberOfHomeYet => 'Henüz Bir Eve Dahil Değilsiniz';
+  String get notMemberOfHomeYet => 'Δεν έχετε συνδεθεί ακόμα σε σπίτι';
 
   @override
   String get noHomeSyncDesc =>
-      'Ortak ürün ve alışveriş listesi senkronizasyonu için bir ev oluşturun veya var olan bir eve davet kodu ile katılın.';
+      'Δημιουργήστε ένα σπίτι ή συνδεθείτε σε ένα υπάρχον με κωδικό πρόσκλησης για συγχρονισμό.';
 
   @override
-  String get createHome => 'Ev Oluştur';
+  String get createHome => 'Δημιουργία Σπιτιού';
 
   @override
-  String get enterCode => 'Kodu Gir';
+  String get enterCode => 'Εισαγωγή Κωδικού';
 
   @override
-  String get createOrJoinHome => 'Ev Oluştur veya Katıl';
+  String get createOrJoinHome => 'Δημιουργία ή Σύνδεση σε Σπίτι';
 
   @override
-  String get createNewHomeTitle => 'Yeni Ev / Aile Oluştur';
+  String get createNewHomeTitle => 'Δημιουργία Νέου Σπιτιού / Οικογένειας';
 
   @override
   String get createNewHomeDesc =>
-      'Evinize bir isim verin. 1 kısa reklam izleyerek evinizi ücretsiz oluşturabilirsiniz.';
+      'Δώστε ένα όνομα στο σπίτι σας. Μπορείτε να το δημιουργήσετε δωρεάν βλέποντας 1 σύντομη διαφήμιση.';
 
   @override
-  String get homeNameLabel => 'Ev / Aile Adı';
+  String get homeNameLabel => 'Όνομα Σπιτιού / Οικογένειας';
 
   @override
-  String get homeNameHint => 'Örn: Yılmaz Ailesi';
+  String get homeNameHint => 'π.χ. Οικογένεια Παπαδόπουλου';
 
   @override
-  String get homeNameRequired => 'Ev adı zorunludur.';
+  String get homeNameRequired => 'Το όνομα σπιτιού είναι υποχρεωτικό.';
 
   @override
-  String get roleInHomeLabel => 'Evdeki Rolünüz';
+  String get roleInHomeLabel => 'Ο Ρόλος σας στο Σπίτι';
 
   @override
-  String get roleHouseOwner => '👑 Ev Sahibi';
+  String get roleHouseOwner => '👑 Ιδιοκτήτης Σπιτιού';
 
   @override
-  String get roleMother => '👨‍👩‍👧 Anne';
+  String get roleMother => '👨‍👩‍👧 Μητέρα';
 
   @override
-  String get roleFather => '👨‍👩‍👦 Baba';
+  String get roleFather => '👨‍👩‍👦 Πατέρας';
 
   @override
-  String get roleChild => '👶 Çocuk';
+  String get roleChild => '👶 Παιδί';
 
   @override
-  String get roleRoommate => '🏠 Ev Arkadaşı';
+  String get roleRoommate => '🏠 Συγκάτοικος';
 
   @override
-  String get roleOtherResident => '🐾 Diğer/Ev Sakini';
+  String get roleOtherResident => '🐾 Άλλος / Κάτοικος';
 
   @override
   String get noUpcomingExpirationsMessage =>
-      'Yaklaşan son kullanma tarihi bulunan ürün yok. 👍';
+      'Δεν υπάρχουν προϊόντα με κοντινή ημερομηνία λήξης. 👍';
 
   @override
-  String get expirationProductItem => 'Son Kullanma Tarihli Ürün';
+  String get expirationProductItem => 'Προϊόν με Ημερομηνία Λήξης';
 
   @override
   String get expirationProductSubtitle =>
-      'Buzdolabı veya kilerdeki gıda/ilaç takibi';
+      'Παρακολούθηση τροφίμων/φαρμάκων στο ψυγείο ή το ντουλάπι';
 
   @override
-  String get warrantyDocumentItem => 'Garanti Belgesi / Evrak Ekle';
+  String get warrantyDocumentItem => 'Προσθήκη Εγγράφου / Αρχείου Εγγύησης';
 
   @override
   String get warrantyDocumentSubtitle =>
-      'Ürün garanti belgeleri ve cihaz evrakları';
+      'Έγγραφα εγγύησης προϊόντων και αρχεία συσκευών';
 
   @override
-  String get enterQuickExpense => 'Hızlı Harcama Gir';
+  String get enterQuickExpense => 'Γρήγορη Εισαγωγή Εξόδου';
 
   @override
-  String get amountLabel => 'Tutar';
+  String get amountLabel => 'Ποσό';
 
   @override
-  String get amountRequired => 'Lütfen tutar girin';
+  String get amountRequired => 'Παρακαλώ εισάγετε ένα ποσό';
 
   @override
-  String get validAmountRequired => 'Geçerli bir tutar girin';
+  String get validAmountRequired => 'Παρακαλώ εισάγετε ένα έγκυρο ποσό';
 
   @override
-  String get shortDescriptionLabel => 'Kısa Açıklama';
+  String get shortDescriptionLabel => 'Σύντομη Περιγραφή';
 
   @override
-  String get shortDescriptionHint => 'Örn: Kahve, Market vs.';
+  String get shortDescriptionHint => 'π.χ. Καφές, Σούπερ Μάρκετ κλπ.';
 
   @override
-  String get descriptionRequired => 'Açıklama girin';
+  String get descriptionRequired => 'Εισάγετε μια περιγραφή';
 
   @override
-  String get categoryLabel => 'Kategori';
+  String get categoryLabel => 'Κατηγορία';
 
   @override
-  String get addToPaymentSchedule => 'Ödeme Takvimine Ekle';
+  String get addToPaymentSchedule => 'Προσθήκη στο Πρόγραμμα Πληρωμών';
 
   @override
-  String get editPaymentSchedule => 'Ödeme Takvimini Düzenle';
+  String get editPaymentSchedule => 'Επεξεργασία Προγράμματος Πληρωμών';
 
   @override
-  String get billExpenseOption => 'Fatura / Gider';
+  String get billExpenseOption => 'Λογαριασμός / Έξοδο';
 
   @override
-  String get incomeCollectionOption => 'Tahsilat / Gelir';
+  String get incomeCollectionOption => 'Έσοδο / Είσπραξη';
 
   @override
-  String get scheduleTitleLabel => 'Başlık (örn: Elektrik Faturası, Kira)';
+  String get scheduleTitleLabel =>
+      'Τίτλος (π.χ. Λογαριασμός Ρεύματος, Ενοίκιο)';
 
   @override
-  String get titleRequired => 'Lütfen başlık girin';
+  String get titleRequired => 'Παρακαλώ εισάγετε έναν τίτλο';
 
   @override
-  String get dateLabel => 'Tarih';
+  String get dateLabel => 'Ημερομηνία';
 
   @override
-  String get bankAccountNameOptional => 'İlgili Banka / Hesap Adı (Opsiyonel)';
+  String get bankAccountNameOptional =>
+      'Συνδεδεμένη Τράπεζα / Όνομα Λογαριασμού (Προαιρετικό)';
 
   @override
-  String get markAsPaid => 'Ödendi Olarak İşaretle';
+  String get markAsPaid => 'Σήμανση ως Πληρωμένο';
 
   @override
-  String get repeatMonthly => 'Aylık Tekrarlansın';
+  String get repeatMonthly => 'Μηνιαία Επανάληψη';
 
   @override
-  String get oneTimePaymentNotice => 'Tek seferlik ödeme.';
+  String get oneTimePaymentNotice => 'Εφάπαξ πληρωμή.';
 
   @override
-  String get addToScheduleBtn => 'Takvime Ekle';
+  String get addToScheduleBtn => 'Προσθήκη στο Πρόγραμμα';
 
   @override
-  String get addNewDocumentTitle => 'Yeni Belge / Evrak Ekle';
+  String get addNewDocumentTitle => 'Προσθήκη Νέου Εγγράφου / Αρχείου';
 
   @override
-  String get editDocumentTitle => 'Belgeyi Düzenle';
+  String get editDocumentTitle => 'Επεξεργασία Εγγράφου';
 
   @override
-  String get documentTitleLabel => 'Belge Başlığı';
+  String get documentTitleLabel => 'Τίτλος Εγγράφου';
 
   @override
-  String get documentTitleHint => 'Örn: Tapu Senedi, Kira Sözleşmesi';
+  String get documentTitleHint => 'π.χ. Τίτλος Ιδιοκτησίας, Μισθωτήριο';
 
   @override
-  String get notesDescriptionLabel => 'Açıklama / Notlar';
+  String get notesDescriptionLabel => 'Περιγραφή / Σημειώσεις';
 
   @override
   String get notesDescriptionHint =>
-      'Örn: Dosya dolabında 2. gözde saklanıyor.';
+      'π.χ. Αποθηκευμένο στο 2ο συρτάρι της αρχειοθήκης.';
 
   @override
-  String get addFileImage => 'Dosya / Görsel Ekle';
+  String get addFileImage => 'Προσθήκη Αρχείου / Εικόνας';
 
   @override
-  String get selectPhotoDocument => 'Fotoğraf / Belge Seç';
+  String get selectPhotoDocument => 'Επιλογή Φωτογραφίας / Εγγράφου';
 
   @override
-  String get saveDocumentBtn => 'Belgeyi Kaydet';
+  String get saveDocumentBtn => 'Αποθήκευση Εγγράφου';
 
   @override
-  String get addNewContactTitle => 'Yeni İletişim / Servis Numarası Ekle';
+  String get addNewContactTitle => 'Προσθήκη Νέας Επαφής / Αριθμού Σέρβις';
 
   @override
-  String get editContactTitle => 'Numarayı Düzenle';
+  String get editContactTitle => 'Επεξεργασία Αριθμού';
 
   @override
-  String get namePersonLabel => 'İsim / Kişi Adı';
+  String get namePersonLabel => 'Όνομα / Πρόσωπο Επαφής';
 
   @override
-  String get namePersonHint => 'Örn: Tesisatçı Ahmet Usta, Site Yönetimi';
+  String get namePersonHint => 'π.χ. Υδραυλικός Γιώργος, Διαχείριση Κτιρίου';
 
   @override
-  String get titleCategoryLabel => 'Unvan / Kategori';
+  String get titleCategoryLabel => 'Τίτλος / Κατηγορία';
 
   @override
-  String get titleCategoryHint =>
-      'Örn: Su Tesisatı, Elektrik, Çilingir, Yönetim';
+  String get titleCategoryHint => 'π.χ. Υδραυλικά, Ηλεκτρολογικά, Κλειδαράς';
 
   @override
-  String get phoneNumberLabel => 'Telefon Numarası';
+  String get phoneNumberLabel => 'Αριθμός Τηλεφώνου';
 
   @override
-  String get phoneNumberHint => 'Örn: 0555 123 45 67';
+  String get phoneNumberHint => 'π.χ. +30 691 234 5678';
 
   @override
-  String get saveNumberBtn => 'Numarayı Kaydet';
+  String get saveNumberBtn => 'Αποθήκευση Αριθμού';
+
+  @override
+  String get summary => 'Σύνοψη';
+
+  @override
+  String get creditCardExpenses => 'Έξοδα Πιστωτικής Κάρτας';
+
+  @override
+  String get cashExpenses => 'Έξοδα με Μετρητά';
+
+  @override
+  String get quickExpenses => 'Γρήγορα Έξοδα';
+
+  @override
+  String get pleaseSelectDocumentOrPhoto =>
+      'Παρακαλώ επιλέξτε ένα έγγραφο ή φωτογραφία.';
+
+  @override
+  String get editWarranty => 'Επεξεργασία Εγγραφής Εγγύησης';
+
+  @override
+  String get productDeviceName => 'Όνομα Προϊόντος / Συσκευής';
+
+  @override
+  String get productDeviceNameHint => 'π.χ. Ψυγείο, Φορητός Υπολογιστής...';
+
+  @override
+  String get brand => 'Μάρκα';
+
+  @override
+  String get brandHint => 'π.χ. Samsung, Apple...';
+
+  @override
+  String get store => 'Κατάστημα Αγοράς';
+
+  @override
+  String get storeHint => 'π.χ. Κωτσόβολος, Amazon...';
+
+  @override
+  String get purchaseDate => 'Ημερομηνία Αγοράς';
+
+  @override
+  String get warrantyEndDate => 'Ημερομηνία Λήξης Εγγύησης';
+
+  @override
+  String get hasInvoice => 'Διαθέσιμο Τιμολόγιο / Έγγραφο';
+
+  @override
+  String get icon => 'Εικονίδιο';
+
+  @override
+  String get optionalNotes => 'Σημειώσεις (Προαιρετικό)';
+
+  @override
+  String get optionalNotesHint => 'Επιπλέον πληροφορίες...';
+
+  @override
+  String get invoiceNumberOptional => 'Αριθμός Τιμολογίου (Προαιρετικό)';
+
+  @override
+  String get invoiceNumberHint => 'π.χ. AMZ-2024-12345';
+
+  @override
+  String get changeInvoiceFile => 'Αλλαγή Αρχείου Τιμολογίου';
+
+  @override
+  String get uploadInvoiceFile => '📸 Βάλτε Εικόνα Τιμολογίου / PDF';
+
+  @override
+  String get saveChanges => 'Αποθήκευση Αλλαγών';
+
+  @override
+  String get productNameRequired => 'Το όνομα προϊόντος είναι υποχρεωτικό.';
+
+  @override
+  String get brandRequired => 'Η μάρκα είναι υποχρεωτική.';
+
+  @override
+  String get storeRequired => 'Το όνομα καταστήματος είναι υποχρεωτικό.';
+
+  @override
+  String get selectPurchaseDateWarning =>
+      'Παρακαλώ επιλέξτε ημερομηνία αγοράς.';
+
+  @override
+  String get selectWarrantyEndDateWarning =>
+      'Παρακαλώ επιλέξτε ημερομηνία λήξης εγγύησης.';
+
+  @override
+  String get selectDateHint => 'Επιλογή Ημερομηνίας';
+
+  @override
+  String get addNewHomeInfo => 'Προσθήκη Νέων Πληροφοριών Σπιτιού';
+
+  @override
+  String get editHomeInfo => 'Επεξεργασία Πληροφοριών Σπιτιού';
+
+  @override
+  String get categorySelection => 'Επιλογή Κατηγορίας';
+
+  @override
+  String get guideTitle => 'Τίτλος Οδηγού';
+
+  @override
+  String get guideTitleHint =>
+      'π.χ. Συνδρομή Αερίου, Βαλβίδα Νερού, Κωδικός Wi-Fi';
+
+  @override
+  String get importantValueLabel =>
+      'Σημαντική Πληροφορία / Τιμή (Κλικ για Αντιγραφή)';
+
+  @override
+  String get importantValueHint => 'π.χ. Αρ. Συνδρομής: 123456, Κωδικός: xyz';
+
+  @override
+  String get detailedNotesLabel => 'Περιγραφή / Λεπτομερής Σημείωση';
+
+  @override
+  String get detailedNotesHint =>
+      'π.χ. Ο μετρητής είναι στο ντουλάπι του μπαλκονιού δεξιά.';
+
+  @override
+  String get updateInfoBtn => 'Ενημέρωση Πληροφοριών';
+
+  @override
+  String get categoryWifi => '📶 Wi-Fi & Δίκτυο';
+
+  @override
+  String get categoryInstallation => '⚡ Εγκατάσταση & Υπηρεσίες';
+
+  @override
+  String get categoryPasswords => '🔑 Κωδικοί & Πρόσβαση';
+
+  @override
+  String get categoryGeneralHome => 'ℹ️ Γενικές Πληροφορίες Σπιτιού';
 }

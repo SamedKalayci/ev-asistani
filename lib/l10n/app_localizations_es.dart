@@ -682,212 +682,348 @@ class AppLocalizationsEs extends AppLocalizations {
   String get budgetPlanUpdated => '¡Objetivos de presupuesto actualizados!';
 
   @override
-  String get linkAccountTitle => 'Hesabınızı Bağlayın';
+  String get linkAccountTitle => 'Vincular su Cuenta';
 
   @override
   String get guestModeDesc =>
-      'Misafir modundasınız. Verilerinizi kaybetmeden hesabınızı kalıcı yapın.';
+      'Está en modo invitado. Haga su cuenta permanente sin perder datos.';
 
   @override
   String get guestModeBottomSheetDesc =>
-      'Misafir modundasınız. Verilerinizi kaybetmemek için bir giriş yöntemi seçerek kalıcı bir hesap oluşturun.';
+      'Está en modo invitado. Seleccione un método de inicio de sesión para crear una cuenta permanente y no perder sus datos.';
 
   @override
-  String get connectionOptions => 'Bağlantı Seçenekleri';
+  String get connectionOptions => 'Opciones de Inicio de Sesión';
 
   @override
-  String get userRoleLabel => 'Kullanıcı';
+  String get userRoleLabel => 'Usuario';
 
   @override
-  String get anonymousSession => 'Anonim Oturum';
+  String get anonymousSession => 'Sesión Anónima';
 
   @override
-  String get notMemberOfFamilyYet => 'Henüz Bir Aileye Bağlı Değilsiniz';
+  String get notMemberOfFamilyYet => 'Aún no está conectado a una familia';
 
   @override
-  String get notMemberOfHomeYet => 'Henüz Bir Eve Dahil Değilsiniz';
+  String get notMemberOfHomeYet => 'Aún no está conectado a un hogar';
 
   @override
   String get noHomeSyncDesc =>
-      'Ortak ürün ve alışveriş listesi senkronizasyonu için bir ev oluşturun veya var olan bir eve davet kodu ile katılın.';
+      'Cree un hogar o únase a uno existente con un código de invitación para sincronizar elementos y listas de compras.';
 
   @override
-  String get createHome => 'Ev Oluştur';
+  String get createHome => 'Crear Hogar';
 
   @override
-  String get enterCode => 'Kodu Gir';
+  String get enterCode => 'Ingresar Código';
 
   @override
-  String get createOrJoinHome => 'Ev Oluştur veya Katıl';
+  String get createOrJoinHome => 'Crear o Unirse a un Hogar';
 
   @override
-  String get createNewHomeTitle => 'Yeni Ev / Aile Oluştur';
+  String get createNewHomeTitle => 'Crear Nuevo Hogar / Familia';
 
   @override
   String get createNewHomeDesc =>
-      'Evinize bir isim verin. 1 kısa reklam izleyerek evinizi ücretsiz oluşturabilirsiniz.';
+      'Nombre su hogar. Puede crear su hogar gratis viendo 1 anuncio corto.';
 
   @override
-  String get homeNameLabel => 'Ev / Aile Adı';
+  String get homeNameLabel => 'Nombre del Hogar / Familia';
 
   @override
-  String get homeNameHint => 'Örn: Yılmaz Ailesi';
+  String get homeNameHint => 'Ej: Familia García';
 
   @override
-  String get homeNameRequired => 'Ev adı zorunludur.';
+  String get homeNameRequired => 'El nombre del hogar es obligatorio.';
 
   @override
-  String get roleInHomeLabel => 'Evdeki Rolünüz';
+  String get roleInHomeLabel => 'Su Rol en el Hogar';
 
   @override
-  String get roleHouseOwner => '👑 Ev Sahibi';
+  String get roleHouseOwner => '👑 Propietario de la Casa';
 
   @override
-  String get roleMother => '👨‍👩‍👧 Anne';
+  String get roleMother => '👨‍👩‍👧 Madre';
 
   @override
-  String get roleFather => '👨‍👩‍👦 Baba';
+  String get roleFather => '👨‍👩‍👦 Padre';
 
   @override
-  String get roleChild => '👶 Çocuk';
+  String get roleChild => '👶 Hijo/a';
 
   @override
-  String get roleRoommate => '🏠 Ev Arkadaşı';
+  String get roleRoommate => '🏠 Compañero/a de Piso';
 
   @override
-  String get roleOtherResident => '🐾 Diğer/Ev Sakini';
+  String get roleOtherResident => '🐾 Otro / Residente';
 
   @override
   String get noUpcomingExpirationsMessage =>
-      'Yaklaşan son kullanma tarihi bulunan ürün yok. 👍';
+      'Sin productos con fechas de caducidad próximas. 👍';
 
   @override
-  String get expirationProductItem => 'Son Kullanma Tarihli Ürün';
+  String get expirationProductItem => 'Producto con Fecha de Caducidad';
 
   @override
   String get expirationProductSubtitle =>
-      'Buzdolabı veya kilerdeki gıda/ilaç takibi';
+      'Rastrear alimentos/medicinas en nevera o despensa';
 
   @override
-  String get warrantyDocumentItem => 'Garanti Belgesi / Evrak Ekle';
+  String get warrantyDocumentItem => 'Agregar Documento / Archivo de Garantía';
 
   @override
   String get warrantyDocumentSubtitle =>
-      'Ürün garanti belgeleri ve cihaz evrakları';
+      'Documentos de garantía y archivos de electrodomésticos';
 
   @override
-  String get enterQuickExpense => 'Hızlı Harcama Gir';
+  String get enterQuickExpense => 'Añadir Gasto Rápido';
 
   @override
-  String get amountLabel => 'Tutar';
+  String get amountLabel => 'Monto';
 
   @override
-  String get amountRequired => 'Lütfen tutar girin';
+  String get amountRequired => 'Por favor ingrese un monto';
 
   @override
-  String get validAmountRequired => 'Geçerli bir tutar girin';
+  String get validAmountRequired => 'Por favor ingrese un monto válido';
 
   @override
-  String get shortDescriptionLabel => 'Kısa Açıklama';
+  String get shortDescriptionLabel => 'Descripción Corta';
 
   @override
-  String get shortDescriptionHint => 'Örn: Kahve, Market vs.';
+  String get shortDescriptionHint => 'Ej: Café, Compras, etc.';
 
   @override
-  String get descriptionRequired => 'Açıklama girin';
+  String get descriptionRequired => 'Ingrese una descripción';
 
   @override
-  String get categoryLabel => 'Kategori';
+  String get categoryLabel => 'Categoría';
 
   @override
-  String get addToPaymentSchedule => 'Ödeme Takvimine Ekle';
+  String get addToPaymentSchedule => 'Añadir al Calendario de Pagos';
 
   @override
-  String get editPaymentSchedule => 'Ödeme Takvimini Düzenle';
+  String get editPaymentSchedule => 'Editar Calendario de Pagos';
 
   @override
-  String get billExpenseOption => 'Fatura / Gider';
+  String get billExpenseOption => 'Factura / Gasto';
 
   @override
-  String get incomeCollectionOption => 'Tahsilat / Gelir';
+  String get incomeCollectionOption => 'Ingreso / Cobro';
 
   @override
-  String get scheduleTitleLabel => 'Başlık (örn: Elektrik Faturası, Kira)';
+  String get scheduleTitleLabel => 'Título (Ej: Factura de Luz, Alquiler)';
 
   @override
-  String get titleRequired => 'Lütfen başlık girin';
+  String get titleRequired => 'Por favor ingrese un título';
 
   @override
-  String get dateLabel => 'Tarih';
+  String get dateLabel => 'Fecha';
 
   @override
-  String get bankAccountNameOptional => 'İlgili Banka / Hesap Adı (Opsiyonel)';
+  String get bankAccountNameOptional =>
+      'Banco Asociado / Nombre de Cuenta (Opcional)';
 
   @override
-  String get markAsPaid => 'Ödendi Olarak İşaretle';
+  String get markAsPaid => 'Marcar como Pagado';
 
   @override
-  String get repeatMonthly => 'Aylık Tekrarlansın';
+  String get repeatMonthly => 'Repetir Mensualmente';
 
   @override
-  String get oneTimePaymentNotice => 'Tek seferlik ödeme.';
+  String get oneTimePaymentNotice => 'Pago único.';
 
   @override
-  String get addToScheduleBtn => 'Takvime Ekle';
+  String get addToScheduleBtn => 'Añadir al Calendario';
 
   @override
-  String get addNewDocumentTitle => 'Yeni Belge / Evrak Ekle';
+  String get addNewDocumentTitle => 'Agregar Nuevo Documento / Archivo';
 
   @override
-  String get editDocumentTitle => 'Belgeyi Düzenle';
+  String get editDocumentTitle => 'Editar Documento';
 
   @override
-  String get documentTitleLabel => 'Belge Başlığı';
+  String get documentTitleLabel => 'Título del Documento';
 
   @override
-  String get documentTitleHint => 'Örn: Tapu Senedi, Kira Sözleşmesi';
+  String get documentTitleHint => 'Ej: Escritura, Contrato de Alquiler';
 
   @override
-  String get notesDescriptionLabel => 'Açıklama / Notlar';
+  String get notesDescriptionLabel => 'Descripción / Notas';
 
   @override
   String get notesDescriptionHint =>
-      'Örn: Dosya dolabında 2. gözde saklanıyor.';
+      'Ej: Guardado en el segundo cajón del archivador.';
 
   @override
-  String get addFileImage => 'Dosya / Görsel Ekle';
+  String get addFileImage => 'Agregar Archivo / Imagen';
 
   @override
-  String get selectPhotoDocument => 'Fotoğraf / Belge Seç';
+  String get selectPhotoDocument => 'Seleccionar Foto / Documento';
 
   @override
-  String get saveDocumentBtn => 'Belgeyi Kaydet';
+  String get saveDocumentBtn => 'Guardar Documento';
 
   @override
-  String get addNewContactTitle => 'Yeni İletişim / Servis Numarası Ekle';
+  String get addNewContactTitle => 'Agregar Nuevo Contacto / Servicio';
 
   @override
-  String get editContactTitle => 'Numarayı Düzenle';
+  String get editContactTitle => 'Editar Número';
 
   @override
-  String get namePersonLabel => 'İsim / Kişi Adı';
+  String get namePersonLabel => 'Nombre / Persona de Contacto';
 
   @override
-  String get namePersonHint => 'Örn: Tesisatçı Ahmet Usta, Site Yönetimi';
+  String get namePersonHint =>
+      'Ej: Fontanero Juan, Administración del Edificio';
 
   @override
-  String get titleCategoryLabel => 'Unvan / Kategori';
+  String get titleCategoryLabel => 'Título / Categoría';
 
   @override
-  String get titleCategoryHint =>
-      'Örn: Su Tesisatı, Elektrik, Çilingir, Yönetim';
+  String get titleCategoryHint => 'Ej: Fontanería, Electricidad, Cerrajero';
 
   @override
-  String get phoneNumberLabel => 'Telefon Numarası';
+  String get phoneNumberLabel => 'Número de Teléfono';
 
   @override
-  String get phoneNumberHint => 'Örn: 0555 123 45 67';
+  String get phoneNumberHint => 'Ej: +34 600 123 456';
 
   @override
-  String get saveNumberBtn => 'Numarayı Kaydet';
+  String get saveNumberBtn => 'Guardar Número';
+
+  @override
+  String get summary => 'Resumen';
+
+  @override
+  String get creditCardExpenses => 'Gastos de Tarjeta de Crédito';
+
+  @override
+  String get cashExpenses => 'Gastos en Efectivo';
+
+  @override
+  String get quickExpenses => 'Gastos Rápidos';
+
+  @override
+  String get pleaseSelectDocumentOrPhoto =>
+      'Por favor seleccione un documento o foto.';
+
+  @override
+  String get editWarranty => 'Editar Registro de Garantía';
+
+  @override
+  String get productDeviceName => 'Nombre del Producto / Dispositivo';
+
+  @override
+  String get productDeviceNameHint => 'Ej: Nevera, Laptop...';
+
+  @override
+  String get brand => 'Marca';
+
+  @override
+  String get brandHint => 'Ej: Samsung, Apple...';
+
+  @override
+  String get store => 'Tienda de Compra';
+
+  @override
+  String get storeHint => 'Ej: Amazon, BestBuy...';
+
+  @override
+  String get purchaseDate => 'Fecha de Compra';
+
+  @override
+  String get warrantyEndDate => 'Fecha de Vencimiento de Garantía';
+
+  @override
+  String get hasInvoice => 'Factura / Documento Disponible';
+
+  @override
+  String get icon => 'Icono';
+
+  @override
+  String get optionalNotes => 'Notas (Opcional)';
+
+  @override
+  String get optionalNotesHint => 'Información adicional...';
+
+  @override
+  String get invoiceNumberOptional => 'Número de Factura (Opcional)';
+
+  @override
+  String get invoiceNumberHint => 'Ej: AMZ-2024-12345';
+
+  @override
+  String get changeInvoiceFile => 'Cambiar Archivo de Factura';
+
+  @override
+  String get uploadInvoiceFile => '📸 Cargar Imagen de Factura / PDF';
+
+  @override
+  String get saveChanges => 'Guardar Cambios';
+
+  @override
+  String get productNameRequired => 'El nombre del producto es obligatorio.';
+
+  @override
+  String get brandRequired => 'La marca es obligatoria.';
+
+  @override
+  String get storeRequired => 'El nombre de la tienda es obligatorio.';
+
+  @override
+  String get selectPurchaseDateWarning =>
+      'Por favor seleccione la fecha de compra.';
+
+  @override
+  String get selectWarrantyEndDateWarning =>
+      'Por favor seleccione la fecha de fin de garantía.';
+
+  @override
+  String get selectDateHint => 'Seleccionar Fecha';
+
+  @override
+  String get addNewHomeInfo => 'Agregar Nueva Información del Hogar';
+
+  @override
+  String get editHomeInfo => 'Editar Información del Hogar';
+
+  @override
+  String get categorySelection => 'Selección de Categoría';
+
+  @override
+  String get guideTitle => 'Título de la Guía';
+
+  @override
+  String get guideTitleHint =>
+      'Ej: Suscripción de Gas, Válvula de Agua, Clave Wi-Fi';
+
+  @override
+  String get importantValueLabel =>
+      'Información Importante / Valor (Clic para Copiar)';
+
+  @override
+  String get importantValueHint => 'Ej: N° Sub: 123456, Clave: xyz';
+
+  @override
+  String get detailedNotesLabel => 'Descripción / Nota Detallada';
+
+  @override
+  String get detailedNotesHint =>
+      'Ej: El medidor está en el armario del balcón a la derecha.';
+
+  @override
+  String get updateInfoBtn => 'Actualizar Información';
+
+  @override
+  String get categoryWifi => '📶 Wi-Fi y Red';
+
+  @override
+  String get categoryInstallation => '⚡ Instalación y Servicios';
+
+  @override
+  String get categoryPasswords => '🔑 Contraseñas y Códigos';
+
+  @override
+  String get categoryGeneralHome => 'ℹ️ Información General del Hogar';
 }

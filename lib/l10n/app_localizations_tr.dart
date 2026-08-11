@@ -892,4 +892,139 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get saveNumberBtn => 'Numarayı Kaydet';
+
+  @override
+  String get summary => 'Özet';
+
+  @override
+  String get creditCardExpenses => 'Kart Harcamaları';
+
+  @override
+  String get cashExpenses => 'Nakit Harcamaları';
+
+  @override
+  String get quickExpenses => 'Hızlı Harcamalar';
+
+  @override
+  String get pleaseSelectDocumentOrPhoto =>
+      'Lütfen bir belge veya fotoğraf seçin.';
+
+  @override
+  String get editWarranty => 'Garanti Kaydını Düzenle';
+
+  @override
+  String get productDeviceName => 'Ürün / Cihaz Adı';
+
+  @override
+  String get productDeviceNameHint => 'Örn: Buzdolabı, Laptop...';
+
+  @override
+  String get brand => 'Marka';
+
+  @override
+  String get brandHint => 'Örn: Samsung, Apple...';
+
+  @override
+  String get store => 'Satın Alınan Mağaza';
+
+  @override
+  String get storeHint => 'Örn: MediaMarkt, Trendyol...';
+
+  @override
+  String get purchaseDate => 'Alış Tarihi';
+
+  @override
+  String get warrantyEndDate => 'Garanti Bitiş Tarihi';
+
+  @override
+  String get hasInvoice => 'Fatura / Belge Mevcut';
+
+  @override
+  String get icon => 'İkon';
+
+  @override
+  String get optionalNotes => 'Notlar (İsteğe Bağlı)';
+
+  @override
+  String get optionalNotesHint => 'Ek bilgi...';
+
+  @override
+  String get invoiceNumberOptional => 'Fatura Numarası (İsteğe Bağlı)';
+
+  @override
+  String get invoiceNumberHint => 'Örn: AMZ-2024-12345';
+
+  @override
+  String get changeInvoiceFile => 'Fatura Dosyasını Değiştir';
+
+  @override
+  String get uploadInvoiceFile => '📸 Fatura Görseli / PDF Yükle';
+
+  @override
+  String get saveChanges => 'Değişiklikleri Kaydet';
+
+  @override
+  String get productNameRequired => 'Ürün adı zorunludur.';
+
+  @override
+  String get brandRequired => 'Marka zorunludur.';
+
+  @override
+  String get storeRequired => 'Mağaza adı zorunludur.';
+
+  @override
+  String get selectPurchaseDateWarning => 'Lütfen alış tarihini seçin.';
+
+  @override
+  String get selectWarrantyEndDateWarning =>
+      'Lütfen garanti bitiş tarihini seçin.';
+
+  @override
+  String get selectDateHint => 'Tarih Seçiniz';
+
+  @override
+  String get addNewHomeInfo => 'Yeni Ev Bilgisi Ekle';
+
+  @override
+  String get editHomeInfo => 'Ev Bilgisini Düzenle';
+
+  @override
+  String get categorySelection => 'Kategori Seçimi';
+
+  @override
+  String get guideTitle => 'Rehber Başlığı';
+
+  @override
+  String get guideTitleHint =>
+      'Örn: Doğalgaz Aboneliği, Su Vanası, Wi-Fi Şifresi';
+
+  @override
+  String get importantValueLabel =>
+      'Önemli Bilgi / Değer (Tek Tıkla Kopyalanabilir)';
+
+  @override
+  String get importantValueHint =>
+      'Örn: Abone No: 123456, Şifre: xyz123, Mavi Vana';
+
+  @override
+  String get detailedNotesLabel => 'Açıklama / Detaylı Not';
+
+  @override
+  String get detailedNotesHint =>
+      'Örn: Sayaç balkondaki dolabın sağ iç kısmındadır.';
+
+  @override
+  String get updateInfoBtn => 'Bilgiyi Güncelle';
+
+  @override
+  String get categoryWifi => '📶 Wi-Fi & Ağ';
+
+  @override
+  String get categoryInstallation => '⚡ Tesisat & Abonelik';
+
+  @override
+  String get categoryPasswords => '🔑 Şifre & Kodlar';
+
+  @override
+  String get categoryGeneralHome => 'ℹ️ Genel Ev Bilgisi';
 }

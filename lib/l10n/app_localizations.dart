@@ -1771,6 +1771,264 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Numarayı Kaydet'**
   String get saveNumberBtn;
+
+  /// No description provided for @summary.
+  ///
+  /// In tr, this message translates to:
+  /// **'Özet'**
+  String get summary;
+
+  /// No description provided for @creditCardExpenses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kart Harcamaları'**
+  String get creditCardExpenses;
+
+  /// No description provided for @cashExpenses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nakit Harcamaları'**
+  String get cashExpenses;
+
+  /// No description provided for @quickExpenses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hızlı Harcamalar'**
+  String get quickExpenses;
+
+  /// No description provided for @pleaseSelectDocumentOrPhoto.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen bir belge veya fotoğraf seçin.'**
+  String get pleaseSelectDocumentOrPhoto;
+
+  /// No description provided for @editWarranty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Garanti Kaydını Düzenle'**
+  String get editWarranty;
+
+  /// No description provided for @productDeviceName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün / Cihaz Adı'**
+  String get productDeviceName;
+
+  /// No description provided for @productDeviceNameHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Buzdolabı, Laptop...'**
+  String get productDeviceNameHint;
+
+  /// No description provided for @brand.
+  ///
+  /// In tr, this message translates to:
+  /// **'Marka'**
+  String get brand;
+
+  /// No description provided for @brandHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Samsung, Apple...'**
+  String get brandHint;
+
+  /// No description provided for @store.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satın Alınan Mağaza'**
+  String get store;
+
+  /// No description provided for @storeHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: MediaMarkt, Trendyol...'**
+  String get storeHint;
+
+  /// No description provided for @purchaseDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alış Tarihi'**
+  String get purchaseDate;
+
+  /// No description provided for @warrantyEndDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Garanti Bitiş Tarihi'**
+  String get warrantyEndDate;
+
+  /// No description provided for @hasInvoice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fatura / Belge Mevcut'**
+  String get hasInvoice;
+
+  /// No description provided for @icon.
+  ///
+  /// In tr, this message translates to:
+  /// **'İkon'**
+  String get icon;
+
+  /// No description provided for @optionalNotes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Notlar (İsteğe Bağlı)'**
+  String get optionalNotes;
+
+  /// No description provided for @optionalNotesHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ek bilgi...'**
+  String get optionalNotesHint;
+
+  /// No description provided for @invoiceNumberOptional.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fatura Numarası (İsteğe Bağlı)'**
+  String get invoiceNumberOptional;
+
+  /// No description provided for @invoiceNumberHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: AMZ-2024-12345'**
+  String get invoiceNumberHint;
+
+  /// No description provided for @changeInvoiceFile.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fatura Dosyasını Değiştir'**
+  String get changeInvoiceFile;
+
+  /// No description provided for @uploadInvoiceFile.
+  ///
+  /// In tr, this message translates to:
+  /// **'📸 Fatura Görseli / PDF Yükle'**
+  String get uploadInvoiceFile;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklikleri Kaydet'**
+  String get saveChanges;
+
+  /// No description provided for @productNameRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürün adı zorunludur.'**
+  String get productNameRequired;
+
+  /// No description provided for @brandRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Marka zorunludur.'**
+  String get brandRequired;
+
+  /// No description provided for @storeRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mağaza adı zorunludur.'**
+  String get storeRequired;
+
+  /// No description provided for @selectPurchaseDateWarning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen alış tarihini seçin.'**
+  String get selectPurchaseDateWarning;
+
+  /// No description provided for @selectWarrantyEndDateWarning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen garanti bitiş tarihini seçin.'**
+  String get selectWarrantyEndDateWarning;
+
+  /// No description provided for @selectDateHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarih Seçiniz'**
+  String get selectDateHint;
+
+  /// No description provided for @addNewHomeInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Ev Bilgisi Ekle'**
+  String get addNewHomeInfo;
+
+  /// No description provided for @editHomeInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev Bilgisini Düzenle'**
+  String get editHomeInfo;
+
+  /// No description provided for @categorySelection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategori Seçimi'**
+  String get categorySelection;
+
+  /// No description provided for @guideTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rehber Başlığı'**
+  String get guideTitle;
+
+  /// No description provided for @guideTitleHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Doğalgaz Aboneliği, Su Vanası, Wi-Fi Şifresi'**
+  String get guideTitleHint;
+
+  /// No description provided for @importantValueLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önemli Bilgi / Değer (Tek Tıkla Kopyalanabilir)'**
+  String get importantValueLabel;
+
+  /// No description provided for @importantValueHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Abone No: 123456, Şifre: xyz123, Mavi Vana'**
+  String get importantValueHint;
+
+  /// No description provided for @detailedNotesLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açıklama / Detaylı Not'**
+  String get detailedNotesLabel;
+
+  /// No description provided for @detailedNotesHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Sayaç balkondaki dolabın sağ iç kısmındadır.'**
+  String get detailedNotesHint;
+
+  /// No description provided for @updateInfoBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilgiyi Güncelle'**
+  String get updateInfoBtn;
+
+  /// No description provided for @categoryWifi.
+  ///
+  /// In tr, this message translates to:
+  /// **'📶 Wi-Fi & Ağ'**
+  String get categoryWifi;
+
+  /// No description provided for @categoryInstallation.
+  ///
+  /// In tr, this message translates to:
+  /// **'⚡ Tesisat & Abonelik'**
+  String get categoryInstallation;
+
+  /// No description provided for @categoryPasswords.
+  ///
+  /// In tr, this message translates to:
+  /// **'🔑 Şifre & Kodlar'**
+  String get categoryPasswords;
+
+  /// No description provided for @categoryGeneralHome.
+  ///
+  /// In tr, this message translates to:
+  /// **'ℹ️ Genel Ev Bilgisi'**
+  String get categoryGeneralHome;
 }
 
 class _AppLocalizationsDelegate

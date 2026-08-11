@@ -892,4 +892,137 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveNumberBtn => 'Save Number';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get creditCardExpenses => 'Credit Card Expenses';
+
+  @override
+  String get cashExpenses => 'Cash Expenses';
+
+  @override
+  String get quickExpenses => 'Quick Expenses';
+
+  @override
+  String get pleaseSelectDocumentOrPhoto =>
+      'Please select a document or photo.';
+
+  @override
+  String get editWarranty => 'Edit Warranty Record';
+
+  @override
+  String get productDeviceName => 'Product / Device Name';
+
+  @override
+  String get productDeviceNameHint => 'e.g. Fridge, Laptop...';
+
+  @override
+  String get brand => 'Brand';
+
+  @override
+  String get brandHint => 'e.g. Samsung, Apple...';
+
+  @override
+  String get store => 'Store';
+
+  @override
+  String get storeHint => 'e.g. Amazon, BestBuy...';
+
+  @override
+  String get purchaseDate => 'Purchase Date';
+
+  @override
+  String get warrantyEndDate => 'Warranty End Date';
+
+  @override
+  String get hasInvoice => 'Invoice / Document Available';
+
+  @override
+  String get icon => 'Icon';
+
+  @override
+  String get optionalNotes => 'Notes (Optional)';
+
+  @override
+  String get optionalNotesHint => 'Additional info...';
+
+  @override
+  String get invoiceNumberOptional => 'Invoice Number (Optional)';
+
+  @override
+  String get invoiceNumberHint => 'e.g. AMZ-2024-12345';
+
+  @override
+  String get changeInvoiceFile => 'Change Invoice File';
+
+  @override
+  String get uploadInvoiceFile => '📸 Upload Invoice Image / PDF';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get productNameRequired => 'Product name is required.';
+
+  @override
+  String get brandRequired => 'Brand is required.';
+
+  @override
+  String get storeRequired => 'Store name is required.';
+
+  @override
+  String get selectPurchaseDateWarning => 'Please select purchase date.';
+
+  @override
+  String get selectWarrantyEndDateWarning => 'Please select warranty end date.';
+
+  @override
+  String get selectDateHint => 'Select Date';
+
+  @override
+  String get addNewHomeInfo => 'Add New Home Info';
+
+  @override
+  String get editHomeInfo => 'Edit Home Info';
+
+  @override
+  String get categorySelection => 'Category Selection';
+
+  @override
+  String get guideTitle => 'Guide Title';
+
+  @override
+  String get guideTitleHint =>
+      'e.g. Gas Subscription, Water Valve, Wi-Fi Password';
+
+  @override
+  String get importantValueLabel => 'Important Info / Value (Click to Copy)';
+
+  @override
+  String get importantValueHint =>
+      'e.g. Sub No: 123456, Password: xyz, Blue Valve';
+
+  @override
+  String get detailedNotesLabel => 'Description / Detailed Note';
+
+  @override
+  String get detailedNotesHint =>
+      'e.g. Meter is inside balcony cabinet on right.';
+
+  @override
+  String get updateInfoBtn => 'Update Info';
+
+  @override
+  String get categoryWifi => '📶 Wi-Fi & Network';
+
+  @override
+  String get categoryInstallation => '⚡ Installation & Utilities';
+
+  @override
+  String get categoryPasswords => '🔑 Passwords & Codes';
+
+  @override
+  String get categoryGeneralHome => 'ℹ️ General Home Info';
 }

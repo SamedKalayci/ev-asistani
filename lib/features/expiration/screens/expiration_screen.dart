@@ -423,10 +423,12 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: colorScheme.primary,
                   side: BorderSide(color: colorScheme.primary.withValues(alpha: 0.5)),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  minimumSize: const Size(0, 32),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                icon: const Icon(Icons.add_shopping_cart_rounded, size: 18),
-                label: Text(l10n.trashAndShopping),
+                icon: const Icon(Icons.add_shopping_cart_rounded, size: 16),
+                label: Text(l10n.trashAndShopping, style: const TextStyle(fontSize: 12)),
               )
             : null,
       ),

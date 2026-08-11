@@ -15,7 +15,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/permission_utils.dart';
-import '../../../core/utils/l10n_helper.dart';
 import '../models/vault_item_model.dart';
 import '../providers/vault_provider.dart';
 
@@ -182,6 +181,7 @@ class _VaultDocumentFormBottomSheetState
   }
 
   void _showFilePickerOptions() {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -206,7 +206,7 @@ class _VaultDocumentFormBottomSheetState
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Dosya / Görsel Seç',
+                l10n.addFileImage,
                 style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -220,8 +220,7 @@ class _VaultDocumentFormBottomSheetState
                   ),
                   child: const Icon(Icons.camera_alt_rounded, color: AppColors.primary),
                 ),
-                title: const Text('📸 Fotoğraf Çek'),
-                subtitle: const Text('Kamera ile anlık fotoğraf'),
+                title: const Text('📸 Kamera'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickImage(ImageSource.camera);
@@ -237,8 +236,7 @@ class _VaultDocumentFormBottomSheetState
                   ),
                   child: const Icon(Icons.photo_library_rounded, color: Color(0xFF2563EB)),
                 ),
-                title: const Text('🖼️ Galeriden Seç'),
-                subtitle: const Text('Telefondaki fotoğraf veya görsel'),
+                title: const Text('🖼️ Galeri'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickImage(ImageSource.gallery);
@@ -254,8 +252,7 @@ class _VaultDocumentFormBottomSheetState
                   ),
                   child: const Icon(Icons.picture_as_pdf_rounded, color: Color(0xFFDC2626)),
                 ),
-                title: const Text('📄 PDF / Belge Seç'),
-                subtitle: const Text('PDF, Word veya Excel dosyası'),
+                title: const Text('📄 PDF / Document'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickFile();
@@ -320,9 +317,6 @@ class _VaultDocumentFormBottomSheetState
         await repo.updateVaultItem(familyId, widget.item!.id, updateData);
         if (mounted) {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Belge güncellendi! ✅')),
-          );
         }
       } else {
         final newItem = VaultItemModel(
@@ -337,15 +331,12 @@ class _VaultDocumentFormBottomSheetState
         await repo.addVaultItem(familyId, newItem);
         if (mounted) {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Belge kaydedildi! ✅')),
-          );
         }
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Dosya yükleme hatası: $e')),
+          SnackBar(content: Text('$e')),
         );
       }
     } finally {
@@ -400,7 +391,7 @@ class _VaultDocumentFormBottomSheetState
               const SizedBox(height: AppSpacing.lg),
               Center(
                 child: Text(
-                  _isEditing ? 'Belgeyi Düzenle' : 'Yeni Belge / Evrak Ekle',
+                  _isEditing ? l10n.editDocumentTitle : l10n.addNewDocumentTitle,
                   style: AppTypography.headlineSmall.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -409,16 +400,16 @@ class _VaultDocumentFormBottomSheetState
               const SizedBox(height: AppSpacing.lg),
 
               AppTextField(
-                label: 'Belge Başlığı',
-                hintText: 'Örn: Tapu Senedi, Kira Sözleşmesi',
+                label: l10n.documentTitleLabel,
+                hintText: l10n.documentTitleHint,
                 controller: _titleController,
                 validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Başlık zorunludur.' : null,
+                    (v == null || v.trim().isEmpty) ? l10n.titleRequired : null,
               ),
               const SizedBox(height: AppSpacing.md),
               AppTextField(
-                label: 'Açıklama / Notlar',
-                hintText: 'Örn: Dosya dolabında 2. gözde saklanıyor.',
+                label: l10n.notesDescriptionLabel,
+                hintText: l10n.notesDescriptionHint,
                 controller: _descController,
               ),
 
@@ -426,7 +417,7 @@ class _VaultDocumentFormBottomSheetState
 
               // ── Dosya / Görsel Seçici ────────────────────────────────────
               Text(
-                'Dosya / Görsel Ekle',
+                l10n.addFileImage,
                 style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: AppSpacing.xs),

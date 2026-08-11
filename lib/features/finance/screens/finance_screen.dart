@@ -184,7 +184,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
                   const SizedBox(width: AppSpacing.xs),
                   ActionChip(
                     avatar: const Icon(Icons.bar_chart_rounded, size: 18, color: Colors.indigo),
-                    label: Text(l10n.viewSummary, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.indigo)),
+                    label: Text(l10n.summary, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.indigo)),
                     backgroundColor: Colors.indigo.withValues(alpha: 0.1),
                     side: BorderSide(color: Colors.indigo.withValues(alpha: 0.3)),
                     shape: const RoundedRectangleBorder(borderRadius: AppRadius.borderFull),

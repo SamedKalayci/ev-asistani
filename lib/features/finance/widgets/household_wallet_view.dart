@@ -58,6 +58,12 @@ class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
     }).toList();
 
     final expenses = walletItems.where((i) => i.type == FinanceType.expense).toList();
+    expenses.sort((a, b) {
+      final dateA = a.dueDate ?? a.createdAt ?? DateTime(2000);
+      final dateB = b.dueDate ?? b.createdAt ?? DateTime(2000);
+      return dateB.compareTo(dateA);
+    });
+
     final totalWalletExpense = expenses.fold(0.0, (sum, item) => sum + item.amount);
 
     final filteredExpenses = expenses.where((e) {
@@ -65,6 +71,12 @@ class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
       if (e.accountName == null) return _selectedFilter == 'Nakit';
       return e.accountName!.startsWith(_selectedFilter);
     }).toList();
+
+    filteredExpenses.sort((a, b) {
+      final dateA = a.dueDate ?? a.createdAt ?? DateTime(2000);
+      final dateB = b.dueDate ?? b.createdAt ?? DateTime(2000);
+      return dateB.compareTo(dateA);
+    });
 
     return SingleChildScrollView(
       padding: const EdgeInsets.only(
@@ -367,67 +379,83 @@ class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
         ref.read(financeRepositoryProvider).deleteFinanceItem(item.familyId, item.id);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${item.title} ${l10n.deleted}.')));
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: item.customCategoryName != null && item.customCategoryName!.isNotEmpty
-                    ? colorScheme.secondaryContainer.withValues(alpha: 0.3)
-                    : colorScheme.errorContainer.withValues(alpha: 0.3),
-                borderRadius: AppRadius.borderSm,
-              ),
-              child: Icon(
-                item.customCategoryName != null && item.customCategoryName!.isNotEmpty
-                    ? Icons.star_outline_rounded
-                    : item.category.icon,
-                size: 16,
-                color: item.customCategoryName != null && item.customCategoryName!.isNotEmpty
-                    ? colorScheme.secondary
-                    : AppColors.error,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.customCategoryName ?? item.category.localizedName(context),
-                    style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm).copyWith(right: 12),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: item.customCategoryName != null && item.customCategoryName!.isNotEmpty
+                        ? colorScheme.secondaryContainer.withValues(alpha: 0.3)
+                        : colorScheme.errorContainer.withValues(alpha: 0.3),
+                    borderRadius: AppRadius.borderSm,
                   ),
-                  Text(
-                    '$userName • ${item.accountName ?? l10n.cash}',
-                    style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
+                  child: Icon(
+                    item.customCategoryName != null && item.customCategoryName!.isNotEmpty
+                        ? Icons.star_outline_rounded
+                        : item.category.icon,
+                    size: 16,
+                    color: item.customCategoryName != null && item.customCategoryName!.isNotEmpty
+                        ? colorScheme.secondary
+                        : AppColors.error,
                   ),
-                  if (item.title.isNotEmpty) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      item.title,
-                      style: AppTypography.labelSmall.copyWith(
-                        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                        fontStyle: FontStyle.italic,
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.customCategoryName ?? item.category.localizedName(context),
+                        style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ],
+                      Text(
+                        '$userName • ${item.accountName ?? l10n.cash}',
+                        style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
+                      ),
+                      if (item.title.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          item.title,
+                          style: AppTypography.labelSmall.copyWith(
+                            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                            fontStyle: FontStyle.italic,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                Text(
+                  '-${_formatCurrency(item.amount, ref.read(currencySymbolProvider))}',
+                  style: AppTypography.bodyMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 4,
+            bottom: 4,
+            child: Container(
+              width: 3,
+              decoration: BoxDecoration(
+                color: AppColors.error,
+                borderRadius: BorderRadius.circular(3),
               ),
             ),
-            Text(
-              '-${_formatCurrency(item.amount, ref.read(currencySymbolProvider))}',
-              style: AppTypography.bodyMedium.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
