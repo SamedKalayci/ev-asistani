@@ -1056,4 +1056,16 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get aboutCopyright => '© 2026 Ev Asistanı. Bütün hüquqlar qorunur.';
+
+  @override
+  String get addShoppingItemSub =>
+      'Çatışmayan ərzaq, təmizlik və ev ehtiyacları';
+
+  @override
+  String get guestLoginSuccess => 'Qonaq sessiyanı başladıldı. 👋';
+
+  @override
+  String guestLoginFailed(String error) {
+    return 'Qonaq girişi uğursuz oldu: $error';
+  }
 }

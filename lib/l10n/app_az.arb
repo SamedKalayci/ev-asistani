@@ -357,5 +357,13 @@
   "customRoleHint": "Rol adını yazın...",
   "aboutDeveloper": "Tərtibatçı: Samed Kalaycı",
   "aboutDescription": "Təsvir: Ağıllı ev təşkilatı.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Bütün hüquqlar qorunur."
+  "aboutCopyright": "© 2026 Ev Asistanı. Bütün hüquqlar qorunur.",
+  "addShoppingItemSub": "Çatışmayan ərzaq, təmizlik və ev ehtiyacları",
+  "guestLoginSuccess": "Qonaq sessiyanı başladıldı. 👋",
+  "guestLoginFailed": "Qonaq girişi uğursuz oldu: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }

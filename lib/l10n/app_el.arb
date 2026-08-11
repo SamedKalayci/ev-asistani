@@ -357,5 +357,13 @@
   "customRoleHint": "Πληκτρολογήστε ρόλο...",
   "aboutDeveloper": "Δημιουργός: Samed Kalaycı",
   "aboutDescription": "Περιγραφή: Έξυπνη οργάνωση σπιτιού.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Με την επιφύλαξη παντός δικαιώματος."
+  "aboutCopyright": "© 2026 Ev Asistanı. Με την επιφύλαξη παντός δικαιώματος.",
+  "addShoppingItemSub": "Τρόφιμα, καθαρισμός και οικιακές ανάγκες",
+  "guestLoginSuccess": "Η συνεδρία επισκέπτη ξεκίνησε. 👋",
+  "guestLoginFailed": "Σύνδεση επισκέπτη απέτυχε: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }

@@ -2107,6 +2107,24 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'© 2026 Ev Asistanı. Tüm hakları saklıdır.'**
   String get aboutCopyright;
+
+  /// No description provided for @addShoppingItemSub.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eksilen gıda, temizlik ve ev ihtiyaçları'**
+  String get addShoppingItemSub;
+
+  /// No description provided for @guestLoginSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir oturumu ile giriş yapıldı. 👋'**
+  String get guestLoginSuccess;
+
+  /// No description provided for @guestLoginFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir girişi başarısız: {error}'**
+  String guestLoginFailed(String error);
 }
 
 class _AppLocalizationsDelegate

@@ -382,6 +382,14 @@
   "customRoleHint": "Rol adını yazın (örn. Amca, Misafir)...",
   "aboutDeveloper": "Geliştirici: Samed Kalaycı",
   "aboutDescription": "Açıklama: Ev içi düzen ve ortak liste yönetimi uygulaması.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Tüm hakları saklıdır."
+  "aboutCopyright": "© 2026 Ev Asistanı. Tüm hakları saklıdır.",
+  "addShoppingItemSub": "Eksilen gıda, temizlik ve ev ihtiyaçları",
+  "guestLoginSuccess": "Misafir oturumu ile giriş yapıldı. 👋",
+  "guestLoginFailed": "Misafir girişi başarısız: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }
 

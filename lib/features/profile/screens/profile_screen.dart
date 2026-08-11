@@ -29,6 +29,7 @@ import '../../finance/widgets/account_form_bottom_sheet.dart';
 import '../../finance/widgets/quick_notes_management_page.dart';
 import '../../finance/screens/category_budgets_screen.dart';
 import '../../../core/utils/l10n_helper.dart';
+import '../../premium/widgets/paywall_bottom_sheet.dart';
 
 /// Profil ve Evim Aile Yönetimi Ekranı (ProfileScreen).
 /// Real-time Firestore & Firebase Auth senkronizasyonu ile.
@@ -423,8 +424,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<void> _showCreateFamilyDialog() async {
     final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
+    final roleController = TextEditingController(text: l10n.roleHouseOwner);
     final formKey = GlobalKey<FormState>();
-    String? selectedRole = l10n.roleHouseOwner; // Varsayılan
 
     final result = await showDialog<Map<String, String>?>(
       context: context,
@@ -447,26 +448,35 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         (v == null || v.trim().isEmpty) ? l10n.homeNameRequired : null,
                   ),
                   const SizedBox(height: AppSpacing.md),
-                  DropdownButtonFormField<String>(
-                    value: selectedRole,
+                  // Rol Adı — serbest metin girişi + hızlı öneri chip'leri
+                  TextFormField(
+                    controller: roleController,
                     decoration: InputDecoration(
                       labelText: l10n.roleInHomeLabel,
+                      hintText: l10n.roleHouseOwner,
                       border: OutlineInputBorder(
                         borderRadius: AppRadius.borderMd,
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
-                    items: [
-                      DropdownMenuItem(value: l10n.roleHouseOwner, child: Text(l10n.roleHouseOwner)),
-                      DropdownMenuItem(value: l10n.roleMother, child: Text(l10n.roleMother)),
-                      DropdownMenuItem(value: l10n.roleFather, child: Text(l10n.roleFather)),
-                      DropdownMenuItem(value: l10n.roleChild, child: Text(l10n.roleChild)),
-                      DropdownMenuItem(value: l10n.roleRoommate, child: Text(l10n.roleRoommate)),
-                      DropdownMenuItem(value: l10n.roleOtherResident, child: Text(l10n.roleOtherResident)),
-                    ],
-                    onChanged: (val) {
-                      setState(() => selectedRole = val);
-                    },
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  // Hızlı Seçim Chip'leri
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 4,
+                    children: [
+                      l10n.roleHouseOwner,
+                      l10n.roleMother,
+                      l10n.roleFather,
+                      l10n.roleChild,
+                      l10n.roleRoommate,
+                    ].map((role) => ActionChip(
+                      label: Text(role, style: AppTypography.labelSmall),
+                      onPressed: () => setState(() => roleController.text = role),
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                    )).toList(),
                   ),
                 ],
               ),
@@ -481,7 +491,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 label: Text(l10n.createHome),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    Navigator.of(ctx).pop({'name': controller.text.trim(), 'role': selectedRole ?? l10n.roleHouseOwner});
+                    Navigator.of(ctx).pop({'name': controller.text.trim(), 'role': roleController.text.trim().isEmpty ? l10n.roleHouseOwner : roleController.text.trim()});
                   }
                 },
               ),
@@ -925,13 +935,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final displayName = user?.displayName.isNotEmpty == true ? user!.displayName : l10n.userRoleLabel;
     final email = user?.email.isNotEmpty == true ? user!.email : l10n.anonymousSession;
 
-    final avatarUrl = user?.effectiveAvatarUrl;
+    final avatarUrl = user?.effectiveAvatarUrl ?? '';
     final avatarType = user?.safeAvatarType ?? AvatarType.presetAvatar;
-    final isEmoji = avatarType == AvatarType.emoji &&
-        avatarUrl != null &&
-        avatarUrl.isNotEmpty;
-    final isNetworkImage =
-        avatarUrl != null && avatarUrl.startsWith('http') && !isEmoji;
+    final isEmoji = avatarType == AvatarType.emoji && avatarUrl.isNotEmpty;
+    final isNetworkImage = avatarUrl.startsWith('http') && !isEmoji;
+    final isLocalAsset = avatarUrl.startsWith('assets/') && !isEmoji;
 
     return Container(
       width: double.infinity,
@@ -965,13 +973,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     backgroundColor: colorScheme.primaryContainer,
                     backgroundImage:
                         isNetworkImage ? NetworkImage(avatarUrl) : null,
-                    child: isEmoji
-                        ? Text(
-                            avatarUrl,
-                            style: const TextStyle(fontSize: 38),
-                          )
-                        : (!isNetworkImage
-                            ? Text(
+                    child: isLocalAsset
+                        ? ClipOval(
+                            child: Image.asset(
+                              avatarUrl,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Text(
                                 displayName.isNotEmpty
                                     ? displayName[0].toUpperCase()
                                     : 'K',
@@ -979,8 +988,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   color: colorScheme.onPrimaryContainer,
                                   fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                            ),
+                          )
+                        : isEmoji
+                            ? Text(
+                                avatarUrl,
+                                style: const TextStyle(fontSize: 38),
                               )
-                            : null),
+                            : (!isNetworkImage
+                                ? Text(
+                                    displayName.isNotEmpty
+                                        ? displayName[0].toUpperCase()
+                                        : 'K',
+                                    style: AppTypography.displayMedium.copyWith(
+                                      color: colorScheme.onPrimaryContainer,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : null),
                   ),
                 ),
               ),
@@ -1035,31 +1061,72 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _buildAdFreeCard(BuildContext context, ColorScheme colorScheme) {
     final l10n = AppLocalizations.of(context)!;
     final isAdFree = ref.watch(isAdFreeProvider);
+    final isPremium = ref.watch(isPremiumProvider);
+    final isActive = isAdFree || isPremium;
 
-    if (isAdFree) {
+    if (isActive) {
       return Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.md,
         ),
         decoration: BoxDecoration(
-          color: const Color(0xFFDCFCE7),
-          borderRadius: AppRadius.borderLg,
-          border: Border.all(
-            color: const Color(0xFF22C55E).withValues(alpha: 0.3),
-            width: 1.5,
+          gradient: const LinearGradient(
+            colors: [Color(0xFF064E3B), Color(0xFF065F46)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+          borderRadius: AppRadius.borderLg,
+          boxShadow: AppShadows.sm,
         ),
         child: Row(
           children: [
-            const Icon(Icons.check_circle_rounded, color: Color(0xFF16A34A), size: 24),
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Text('👑', style: TextStyle(fontSize: 20)),
+              ),
+            ),
             const SizedBox(width: AppSpacing.md),
             Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isPremium ? 'PRO Üyelik Aktif ✨' : l10n.removeAdsActive,
+                    style: AppTypography.titleSmall.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    isPremium
+                        ? 'Tüm PRO özelliklerine erisebilirsiniz.'
+                        : 'Reklamlardan tamamen kurtuldunuz!',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: Colors.white.withValues(alpha: 0.85),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: AppRadius.borderSm,
+              ),
               child: Text(
-                l10n.removeAdsActive,
-                style: AppTypography.bodyLarge.copyWith(
-                  color: const Color(0xFF15803D),
+                'AKTIF',
+                style: AppTypography.labelSmall.copyWith(
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
                 ),
               ),
             ),
@@ -1155,7 +1222,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                   icon: const Icon(Icons.payment_rounded, size: 18),
                   label: Text(l10n.buyNow, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  onPressed: () => _purchaseRemoveAds(context),
+                  onPressed: () => PaywallBottomSheet.show(context),
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
@@ -1173,82 +1240,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Future<void> _purchaseRemoveAds(BuildContext context) async {
-    // Siyah ekran sorununu önlemek için overlay flag ile yönetiyoruz
-    bool overlayOpen = false;
 
-    void closeOverlay() {
-      if (overlayOpen && context.mounted) {
-        overlayOpen = false;
-        Navigator.of(context, rootNavigator: true).pop();
-      }
-    }
-
-    // Dialog'u AWAIT ETMEDİ açıyoruz — purchase mantığı hemen çalışsın
-    overlayOpen = true;
-    unawaited(showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.black38,
-      builder: (ctx) => const PopScope(
-        canPop: false,
-        child: Center(child: CircularProgressIndicator()),
-      ),
-    ));
-
-    // Satın alma mantığını çalıştır
-    await _executePurchase(context, closeOverlay);
-  }
-
-  Future<void> _executePurchase(BuildContext context, VoidCallback closeOverlay) async {
-    try {
-      final service = ref.read(purchaseServiceProvider);
-      final offerings = await service.getOfferings();
-      final adFreePackage = offerings?.current?.lifetime ?? offerings?.current?.monthly;
-
-      if (adFreePackage != null) {
-        final customerInfo = await service.purchasePackage(adFreePackage);
-        // Entitlement kontrolü — RC bağlı değilse fallback ile devam edilir
-        final _ = customerInfo != null &&
-            (customerInfo.entitlements.all['remove_ads']?.isActive == true ||
-             customerInfo.entitlements.all['pro']?.isActive == true ||
-             customerInfo.entitlements.all['premium']?.isActive == true);
-      }
-
-      // Firestore aile dokümanına yaz (cihaz-bağımsız, aile bazlı)
-      await ref.read(isAdFreeProvider.notifier).setAdFreeForFamily();
-
-      closeOverlay();
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('🎉 Tebrikler! Reklamlar başarıyla kaldırıldı!'),
-            backgroundColor: AppColors.primary,
-          ),
-        );
-      }
-    } catch (e) {
-      closeOverlay();
-      if (context.mounted) {
-        // RevenueCat bağlanamadıysa ya da iptal edildiyse hata göster
-        final errMsg = e.toString();
-        final isCancelled = errMsg.contains('cancelled') ||
-            errMsg.contains('cancel') ||
-            errMsg.contains('1') ; // StoreKit cancel code
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              isCancelled
-                  ? 'Satın alma iptal edildi.'
-                  : 'Satın alma hatası: $errMsg',
-            ),
-            backgroundColor: isCancelled ? AppColors.primary : AppColors.error,
-          ),
-        );
-      }
-    }
-  }
 
   Future<void> _restoreRemoveAds(BuildContext context) async {
     bool overlayOpen = false;

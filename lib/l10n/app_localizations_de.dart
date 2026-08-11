@@ -1057,4 +1057,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aboutCopyright => '© 2026 Ev Asistanı. Alle Rechte vorbehalten.';
+
+  @override
+  String get addShoppingItemSub =>
+      'Fehlende Lebensmittel, Reinigung und Haushaltsbedarf';
+
+  @override
+  String get guestLoginSuccess => 'Gastsitzung gestartet. 👋';
+
+  @override
+  String guestLoginFailed(String error) {
+    return 'Gastanmeldung fehlgeschlagen: $error';
+  }
 }

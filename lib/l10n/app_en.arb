@@ -357,6 +357,14 @@
   "customRoleHint": "Type role name (e.g. Guest, Uncle)...",
   "aboutDeveloper": "Developer: Samed Kalaycı",
   "aboutDescription": "Description: Smart home organization & family management app.",
-  "aboutCopyright": "© 2026 Ev Asistanı. All rights reserved."
+  "aboutCopyright": "© 2026 Ev Asistanı. All rights reserved.",
+  "addShoppingItemSub": "Missing groceries, cleaning and household needs",
+  "guestLoginSuccess": "Guest session started. 👋",
+  "guestLoginFailed": "Guest sign-in failed: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }
 

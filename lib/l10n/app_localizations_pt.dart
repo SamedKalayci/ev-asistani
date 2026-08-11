@@ -1064,4 +1064,16 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get aboutCopyright =>
       '© 2026 Ev Asistanı. Todos os direitos reservados.';
+
+  @override
+  String get addShoppingItemSub =>
+      'Mantimentos, limpeza e necessidades domésticas em falta';
+
+  @override
+  String get guestLoginSuccess => 'Sessão de convidado iniciada. 👋';
+
+  @override
+  String guestLoginFailed(String error) {
+    return 'Falha no login de convidado: $error';
+  }
 }

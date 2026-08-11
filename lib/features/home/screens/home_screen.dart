@@ -1266,7 +1266,7 @@ class HomeScreen extends ConsumerWidget {
                   l10n.addShoppingItemTitle,
                   style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
-                subtitle: const Text('Eksilen gıda, temizlik ve ev ihtiyaçları'),
+                subtitle: Text(l10n.addShoppingItemSub),
                 onTap: () {
                   Navigator.pop(context);
                   _showShoppingQuickAddBottomSheet(context, ref);

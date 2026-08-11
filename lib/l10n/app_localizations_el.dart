@@ -1066,4 +1066,15 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get aboutCopyright =>
       '© 2026 Ev Asistanı. Με την επιφύλαξη παντός δικαιώματος.';
+
+  @override
+  String get addShoppingItemSub => 'Τρόφιμα, καθαρισμός και οικιακές ανάγκες';
+
+  @override
+  String get guestLoginSuccess => 'Η συνεδρία επισκέπτη ξεκίνησε. 👋';
+
+  @override
+  String guestLoginFailed(String error) {
+    return 'Σύνδεση επισκέπτη απέτυχε: $error';
+  }
 }

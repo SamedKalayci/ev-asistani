@@ -109,9 +109,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await auth.signInAnonymously();
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Misafir oturumu ile giriş yapıldı. 👋'),
+          SnackBar(
+            content: Text(l10n.guestLoginSuccess),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
@@ -120,9 +121,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Misafir girişi başarısız: $e'),
+            content: Text(l10n.guestLoginFailed(e.toString())),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
           ),

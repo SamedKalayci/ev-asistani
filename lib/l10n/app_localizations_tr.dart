@@ -1067,4 +1067,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get aboutCopyright => '© 2026 Ev Asistanı. Tüm hakları saklıdır.';
+
+  @override
+  String get addShoppingItemSub => 'Eksilen gıda, temizlik ve ev ihtiyaçları';
+
+  @override
+  String get guestLoginSuccess => 'Misafir oturumu ile giriş yapıldı. 👋';
+
+  @override
+  String guestLoginFailed(String error) {
+    return 'Misafir girişi başarısız: $error';
+  }
 }

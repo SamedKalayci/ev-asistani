@@ -357,5 +357,13 @@
   "customRoleHint": "Escreva a função...",
   "aboutDeveloper": "Desenvolvedor: Samed Kalaycı",
   "aboutDescription": "Descrição: Organização inteligente da casa.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Todos os direitos reservados."
+  "aboutCopyright": "© 2026 Ev Asistanı. Todos os direitos reservados.",
+  "addShoppingItemSub": "Mantimentos, limpeza e necessidades domésticas em falta",
+  "guestLoginSuccess": "Sessão de convidado iniciada. 👋",
+  "guestLoginFailed": "Falha no login de convidado: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }

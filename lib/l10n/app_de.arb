@@ -357,5 +357,13 @@
   "customRoleHint": "Rollenname eingeben...",
   "aboutDeveloper": "Entwickler: Samed Kalaycı",
   "aboutDescription": "Beschreibung: Intelligente Haushaltsorganisation.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Alle Rechte vorbehalten."
+  "aboutCopyright": "© 2026 Ev Asistanı. Alle Rechte vorbehalten.",
+  "addShoppingItemSub": "Fehlende Lebensmittel, Reinigung und Haushaltsbedarf",
+  "guestLoginSuccess": "Gastsitzung gestartet. 👋",
+  "guestLoginFailed": "Gastanmeldung fehlgeschlagen: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }

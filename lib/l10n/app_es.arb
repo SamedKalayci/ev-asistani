@@ -357,5 +357,13 @@
   "customRoleHint": "Escribe el rol...",
   "aboutDeveloper": "Desarrollador: Samed Kalaycı",
   "aboutDescription": "Descripción: Organización inteligente del hogar.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Todos los derechos reservados."
+  "aboutCopyright": "© 2026 Ev Asistanı. Todos los derechos reservados.",
+  "addShoppingItemSub": "Alimentos, limpieza y necesidades del hogar faltantes",
+  "guestLoginSuccess": "Sesión de invitado iniciada. 👋",
+  "guestLoginFailed": "Inicio de sesión de invitado fallido: {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }

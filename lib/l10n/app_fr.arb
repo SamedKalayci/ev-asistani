@@ -357,5 +357,13 @@
   "customRoleHint": "Saisissez le rôle...",
   "aboutDeveloper": "Développeur : Samed Kalaycı",
   "aboutDescription": "Description : Organisation intelligente du foyer.",
-  "aboutCopyright": "© 2026 Ev Asistanı. Tous droits réservés."
+  "aboutCopyright": "© 2026 Ev Asistanı. Tous droits réservés.",
+  "addShoppingItemSub": "Épicerie, nettoyage et besoins ménagers manquants",
+  "guestLoginSuccess": "Session invité démarrée. 👋",
+  "guestLoginFailed": "Connexion en tant qu'invité échouée : {error}",
+  "@guestLoginFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }
