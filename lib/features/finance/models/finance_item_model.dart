@@ -205,8 +205,10 @@ class FinanceItemModel {
   final bool isRecurring;
   final bool isPaid;
   final bool isWalletExpense;
+  final String? accountName; // Hangi hesaptan yapıldığı (Nakit, QNB vb.)
   final String createdBy;
   final DateTime? createdAt;
+  final String? customCategoryName;
 
   const FinanceItemModel({
     required this.id,
@@ -219,8 +221,10 @@ class FinanceItemModel {
     this.isRecurring = false,
     this.isPaid = false,
     this.isWalletExpense = false,
+    this.accountName,
     required this.createdBy,
     this.createdAt,
+    this.customCategoryName,
   });
 
   /// Kalan gün sayısı metni (örn: "3 Gün Kaldı", "Bugün", "Günü Geçti").
@@ -279,8 +283,10 @@ class FinanceItemModel {
       isRecurring: (map['isRecurring'] as bool?) ?? false,
       isPaid: (map['isPaid'] as bool?) ?? false,
       isWalletExpense: (map['isWalletExpense'] as bool?) ?? false,
+      accountName: map['accountName'] as String?,
       createdBy: (map['createdBy'] as String?) ?? '',
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
+      customCategoryName: map['customCategoryName'] as String?,
     );
   }
 
@@ -295,10 +301,12 @@ class FinanceItemModel {
       'isRecurring': isRecurring,
       'isPaid': isPaid,
       'isWalletExpense': isWalletExpense,
+      if (accountName != null) 'accountName': accountName,
       'createdBy': createdBy,
       'createdAt': createdAt != null
           ? Timestamp.fromDate(createdAt!)
           : FieldValue.serverTimestamp(),
+      if (customCategoryName != null) 'customCategoryName': customCategoryName,
     };
   }
 
@@ -313,8 +321,10 @@ class FinanceItemModel {
     bool? isRecurring,
     bool? isPaid,
     bool? isWalletExpense,
+    Object? accountName = _sentinel,
     String? createdBy,
     DateTime? createdAt,
+    String? customCategoryName,
   }) {
     return FinanceItemModel(
       id: id ?? this.id,
@@ -327,8 +337,17 @@ class FinanceItemModel {
       isRecurring: isRecurring ?? this.isRecurring,
       isPaid: isPaid ?? this.isPaid,
       isWalletExpense: isWalletExpense ?? this.isWalletExpense,
+      accountName: accountName == _sentinel ? this.accountName : accountName as String?,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
+      customCategoryName: customCategoryName ?? this.customCategoryName,
     );
   }
+}
+
+// Sentinel obje: copyWith'de null ile "değiştirilmedi" arasındaki farkı anlamak için
+const _sentinel = Object();
+
+extension FinanceCategoryL10n on FinanceCategory {
+  String localizedName(BuildContext context) => getLocalizedLabel(context);
 }

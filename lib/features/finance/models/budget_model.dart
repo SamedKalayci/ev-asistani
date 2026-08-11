@@ -10,6 +10,7 @@ class BudgetModel {
   final String createdBy;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? customName;
 
   const BudgetModel({
     required this.id,
@@ -19,6 +20,7 @@ class BudgetModel {
     required this.createdBy,
     this.createdAt,
     this.updatedAt,
+    this.customName,
   });
 
   factory BudgetModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -30,6 +32,7 @@ class BudgetModel {
       createdBy: (map['createdBy'] as String?) ?? '',
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate(),
+      customName: map['customName'] as String?,
     );
   }
 
@@ -41,6 +44,7 @@ class BudgetModel {
       'createdBy': createdBy,
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+      'customName': customName,
     };
   }
 
@@ -52,6 +56,7 @@ class BudgetModel {
     String? createdBy,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? customName,
   }) {
     return BudgetModel(
       id: id ?? this.id,
@@ -61,6 +66,7 @@ class BudgetModel {
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      customName: customName ?? this.customName,
     );
   }
 }

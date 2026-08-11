@@ -81,25 +81,13 @@ class VaultDocumentsScreen extends ConsumerWidget {
   Future<void> _handleShare(BuildContext context, VaultItemModel item) async {
     final fileUrl = item.fileUrl;
 
-    // Yerel dosya yolu varsa direkt paylaş
     if (fileUrl != null && fileUrl.isNotEmpty) {
-      final localFile = File(fileUrl);
-
-      if (await localFile.exists()) {
-        await Share.shareXFiles(
-          [XFile(fileUrl)],
-          text: '${item.title}\n${item.description}',
-        );
-        return;
-      }
-
-      // Uzak URL ise metin olarak paylaş
-      if (fileUrl.startsWith('http')) {
-        await Share.share(
-          '${item.title}\n${item.description}\n\n$fileUrl',
-        );
-        return;
-      }
+      final textPrefix = AppLocalizations.of(context)!.localeName == 'tr'
+          ? 'Belgeyi görüntülemek için bağlantı'
+          : 'Link to view document';
+      final shareText = '${item.title} - $textPrefix: $fileUrl';
+      await Share.share(shareText);
+      return;
     }
 
     // Dosya yoksa belge bilgilerini kopyala ve bildir

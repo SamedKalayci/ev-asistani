@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
@@ -16,6 +15,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/permission_utils.dart';
+import '../../../core/utils/l10n_helper.dart';
 import '../models/vault_item_model.dart';
 import '../providers/vault_provider.dart';
 
@@ -49,6 +49,7 @@ class _VaultDocumentFormBottomSheetState
   Uint8List? _pickedFileBytes;
   String? _pickedFileName;
   bool _isLoading = false;
+  bool _fileValidationFailed = false;
 
   bool get _isEditing => widget.item != null;
 
@@ -97,43 +98,31 @@ class _VaultDocumentFormBottomSheetState
   Future<void> _pickImage(ImageSource source) async {
     try {
       if (!kIsWeb) {
-        if (source == ImageSource.camera) {
-          final status = await Permission.camera.request();
-          if (status.isGranted) {
-            // Kamera izni verildi, devam et
-          } else if (status.isPermanentlyDenied) {
-            if (mounted) {
-              await _showPermissionDeniedDialog(
-                'İzin Gerekli',
-                'Fotoğraf çekebilmek için kamera izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.',
-              );
-            }
-            return;
-          } else {
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Fotoğraf çekebilmek için kamera izni gereklidir.'),
-                  backgroundColor: AppColors.error,
-                ),
-              );
-            }
-            return;
+        // Hem kamera hem galeri için PermissionUtils üzerinden izin iste.
+        // PermissionUtils mantığı:
+        //   notDetermined  → request() → sistem diyaloğu gösterir
+        //   denied (iOS)   → permanentlyDenied olarak döner (iOS bir daha sormaz)
+        //   permanentlyDenied / restricted → ayarlara git gerekir
+        //   granted / limited → devam et
+        final status = await PermissionUtils.requestImagePermission(source);
+
+        if (status.isPermanentlyDenied || status.isRestricted) {
+          if (mounted) {
+            final isCamera = source == ImageSource.camera;
+            await _showPermissionDeniedDialog(
+              'İzin Gerekli',
+              isCamera
+                  ? 'Fotoğraf çekebilmek için kamera izni gereklidir. '
+                      'Lütfen Ayarlar\'dan kamera iznini etkinleştirin.'
+                  : 'Galeriye erişim izni gereklidir. '
+                      'Lütfen Ayarlar\'dan Fotoğraflar iznini etkinleştirin.',
+            );
           }
-        } else {
-          final status = await PermissionUtils.requestImagePermission(source);
-          if (status.isPermanentlyDenied) {
-            if (mounted) {
-              await _showPermissionDeniedDialog(
-                'İzin Gerekli',
-                'Galeriye erişim izni kalıcı olarak reddedilmiş. Lütfen ayarlardan izin verin.',
-              );
-            }
-            return;
-          } else if (!status.isGranted && !status.isLimited && !status.isRestricted) {
-            return;
-          }
+          return;
         }
+
+        // granted veya limited değilse (örn. kullanıcı diyaloğu kapattı) sessizce çık
+        if (!status.isGranted && !status.isLimited) return;
       }
 
       final picker = ImagePicker();
@@ -149,6 +138,7 @@ class _VaultDocumentFormBottomSheetState
           _pickedFileBytes = bytes;
           _pickedFilePath = pickedFile.path;
           _pickedFileName = pickedFile.name;
+          _fileValidationFailed = false;
         });
       }
     } catch (e) {
@@ -176,6 +166,7 @@ class _VaultDocumentFormBottomSheetState
           _pickedFileBytes = picked.bytes;
           _pickedFilePath = picked.path;
           _pickedFileName = picked.name;
+          _fileValidationFailed = false;
         });
       }
     } catch (e) {
@@ -280,6 +271,18 @@ class _VaultDocumentFormBottomSheetState
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+
+    final hasFile = _pickedFilePath != null || _pickedFileBytes != null || (_isEditing && widget.item?.fileUrl != null && widget.item!.fileUrl!.isNotEmpty);
+    if (!hasFile) {
+      setState(() {
+        _fileValidationFailed = true;
+      });
+      return;
+    }
+
+    setState(() {
+      _fileValidationFailed = false;
+    });
 
     final familyId = ref.read(activeFamilyIdProvider);
     final user = ref.read(userProvider).valueOrNull;
@@ -520,15 +523,36 @@ class _VaultDocumentFormBottomSheetState
               // Dosya Seçici Butonu
               OutlinedButton.icon(
                 onPressed: _showFilePickerOptions,
-                icon: const Icon(Icons.upload_file_rounded),
-                label: Text(_pickedFilePath != null
-                    ? l10n.selectPhotoDocument
-                    : '📸 ${l10n.selectPhotoDocument}'),
+                icon: Icon(
+                  Icons.upload_file_rounded,
+                  color: _fileValidationFailed ? colorScheme.error : null,
+                ),
+                label: Text(
+                  _pickedFilePath != null
+                      ? l10n.selectPhotoDocument
+                      : '📸 ${l10n.selectPhotoDocument}',
+                  style: TextStyle(
+                    color: _fileValidationFailed ? colorScheme.error : null,
+                  ),
+                ),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
-                  side: BorderSide(color: colorScheme.outlineVariant),
+                  side: BorderSide(
+                    color: _fileValidationFailed ? colorScheme.error : colorScheme.outlineVariant,
+                    width: _fileValidationFailed ? 1.5 : 1.0,
+                  ),
                 ),
               ),
+              if (_fileValidationFailed) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  l10n.pleaseSelectDocumentOrPhoto,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: colorScheme.error,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
 
               const SizedBox(height: AppSpacing.xl),
 

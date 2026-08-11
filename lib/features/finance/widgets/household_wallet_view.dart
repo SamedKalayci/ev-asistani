@@ -10,15 +10,23 @@ import '../../../shared/models/user_model.dart';
 import 'quick_add_expense_bottom_sheet.dart';
 import '../../profile/providers/family_provider.dart';
 import '../models/finance_item_model.dart';
-import '../providers/budget_provider.dart';
 import '../providers/finance_provider.dart';
-import 'budget_plan_bottom_sheet.dart';
+import 'finance_pie_chart.dart';
+import '../screens/category_budgets_screen.dart';
 import '../../../core/providers/currency_provider.dart';
+import '../../../core/utils/l10n_helper.dart';
 
-class HouseholdWalletView extends ConsumerWidget {
+class HouseholdWalletView extends ConsumerStatefulWidget {
   final List<FinanceItemModel> monthItems;
 
   const HouseholdWalletView({super.key, required this.monthItems});
+
+  @override
+  ConsumerState<HouseholdWalletView> createState() => _HouseholdWalletViewState();
+}
+
+class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
+  String _selectedFilter = 'Tümü';
 
   String _formatCurrency(double amount, String symbol) {
     final isNegative = amount < 0;
@@ -34,23 +42,16 @@ class HouseholdWalletView extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context)!;
     
-    final budgetsAsync = ref.watch(budgetsProvider);
-    final rawBudgets = budgetsAsync.valueOrNull ?? [];
     final currencySymbol = ref.watch(currencySymbolProvider);
-
-    final Map<FinanceCategory, double> consolidatedBudgets = {};
-    for (final b in rawBudgets) {
-      consolidatedBudgets[b.category] = (consolidatedBudgets[b.category] ?? 0.0) + b.limitAmount;
-    }
     final selectedMonth = ref.watch(selectedMonthProvider);
     final monthlyFreeBudget = ref.watch(monthlyFreeBudgetProvider);
 
-    final walletItems = monthItems.where((i) {
+    final walletItems = widget.monthItems.where((i) {
       if (!i.isWalletExpense) return false;
       if (i.dueDate == null) return true;
       return i.dueDate!.year == selectedMonth.year && i.dueDate!.month == selectedMonth.month;
@@ -58,6 +59,12 @@ class HouseholdWalletView extends ConsumerWidget {
 
     final expenses = walletItems.where((i) => i.type == FinanceType.expense).toList();
     final totalWalletExpense = expenses.fold(0.0, (sum, item) => sum + item.amount);
+
+    final filteredExpenses = expenses.where((e) {
+      if (_selectedFilter == 'Tümü') return true;
+      if (e.accountName == null) return _selectedFilter == 'Nakit';
+      return e.accountName!.startsWith(_selectedFilter);
+    }).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.only(
@@ -99,199 +106,166 @@ class HouseholdWalletView extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              const SizedBox(height: AppSpacing.xl),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => BudgetPlanBottomSheet.show(context, rawBudgets),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withValues(alpha: 0.15),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppRadius.borderFull,
-                          side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+                const SizedBox(height: AppSpacing.xl),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CategoryBudgetsScreen(),
+                          ),
                         ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white.withValues(alpha: 0.15),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: AppRadius.borderFull,
+                            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+                          ),
+                        ),
+                        icon: const Icon(Icons.track_changes_rounded, size: 20),
+                        label: Text(l10n.planBudget, style: const TextStyle(fontWeight: FontWeight.w600)),
                       ),
-                      icon: const Icon(Icons.track_changes_rounded, size: 20),
-                      label: Text(l10n.planBudget, style: const TextStyle(fontWeight: FontWeight.w600)),
                     ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => QuickAddExpenseBottomSheet.show(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFE4E1),
-                        foregroundColor: const Color(0xFFD32F2F),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                        shape: const RoundedRectangleBorder(borderRadius: AppRadius.borderFull),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () => QuickAddExpenseBottomSheet.show(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFE4E1),
+                          foregroundColor: const Color(0xFFD32F2F),
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+                          shape: const RoundedRectangleBorder(borderRadius: AppRadius.borderFull),
+                        ),
+                        icon: const Icon(Icons.flash_on_rounded, size: 20, color: Colors.orange),
+                        label: Text(l10n.quickAddExpense, style: const TextStyle(fontWeight: FontWeight.w600)),
                       ),
-                      icon: const Icon(Icons.flash_on_rounded, size: 20, color: Colors.orange),
-                      label: Text(l10n.quickAddExpense, style: const TextStyle(fontWeight: FontWeight.w600)),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
 
-        const SizedBox(height: AppSpacing.xxl),
+          const SizedBox(height: AppSpacing.xxl),
 
-        // ── 2. Kategori Bütçe İlerleme (Progress) ───────────────────────────
-        Text(
-          l10n.categoryBudgets,
-          style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        if (consolidatedBudgets.isEmpty)
+          // ── 2. Kategori Dağılımı (Pasta Grafik) ─────────────────────────────
           Container(
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            width: double.infinity,
+            padding: const EdgeInsets.all(AppSpacing.xl),
             decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-              borderRadius: AppRadius.borderLg,
+              color: colorScheme.surfaceContainerLowest,
+              borderRadius: AppRadius.borderXl,
               border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.3)),
             ),
-            child: Row(
+            child: const ExpensePieChartSummary(),
+          ),
+
+          const SizedBox(height: AppSpacing.xl),
+
+          // ── 3. Bireysel Harcamalar ──────────────────────────────────────────────
+          Text(
+            l10n.personalExpenses,
+            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          if (expenses.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
+              child: Center(
+                child: Text(
+                  l10n.noExpensesPeriod,
+                  style: AppTypography.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
+                ),
+              ),
+            )
+          else
+            _buildUserExpenseCards(context, ref, expenses, totalWalletExpense),
+
+          const SizedBox(height: AppSpacing.lg),
+
+          // ── 3b. Minimal Toplam Gider Metni ─────────────────────────────
+          RichText(
+            text: TextSpan(
+              style: AppTypography.bodyLarge.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
               children: [
-                const Icon(Icons.info_outline_rounded, color: AppColors.primary),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Text(
-                    l10n.noBudgetsSet,
-                    style: AppTypography.bodySmall,
+                TextSpan(text: '${l10n.totalMonthlyExpenseLabel}: '),
+                TextSpan(
+                  text: _formatCurrency(totalWalletExpense, currencySymbol),
+                  style: const TextStyle(
+                    color: Color(0xFFD32F2F), // Belirgin kiremit/kırmızı ton
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-          )
-        else
-          ...consolidatedBudgets.entries.map((entry) {
-            final category = entry.key;
-            final limitAmount = entry.value;
-            if (limitAmount <= 0) return const SizedBox.shrink();
-            final spent = expenses
-                .where((e) => e.category == category)
-                .fold(0.0, (sum, e) => sum + e.amount);
-            final percent = (spent / limitAmount).clamp(0.0, 1.0);
-            final isOver = spent > limitAmount;
-
-            return Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(category.icon, size: 16, color: colorScheme.primary),
-                          const SizedBox(width: AppSpacing.xs),
-                          Text(
-                            category.getLocalizedLabel(context),
-                            style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '${_formatCurrency(spent, currencySymbol)} / ${_formatCurrency(limitAmount, currencySymbol)}',
-                        style: AppTypography.labelSmall.copyWith(
-                          color: isOver ? AppColors.error : colorScheme.onSurfaceVariant,
-                          fontWeight: isOver ? FontWeight.bold : FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  ClipRRect(
-                    borderRadius: AppRadius.borderFull,
-                    child: LinearProgressIndicator(
-                      value: percent,
-                      minHeight: 8,
-                      backgroundColor: colorScheme.surfaceContainerHighest,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        isOver ? AppColors.error : colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  if (isOver) ...[
-                     const SizedBox(height: 2),
-                     Align(
-                       alignment: Alignment.centerRight,
-                       child: Text(
-                         l10n.limitExceeded,
-                         style: AppTypography.labelSmall.copyWith(color: AppColors.error, fontSize: 10),
-                       ),
-                     ),
-                  ]
-                ],
-              ),
-            );
-          }),
-
-        const SizedBox(height: AppSpacing.xl),
-
-        // ── 3. Bireysel Harcamalar ──────────────────────────────────────────────
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.personalExpenses,
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${l10n.totalExpense}: ${_formatCurrency(totalWalletExpense, currencySymbol)}',
-              style: AppTypography.titleSmall.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.md),
-        if (expenses.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
-            child: Center(
-              child: Text(
-                l10n.noExpensesPeriod,
-                style: AppTypography.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
-              ),
-            ),
-          )
-        else
-          _buildUserExpenseCards(context, ref, expenses, totalWalletExpense),
-
-        const SizedBox(height: AppSpacing.xxl),
-
-        // ── 4. Kompakt Anlık Harcama Akışı ──────────────────────────────────
-        Text(
-          l10n.expenseHistory,
-          style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: AppSpacing.md),
-        if (expenses.isEmpty)
-          Text(l10n.noRecordsFound, style: AppTypography.bodySmall)
-        else
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: expenses.length,
-            separatorBuilder: (_, __) => Divider(height: 1, color: colorScheme.outlineVariant.withValues(alpha: 0.2)),
-            itemBuilder: (context, index) {
-              final expense = expenses[index];
-              return _buildCompactExpenseTile(context, ref, expense, colorScheme);
-            },
           ),
-        const SizedBox(height: 32),
-      ],
-    ),
-  );
-}
+          const SizedBox(height: AppSpacing.md),
+
+          // ── 4. Kompakt Anlık Harcama Akışı ──────────────────────────────────
+          Text(
+            l10n.expenseHistory,
+            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          
+          // Filtreleme Seçenekleri
+          SegmentedButton<String>(
+            segments: [
+              ButtonSegment<String>(
+                value: 'Tümü',
+                label: Text(l10n.statusAll),
+                icon: const Icon(Icons.all_inclusive_rounded, size: 16),
+              ),
+              ButtonSegment<String>(
+                value: 'Nakit',
+                label: Text(l10n.cash),
+                icon: const Icon(Icons.payments_outlined, size: 16),
+              ),
+              ButtonSegment<String>(
+                value: 'Kredi Kartı',
+                label: Text(l10n.creditCard),
+                icon: const Icon(Icons.credit_card_rounded, size: 16),
+              ),
+            ],
+            selected: {_selectedFilter},
+            onSelectionChanged: (newSelection) {
+              setState(() {
+                _selectedFilter = newSelection.first;
+              });
+            },
+            style: SegmentedButton.styleFrom(
+              selectedForegroundColor: colorScheme.onPrimary,
+              selectedBackgroundColor: colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+
+          if (filteredExpenses.isEmpty)
+            Text(l10n.noRecordsFound, style: AppTypography.bodySmall)
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: filteredExpenses.length,
+              separatorBuilder: (_, __) => Divider(height: 1, color: colorScheme.outlineVariant.withValues(alpha: 0.2)),
+              itemBuilder: (context, index) {
+                final expense = filteredExpenses[index];
+                return _buildCompactExpenseTile(context, ref, expense, colorScheme);
+              },
+            ),
+          const SizedBox(height: 32),
+        ],
+      ),
+    );
+  }
 
   Widget _buildUserExpenseCards(BuildContext context, WidgetRef ref, List<FinanceItemModel> expenses, double totalExpense) {
     final membersAsync = ref.watch(familyMembersProvider);
@@ -304,10 +278,11 @@ class HouseholdWalletView extends ConsumerWidget {
       userExpenses[expense.createdBy] = (userExpenses[expense.createdBy] ?? 0.0) + expense.amount;
     }
 
+    final l10n = AppLocalizations.of(context)!;
     List<Map<String, dynamic>> userData = [];
     userExpenses.forEach((uid, amount) {
-      final user = members.firstWhere((m) => m.uid == uid, orElse: () => const UserModel(uid: '', name: 'Bilinmeyen', email: ''));
-      final name = user.displayName.isNotEmpty ? user.displayName.split(' ').first : 'Bilinmeyen';
+      final user = members.firstWhere((m) => m.uid == uid, orElse: () => UserModel(uid: '', name: l10n.unknown, email: ''));
+      final name = user.displayName.isNotEmpty ? user.displayName.split(' ').first : l10n.unknown;
       userData.add({
         'uid': uid,
         'name': name,
@@ -370,13 +345,14 @@ class HouseholdWalletView extends ConsumerWidget {
   }
 
   Widget _buildCompactExpenseTile(BuildContext context, WidgetRef ref, FinanceItemModel item, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     final membersAsync = ref.watch(familyMembersProvider);
     final members = membersAsync.valueOrNull ?? [];
     final user = members.firstWhere(
       (m) => m.uid == item.createdBy,
-      orElse: () => const UserModel(uid: '', name: 'Bilinmeyen', email: ''),
+      orElse: () => UserModel(uid: '', name: l10n.unknown, email: ''),
     );
-    final userName = user.displayName.isNotEmpty == true ? user.displayName.split(' ').first : 'Bilinmeyen';
+    final userName = user.displayName.isNotEmpty == true ? user.displayName.split(' ').first : l10n.unknown;
 
     return Dismissible(
       key: Key(item.id),
@@ -389,7 +365,7 @@ class HouseholdWalletView extends ConsumerWidget {
       ),
       onDismissed: (_) {
         ref.read(financeRepositoryProvider).deleteFinanceItem(item.familyId, item.id);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${item.title} silindi.')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${item.title} ${l10n.deleted}.')));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
@@ -398,10 +374,20 @@ class HouseholdWalletView extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: colorScheme.errorContainer.withValues(alpha: 0.3),
+                color: item.customCategoryName != null && item.customCategoryName!.isNotEmpty
+                    ? colorScheme.secondaryContainer.withValues(alpha: 0.3)
+                    : colorScheme.errorContainer.withValues(alpha: 0.3),
                 borderRadius: AppRadius.borderSm,
               ),
-              child: Icon(item.category.icon, size: 16, color: AppColors.error),
+              child: Icon(
+                item.customCategoryName != null && item.customCategoryName!.isNotEmpty
+                    ? Icons.star_outline_rounded
+                    : item.category.icon,
+                size: 16,
+                color: item.customCategoryName != null && item.customCategoryName!.isNotEmpty
+                    ? colorScheme.secondary
+                    : AppColors.error,
+              ),
             ),
             const SizedBox(width: AppSpacing.md),
             Expanded(
@@ -409,15 +395,27 @@ class HouseholdWalletView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.title,
+                    item.customCategoryName ?? item.category.localizedName(context),
                     style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w600),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '$userName • ${item.category.getLocalizedLabel(context)}',
+                    '$userName • ${item.accountName ?? l10n.cash}',
                     style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
                   ),
+                  if (item.title.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      item.title,
+                      style: AppTypography.labelSmall.copyWith(
+                        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                        fontStyle: FontStyle.italic,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ],
               ),
             ),

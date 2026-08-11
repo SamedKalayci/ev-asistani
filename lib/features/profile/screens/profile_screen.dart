@@ -24,6 +24,10 @@ import '../providers/family_provider.dart';
 import '../widgets/link_account_bottom_sheet.dart';
 import '../widgets/profile_edit_bottom_sheet.dart';
 import '../widgets/profile_setting_tile.dart';
+import '../../finance/widgets/account_form_bottom_sheet.dart';
+import '../../finance/widgets/quick_notes_management_page.dart';
+import '../../finance/screens/category_budgets_screen.dart';
+import '../../../core/utils/l10n_helper.dart';
 
 /// Profil ve Evim Aile Yönetimi Ekranı (ProfileScreen).
 /// Real-time Firestore & Firebase Auth senkronizasyonu ile.
@@ -548,6 +552,55 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 // Aileye henüz katılmamışsa davet/oluşturma kartı
                 _buildNoFamilyCard(colorScheme),
               ],
+
+              const SizedBox(height: AppSpacing.sectionGap),
+
+              // ── İşlemler ─────────────────────────────────────────────
+              _buildSectionHeader(colorScheme, l10n.transactionsTitle),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
+                icon: Icons.calendar_today_rounded,
+                title: l10n.periodAndRolloverSettings,
+                subtitle: l10n.periodAndRolloverSettingsDesc,
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.comingSoon)),
+                  );
+                },
+              ),
+
+              const SizedBox(height: AppSpacing.sectionGap),
+
+              // ── Kategoriler ve Hesaplar ─────────────────────────────
+              _buildSectionHeader(colorScheme, l10n.categoriesAndAccounts),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
+                icon: Icons.account_balance_wallet_rounded,
+                title: l10n.myAccounts,
+                subtitle: l10n.myAccountsDesc,
+                onTap: () => AccountFormBottomSheet.show(context),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
+                icon: Icons.tips_and_updates_rounded,
+                title: l10n.recurringExpenses,
+                subtitle: l10n.recurringExpensesDescSetting,
+                onTap: () => QuickNotesManagementPage.show(context),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              ProfileSettingTile(
+                icon: Icons.track_changes_rounded,
+                title: l10n.categoryBudgets,
+                subtitle: l10n.categoryBudgetsDesc,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CategoryBudgetsScreen(),
+                    ),
+                  );
+                },
+              ),
 
               const SizedBox(height: AppSpacing.sectionGap),
 

@@ -11,6 +11,7 @@ import '../models/finance_item_model.dart';
 import '../models/payment_schedule_model.dart';
 import '../providers/finance_provider.dart';
 import '../../../core/providers/currency_provider.dart';
+import 'finance_pie_chart.dart';
 
 class MonthlySummaryBottomSheet extends ConsumerStatefulWidget {
   const MonthlySummaryBottomSheet({super.key});
@@ -295,7 +296,21 @@ class _MonthlySummaryBottomSheetState extends ConsumerState<MonthlySummaryBottom
             ),
             const SizedBox(height: AppSpacing.xxl),
 
-            // ── Bekleyen İşlemler ──────────────────────────────────────────
+            // ── Kategori Pasta Grafiği (yalnızca aylık mod) ────────────────────
+            if (_selectedPeriodIndex == 1) ...[
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.xl),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerLowest,
+                  borderRadius: AppRadius.borderXl,
+                  border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.3)),
+                ),
+                child: const ExpensePieChartSummary(),
+              ),
+              const SizedBox(height: AppSpacing.xxl),
+            ],
+
+            // ── Bekleyen İşlemler ─────────────────────────────────────────────────────────────
             if (pendingSchedules.isNotEmpty) ...[
               Text(l10n.upcomingPendingTransactions, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: AppSpacing.md),

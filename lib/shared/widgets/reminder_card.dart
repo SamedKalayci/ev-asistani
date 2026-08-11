@@ -5,7 +5,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 
 /// Son kullanma ve garanti ekranlarında kullanılacak ortak hatırlatma kartı (ReminderCard).
-/// Material Design 3 standartlarına uygun, responsive ve parametrik yapıda.
+/// Material Design 3 standartlarına uygun, responsive ve kompakt yapıda.
 class ReminderCard extends StatelessWidget {
   /// Ürün veya kayıt başlığı (ör. 'Yarım Yağlı Süt', 'Çamaşır Makinesi')
   final String title;
@@ -78,34 +78,33 @@ class ReminderCard extends StatelessWidget {
         borderRadius: AppRadius.borderMd,
         child: Image.network(
           imageUrl!,
-          width: AppSpacing.xxl + AppSpacing.lg,
-          height: AppSpacing.xxl + AppSpacing.lg,
+          width: 40,
+          height: 40,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) => Container(
-            width: AppSpacing.xxl + AppSpacing.lg,
-            height: AppSpacing.xxl + AppSpacing.lg,
+            width: 40,
+            height: 40,
             color: colorScheme.surfaceContainerHigh,
             child: Icon(
               icon ?? Icons.inventory_2_outlined,
               color: colorScheme.onSurfaceVariant,
-              size: AppSpacing.xl,
+              size: 20,
             ),
           ),
         ),
       );
     } else if (icon != null) {
       leadingContent = Container(
-        width: AppSpacing.xxl + AppSpacing.lg,
-        height: AppSpacing.xxl + AppSpacing.lg,
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(
-          // ignore: deprecated_member_use
-          color: effectiveStatusColor.withOpacity(0.12),
+          color: effectiveStatusColor.withValues(alpha: 0.12),
           borderRadius: AppRadius.borderMd,
         ),
         child: Icon(
           icon,
           color: effectiveStatusColor,
-          size: AppSpacing.xl,
+          size: 20,
         ),
       );
     }
@@ -116,7 +115,7 @@ class ReminderCard extends StatelessWidget {
       children: [
         if (showStatusLine)
           Container(
-            height: AppSpacing.xs,
+            height: 3,
             width: double.infinity,
             decoration: BoxDecoration(
               color: effectiveStatusColor,
@@ -127,7 +126,10 @@ class ReminderCard extends StatelessWidget {
             ),
           ),
         Padding(
-          padding: const EdgeInsets.all(AppSpacing.cardPadding),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.cardPadding,
+            vertical: AppSpacing.md,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -139,6 +141,7 @@ class ReminderCard extends StatelessWidget {
                     const SizedBox(width: AppSpacing.md),
                   ],
                   Expanded(
+                    flex: 5,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -152,10 +155,10 @@ class ReminderCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         if (subtitle != null) ...[
-                          const SizedBox(height: AppSpacing.xs),
+                          const SizedBox(height: 2),
                           Text(
                             subtitle!,
-                            style: AppTypography.bodyMedium.copyWith(
+                            style: AppTypography.bodySmall.copyWith(
                               color: colorScheme.onSurfaceVariant,
                             ),
                             maxLines: 1,
@@ -165,76 +168,68 @@ class ReminderCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (onMoreTap != null)
+                  const SizedBox(width: AppSpacing.sm),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (dateLabel != null)
+                        Text(
+                          dateLabel!.toUpperCase(),
+                          style: AppTypography.labelSmall.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                            fontSize: 9,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      if (dateText != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          dateText!,
+                          style: AppTypography.bodySmall.copyWith(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                      if (statusText != null) ...[
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.sm,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: effectiveStatusColor.withValues(alpha: 0.12),
+                            borderRadius: AppRadius.borderSm,
+                            border: Border.all(
+                              color: effectiveStatusColor.withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            statusText!,
+                            style: AppTypography.labelSmall.copyWith(
+                              color: effectiveStatusColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  if (onMoreTap != null) ...[
+                    const SizedBox(width: AppSpacing.xs),
                     IconButton(
                       icon: const Icon(Icons.more_vert_rounded),
-                      iconSize: AppSpacing.lg,
+                      iconSize: AppSpacing.md,
                       color: colorScheme.onSurfaceVariant,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       onPressed: onMoreTap,
                     ),
+                  ],
                 ],
               ),
-              if (dateText != null || statusText != null) ...[
-                const SizedBox(height: AppSpacing.md),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  // ignore: deprecated_member_use
-                  color: colorScheme.outlineVariant.withOpacity(0.3),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    if (dateText != null)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (dateLabel != null)
-                            Text(
-                              dateLabel!.toUpperCase(),
-                              style: AppTypography.labelSmall.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          Text(
-                            dateText!,
-                            style: AppTypography.bodyMedium.copyWith(
-                              color: colorScheme.onSurface,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (statusText != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.md,
-                          vertical: AppSpacing.xs,
-                        ),
-                        decoration: BoxDecoration(
-                          // ignore: deprecated_member_use
-                          color: effectiveStatusColor.withOpacity(0.12),
-                          borderRadius: AppRadius.borderSm,
-                          border: Border.all(
-                            // ignore: deprecated_member_use
-                            color: effectiveStatusColor.withOpacity(0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: Text(
-                          statusText!,
-                          style: AppTypography.labelMedium.copyWith(
-                            color: effectiveStatusColor,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ],
               if (bottomAction != null) ...[
                 const SizedBox(height: AppSpacing.sm),
                 bottomAction!,
@@ -251,8 +246,7 @@ class ReminderCard extends StatelessWidget {
         borderRadius: AppRadius.borderLg,
         boxShadow: AppShadows.sm,
         border: Border.all(
-          // ignore: deprecated_member_use
-          color: colorScheme.outlineVariant.withOpacity(0.3),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
           width: 1,
         ),
       ),

@@ -113,7 +113,6 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final l10n = AppLocalizations.of(context)!;
     final currencySymbol = ref.watch(currencySymbolProvider);
 
     return Container(
@@ -147,7 +146,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            l10n.planBudget,
+            'Kategori Bütçeleri',
             style: AppTypography.headlineSmall.copyWith(
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurface,
@@ -155,7 +154,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            l10n.budgetPlanDescription,
+            'Aylık harcama hedeflerinizi belirleyin. İstemediğiniz kategorileri boş bırakabilirsiniz.',
             style: AppTypography.bodyMedium.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
@@ -193,7 +192,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
                           child: AppTextField(
                             controller: _controllers[cat],
                             keyboardType: TextInputType.number,
-                            hintText: l10n.limitAmountHint,
+                            hintText: 'Limit ₺',
                             prefixIcon: Center(
                               widthFactor: 1.0,
                               child: Text(
@@ -215,7 +214,7 @@ class _BudgetPlanBottomSheetState extends ConsumerState<BudgetPlanBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.xxl),
           PrimaryButton(
-            text: l10n.saveBudgets,
+            text: 'Hedefleri Kaydet',
             onPressed: _isLoading ? null : _saveBudgets,
             isLoading: _isLoading,
             icon: Icons.save_rounded,
