@@ -11,7 +11,7 @@
   "about": "À propos",
   "aboutSubtitle": "Assistant Maison v1.1.0 (Firebase Activé)",
   "developerLabel": "Développeur : Samed Kalaycı",
-  "aboutDescription": "Description : Application d'organisation du foyer et de gestion de listes partagées.",
+  "aboutDescription": "Description : Organisation intelligente du foyer.",
   "allRightsReserved": "© 2026 Assistant Maison. Tous droits réservés.",
   "privacyPolicy": "Politique de Confidentialité & Conditions",
   "privacyPolicySubtitle": "Consulter les informations légales",
@@ -31,26 +31,37 @@
   "azerbaijani": "Azerbaïdjanais",
   "greek": "Grec",
   "portuguese": "Portugais",
-
   "navHome": "Accueil",
   "navInventory": "Inventaire",
   "navShopping": "Achats",
   "navFinance": "Finances",
   "navProfile": "Profil",
-
   "shoppingListTitle": "Liste de Courses",
   "toBuyTab": "À Acheter",
   "purchasedTab": "Achetés",
   "clearCompleted": "Effacer",
   "newProductHint": "Ajouter un article...",
   "itemsCount": "{count} Articles",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "addShoppingItemTitle": "Ajouter un Article à la Liste",
   "productNameLabel": "Nom de l'Article",
   "productNameHint": "Ex : Lait, Pain, Œufs...",
   "addToListBtn": "Ajouter à la Liste",
   "itemAddedToast": "\"{name}\" ajouté à la liste ! 🛒",
+  "@itemAddedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "emptyShoppingList": "Votre liste de courses est vide.",
-
   "financeOverviewTab": "Aperçu",
   "householdWalletTab": "Portefeuille du Foyer",
   "accountsTab": "Comptes",
@@ -65,16 +76,35 @@
   "accountScheduleHeader": "Compte / Calendrier",
   "monthlyFreeBudget": "Budget Libre Restant",
   "quickAddExpense": "Ajout Rapide de Dépense",
-
   "greetingUser": "Bonjour, {name}",
+  "@greetingUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "quickAdd": "Ajout Rapide",
   "expiringSoonTitle": "Expirations Proches",
   "warrantiesExpiringTitle": "Garanties Proches de l'Expiration",
   "shoppingSummaryTitle": "Résumé des Courses",
   "viewAll": "Tout Voir",
   "urgentExpirationsCount": "{count} Articles Urgents",
+  "@urgentExpirationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "urgentWarrantiesCount": "{count} Garanties Urgentes",
-
+  "@urgentWarrantiesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "inventoryTitle": "Inventaire du Foyer",
   "expirationTab": "Expiration",
   "warrantyTab": "Garanties",
@@ -84,7 +114,6 @@
   "periodicMaintenance": "Calendrier d'Entretien",
   "homeGuideWifi": "Guide Maison & Wi-Fi",
   "digitalVaultSubtitle": "Les documents essentiels et numéros d'urgence sont chiffrés et sécurisés.",
-
   "myHomeAndFamily": "Ma Maison & Gestion Familiale",
   "inviteCode": "Code d'Invitation",
   "familyMembers": "Membres de la Famille",
@@ -93,19 +122,21 @@
   "houseOwner": "Propriétaire de la Maison",
   "legalSection": "Mentions Légales",
   "legalAndInfo": "Légal & Info",
+  "accountActions": "Actions du Compte",
+  "removeAdsTitle": "Supprimer les Publicités",
   "memberCount": "{count} Membre",
   "@memberCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "accountActions": "Actions du Compte",
-  "removeAdsTitle": "Supprimer les Publicités",
   "removeAdsSubtitle": "Sans publicité pour toujours avec un achat unique !",
   "removeAdsActive": "Version Sans Publicité Active ✅",
   "specialPriceOffer": "Offre Spéciale ! Pour le prix d'un café.",
   "buyNow": "Acheter Maintenant",
-  "restorePurchases": "Restaurer les Achats",
+  "restorePurchases": "Restaurer les achats",
   "introPopupTitle": "Utilisez l'App Sans Pub !",
   "introPopupDesc": "Supprimez définitivement toutes les publicités pour un petit prix unique.",
   "skipForNow": "Passer pour l'instant",
@@ -122,7 +153,9 @@
   "statementCutoff": "Date de relevé : {day}",
   "@statementCutoff": {
     "placeholders": {
-      "day": { "type": "String" }
+      "day": {
+        "type": "String"
+      }
     }
   },
   "planBudget": "Planifier le Budget",
@@ -351,19 +384,103 @@
   "editHomeNameTitle": "Modifier le Nom du Foyer",
   "editHomeNameLabel": "Nom du Foyer",
   "editHomeNameHint": "ex: Maison Dupont",
-  "homeNameRequired": "Le nom du foyer est obligatoire.",
   "homeNameUpdatedToast": "Nom du foyer mis à jour avec succès ! 🏠",
   "customRoleOption": "✏️ Rôle Personnalisé...",
   "customRoleHint": "Saisissez le rôle...",
   "aboutDeveloper": "Développeur : Samed Kalaycı",
-  "aboutDescription": "Description : Organisation intelligente du foyer.",
   "aboutCopyright": "© 2026 Ev Asistanı. Tous droits réservés.",
   "addShoppingItemSub": "Épicerie, nettoyage et besoins ménagers manquants",
   "guestLoginSuccess": "Session invité démarrée. 👋",
   "guestLoginFailed": "Connexion en tant qu'invité échouée : {error}",
   "@guestLoginFailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "noUpcomingWarranties": "Pas d'expiration de garantie à venir. 👍",
+  "noUpcomingPayments": "Pas de paiements à venir. 👍",
+  "editProduct": "Modifier le produit",
+  "locationLabel": "Emplacement",
+  "locationHint": "Ex: Réfrigérateur, Garde-manger...",
+  "locationRequired": "L'emplacement est requis.",
+  "additionalNotesHint": "Ajouter des notes supplémentaires...",
+  "selectExpirationDateWarning": "Veuillez sélectionner la date d'expiration.",
+  "productNameExampleHint": "Ex: Lait, Œufs...",
+  "selectDate": "Sélectionner une date",
+  "signInBtn": "Se connecter",
+  "signInFailed": "Échec de la connexion.",
+  "signUpBtn": "S'inscrire",
+  "createAccount": "Créer un compte",
+  "welcomeToApp": "Bienvenue sur Assistant Maison",
+  "smartHomeTagline": "Gérez tout dans votre maison de manière intelligente",
+  "signInWithGoogle": "Se connecter avec Google",
+  "signInWithApple": "Se connecter avec Apple",
+  "tryAsGuest": "Essayer en tant qu'invité (Sans compte)",
+  "forgotPassword": "Mot de passe oublié ?",
+  "forgotPasswordDesc": "Entrez votre adresse e-mail. Nous vous enverrons un lien de réinitialisation.",
+  "emailAddress": "Adresse e-mail",
+  "passwordLabel": "Mot de passe",
+  "confirmPasswordLabel": "Confirmer le mot de passe",
+  "confirmPasswordHint": "Confirmez votre mot de passe",
+  "fullNameLabel": "Nom et prénom",
+  "fullNameRequired": "Le nom complet est requis.",
+  "passwordRequired": "Le mot de passe est requis.",
+  "confirmPasswordRequired": "La confirmation du mot de passe est requise.",
+  "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
+  "emailRequired": "L'adresse e-mail est requise.",
+  "enterValidEmail": "Veuillez saisir une adresse e-mail valide.",
+  "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères.",
+  "dontHaveAccount": "Vous n'avez pas de compte ?",
+  "alreadyHaveAccount": "Vous avez déjà un compte ?",
+  "orDivider": "ou",
+  "send": "Envoyer",
+  "passwordResetSent": "Lien de réinitialisation envoyé à votre e-mail ! 📧",
+  "googleLoginSuccess": "Connecté avec Google. 👋",
+  "appleLoginSuccess": "Connecté avec Apple. 👋",
+  "verificationEmailSent": "Lien de vérification envoyé. Veuillez vérifier votre e-mail.",
+  "emailAlreadyInUse": "Cette adresse e-mail est déjà utilisée.",
+  "weakPassword": "Mot de passe trop faible. Utilisez au moins 6 caractères.",
+  "linkWithGoogle": "Lier avec Google",
+  "linkWithApple": "Lier avec Apple",
+  "linkWithEmail": "Lier avec e-mail",
+  "connecting": "Connexion...",
+  "emailHint": "exemple@gmail.com",
+  "guestUser": "Invité",
+  "deleteAccountConfirmDesc": "Êtes-vous sûr de vouloir supprimer votre compte et toutes vos données personnelles ? Cette action est irréversible.",
+  "deleteAccountConfirmBtn": "Oui, supprimer",
+  "deleteAccountReauthNotice": "Pour des raisons de sécurité, veuillez vous déconnecter puis vous reconnecter pour supprimer votre compte.",
+  "adFreeActiveTitle": "Version sans pub active ✨",
+  "adFreeActiveDesc": "Vous avez supprimé les publicités, profitez de l'application !",
+  "activeBadge": "ACTIF",
+  "buyAdFreeTitle": "Obtenir la version sans pub",
+  "buyAdFreeDesc": "Supprimez toutes les publicités pour une expérience sans interruption.",
+  "monthlyYearlyFlexiblePlans": "Plans flexibles mensuels et annuels",
+  "inspectAndBuyPlans": "Voir les offres et acheter",
+  "adFreeTitle": "Version sans publicité",
+  "adFreeHeaderSubtitle": "Supprimez toutes les publicités pour une expérience rapide et fluide.",
+  "zeroAdsTitle": "Zéro publicité, utilisation fluide",
+  "zeroAdsSubtitle": "Toutes les publicités lors des transitions de page sont bloquées.",
+  "allFamilyIncludedTitle": "Inclus pour tous les membres de la famille",
+  "allFamilyIncludedSubtitle": "Tous les membres de votre foyer bénéficient de l'accès sans pub.",
+  "fasterPageTransitionsTitle": "Transitions de page plus rapides",
+  "fasterPageTransitionsSubtitle": "L'application fonctionne plus rapidement sans le chargement de pubs.",
+  "annualPlanRecommended": "Plan annuel (Recommandé)",
+  "save30Percent": "ÉCONOMISEZ 30%",
+  "annualPlanSubprice": "Meilleure valeur avec paiement annuel",
+  "monthlyPlanTitle": "Plan mensuel",
+  "flexibleBadge": "FLEXIBLE",
+  "cancelAnytimeSubprice": "Annulez facilement à tout moment",
+  "switchToAnnualPlan": "Passer au plan annuel sans pub",
+  "switchToMonthlyPlan": "Passer au plan mensuel sans pub",
+  "cancelNoticeIos": "Vous pouvez annuler à tout moment dans les réglages de votre App Store / Apple ID.",
+  "cancelNoticeAndroid": "Vous pouvez annuler à tout moment dans les paramètres de Google Play Store.",
+  "termsOfUseEula": "Conditions d'utilisation (CLUF)",
+  "adFreeActivatedToast": "🎉 Votre abonnement sans publicité a été activé !",
+  "purchasesRestoredToast": "🎉 Achats restaurés avec succès !",
+  "signOutAnonymousTitle": "Se déconnecter du compte invité",
+  "signOutAnonymousDesc": "Toutes vos données et votre accès familial seront perdus. Êtes-vous sûr de vouloir vous déconnecter sans lier votre compte ?",
+  "signOutConfirmDesc": "Êtes-vous sûr de vouloir vous déconnecter de votre compte ?",
+  "linkAccountBtn": "Lier le compte"
 }

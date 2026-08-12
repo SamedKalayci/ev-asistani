@@ -11,7 +11,7 @@
   "about": "Haqqında",
   "aboutSubtitle": "Ev köməkçisi v1.1.0 (Firebase Aktiv)",
   "developerLabel": "İnkişafçı: Samed Kalaycı",
-  "aboutDescription": "Təsvir: Ev təşkilatı və ortaq siyahı idarəetmə proqramı.",
+  "aboutDescription": "Təsvir: Ağıllı ev təşkilatı.",
   "allRightsReserved": "© 2026 Ev Köməkçisi. Bütün hüquqlar qorunur.",
   "privacyPolicy": "Məxfilik Siyasəti və Şərtlər",
   "privacyPolicySubtitle": "Hüquqi məlumatları nəzərdən keçirin",
@@ -31,26 +31,37 @@
   "azerbaijani": "Azərbaycan dili",
   "greek": "Yunan dili",
   "portuguese": "Portuqal dili",
-
   "navHome": "Ana Səhifə",
   "navInventory": "İnventar",
   "navShopping": "Alış-veriş",
   "navFinance": "Maliyyə",
   "navProfile": "Profil",
-
   "shoppingListTitle": "Alış-veriş Siyahısı",
   "toBuyTab": "Alınacaqlar",
   "purchasedTab": "Alınanlar",
   "clearCompleted": "Təmizlə",
   "newProductHint": "Yeni məhsul əlavə et...",
   "itemsCount": "{count} Məhsul",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "addShoppingItemTitle": "Siyahıya Məhsul Əlavə Et",
   "productNameLabel": "Məhsulun Adı",
   "productNameHint": "Məsələn: Süd, Çörək, Yumurta...",
   "addToListBtn": "Siyahıya Əlavə Et",
   "itemAddedToast": "\"{name}\" alış-veriş siyahısına əlavə olundu! 🛒",
+  "@itemAddedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "emptyShoppingList": "Alış-veriş siyahınız boşdur.",
-
   "financeOverviewTab": "Ümumi Baxış",
   "householdWalletTab": "Ev Pulqabısı",
   "accountsTab": "Hesablar",
@@ -65,16 +76,35 @@
   "accountScheduleHeader": "Hesab / Təqvim",
   "monthlyFreeBudget": "Qalan Sərbəst Büdcə",
   "quickAddExpense": "Tez Xərc Əlavə Et",
-
   "greetingUser": "Salam, {name}",
+  "@greetingUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "quickAdd": "Tez Əlavə Et",
   "expiringSoonTitle": "Yararlılıq Müddəti Bitənlər",
   "warrantiesExpiringTitle": "Zəmanəti Bitənlər",
   "shoppingSummaryTitle": "Alış-veriş Siyahısı Xülasəsi",
   "viewAll": "Hamısına Bax",
   "urgentExpirationsCount": "{count} Təcili Məhsul",
+  "@urgentExpirationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "urgentWarrantiesCount": "{count} Təcili Zəmanət",
-
+  "@urgentWarrantiesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "inventoryTitle": "Ev İnventarı",
   "expirationTab": "Yararlılıq",
   "warrantyTab": "Zəmanət",
@@ -84,7 +114,6 @@
   "periodicMaintenance": "Dövri Xidmət Təqvimi",
   "homeGuideWifi": "Ev Bələdçisi və Wi-Fi",
   "digitalVaultSubtitle": "Evlə bağlı vacib sənədlər və təcili nömrələr şifrələnərək qorunur.",
-
   "myHomeAndFamily": "Evim və Ailə İdarəetməsi",
   "inviteCode": "Dəvət Kodu",
   "familyMembers": "Ailə Üvləri",
@@ -93,19 +122,21 @@
   "houseOwner": "Ev Sahibi",
   "legalSection": "Hüquqi",
   "legalAndInfo": "Hüquqi & Məlumat",
+  "accountActions": "Hesab Əməliyyatları",
+  "removeAdsTitle": "Reklamları Sil (Ad-Free)",
   "memberCount": "{count} Üzv",
   "@memberCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "accountActions": "Hesab Əməliyyatları",
-  "removeAdsTitle": "Reklamları Sil (Ad-Free)",
   "removeAdsSubtitle": "Birdəfəlik ödənişlə həmişəlik reklamsız istifadə edin!",
   "removeAdsActive": "Reklamsız Versiya Aktivdir ✅",
   "specialPriceOffer": "Xüsusi Qiymət! Sadece bir kofe qiymətinə.",
   "buyNow": "İndi Al",
-  "restorePurchases": "Bərpa Et",
+  "restorePurchases": "Alışları Bərpa Et",
   "introPopupTitle": "Proqramı Reklamsız İşlədin!",
   "introPopupDesc": "Birdəfəlik kiçik ödənişlə bütün reklamları həmişəlik ləğv edin.",
   "skipForNow": "Hələlik Keç",
@@ -122,7 +153,9 @@
   "statementCutoff": "Qəbz kəsimi: {day}",
   "@statementCutoff": {
     "placeholders": {
-      "day": { "type": "String" }
+      "day": {
+        "type": "String"
+      }
     }
   },
   "planBudget": "Büdcəni Planla",
@@ -351,19 +384,103 @@
   "editHomeNameTitle": "Ev Adını Redaktə Et",
   "editHomeNameLabel": "Ev Adı",
   "editHomeNameHint": "Məs: Əliyevlər Evi",
-  "homeNameRequired": "Ev adı mütləqdir.",
   "homeNameUpdatedToast": "Ev adı uğurla yeniləndi! 🏠",
   "customRoleOption": "✏️ Xüsusi Rol...",
   "customRoleHint": "Rol adını yazın...",
   "aboutDeveloper": "Tərtibatçı: Samed Kalaycı",
-  "aboutDescription": "Təsvir: Ağıllı ev təşkilatı.",
   "aboutCopyright": "© 2026 Ev Asistanı. Bütün hüquqlar qorunur.",
   "addShoppingItemSub": "Çatışmayan ərzaq, təmizlik və ev ehtiyacları",
   "guestLoginSuccess": "Qonaq sessiyanı başladıldı. 👋",
   "guestLoginFailed": "Qonaq girişi uğursuz oldu: {error}",
   "@guestLoginFailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "noUpcomingWarranties": "Yaxınlaşan zəmanət müddəti yoxdur. 👍",
+  "noUpcomingPayments": "Yaxınlaşan ödəniş yoxdur. 👍",
+  "editProduct": "Məhsulu Redaktə Et",
+  "locationLabel": "Məkan",
+  "locationHint": "Məs: Soyuducu, Qida anbarı...",
+  "locationRequired": "Məkan tələb olunur.",
+  "additionalNotesHint": "Əlavə qeydlər əlavə edin...",
+  "selectExpirationDateWarning": "Zəhmət olmasa son istifadə tarixini seçin.",
+  "productNameExampleHint": "Məs: Süd, Yumurta...",
+  "selectDate": "Tarix seçin",
+  "signInBtn": "Giriş et",
+  "signInFailed": "Giriş uğursuz oldu.",
+  "signUpBtn": "Qeydiyyatdan keç",
+  "createAccount": "Hesab yaradın",
+  "welcomeToApp": "Ev Asistanı dünyasına xoş gəlmisiniz",
+  "smartHomeTagline": "Evindəki hər şeyi ağıllı idarə et",
+  "signInWithGoogle": "Google ilə giriş et",
+  "signInWithApple": "Apple ilə giriş et",
+  "tryAsGuest": "Qonaq olaraq sınayın (Üzvlüksüz)",
+  "forgotPassword": "Şifrəni unutmusunuz?",
+  "forgotPasswordDesc": "Hesabınızın e-poçt ünvanını daxil edin. Sizə şifrə sıfırlama keçidi göndərəcəyik.",
+  "emailAddress": "E-poçt ünvanı",
+  "passwordLabel": "Şifrə",
+  "confirmPasswordLabel": "Şifrə təkrarı",
+  "confirmPasswordHint": "Şifrənizi təsdiqləyin",
+  "fullNameLabel": "Adınız Soyadınız",
+  "fullNameRequired": "Adınız Soyadınız tələb olunur.",
+  "passwordRequired": "Şifrə tələb olunur.",
+  "confirmPasswordRequired": "Şifrə təkrarı tələb olunur.",
+  "passwordsDoNotMatch": "Şifrələr uyğun gəlmir.",
+  "emailRequired": "E-poçt ünvanı tələb olunur.",
+  "enterValidEmail": "Zəhmət olmasa düzgün e-poçt ünvanı daxil edin.",
+  "passwordMinLength": "Şifrə ən azı 6 simvol olmalıdır.",
+  "dontHaveAccount": "Hesabınız yoxdur?",
+  "alreadyHaveAccount": "Artıq hesabınız var?",
+  "orDivider": "və ya",
+  "send": "Göndər",
+  "passwordResetSent": "Şifrə sıfırlama keçidi e-poçtunuza gönderildi! 📧",
+  "googleLoginSuccess": "Google hesabınızla giriş edildi. 👋",
+  "appleLoginSuccess": "Apple hesabınızla giriş edildi. 👋",
+  "verificationEmailSent": "E-poçt ünvanınıza təsdiq keçidi gönderildi. Zəhmət olmasa təsdiqləyib daxil olun.",
+  "emailAlreadyInUse": "Bu e-poçt ünvanı artıq istifadədədir.",
+  "weakPassword": "Şifrə çox zəifdir. Ən azı 6 simvol istifadə edin.",
+  "linkWithGoogle": "Google ilə bağla",
+  "linkWithApple": "Apple ilə bağla",
+  "linkWithEmail": "E-poçt ilə bağla",
+  "connecting": "Qoşulur...",
+  "emailHint": "ornek@gmail.com",
+  "guestUser": "Qonaq",
+  "deleteAccountConfirmDesc": "Hesabınızı və bütün şəxsi məlumatlarınızı silmək istədiyinizdən əminsiniz? Bu əməliyyat geri qaytarıla bilməz.",
+  "deleteAccountConfirmBtn": "Bəli, sil",
+  "deleteAccountReauthNotice": "Təhlükəsizlik səbəbiylə hesabınızı silmək üçün zəhmət olmasa çıxış edib yenidən daxil olun.",
+  "adFreeActiveTitle": "Reklamsız Versiya Aktivdir ✨",
+  "adFreeActiveDesc": "Reklamlardan tamamilə azad oldunuz, tətbiqdən həzz alın!",
+  "activeBadge": "AKTİV",
+  "buyAdFreeTitle": "Reklamsız Versiya Alın",
+  "buyAdFreeDesc": "Tətbiq daxilində bütün reklamları silin, fasiləsiz təcrübə yaşayın.",
+  "monthlyYearlyFlexiblePlans": "Aylıq və İllik Çevik Planlar",
+  "inspectAndBuyPlans": "Planları İncələ və Al",
+  "adFreeTitle": "Reklamsız Göstəriş",
+  "adFreeHeaderSubtitle": "Bütün reklamları silin, fasiləsiz və sürətli təcrübə yaşayın.",
+  "zeroAdsTitle": "Sıfır Reklam, Fasiləsiz İstifadə",
+  "zeroAdsSubtitle": "Səhifə keçidlərində və əməliyyatlarda bütün reklamlar bloklanır.",
+  "allFamilyIncludedTitle": "Bütün Ailə Üvləri Üçün Daxildir",
+  "allFamilyIncludedSubtitle": "Ailənizdəki bütün fərdlər avtomatik olaraq reklamsız istifadə edir.",
+  "fasterPageTransitionsTitle": "Daha Sürətli Səhifə Keçidləri",
+  "fasterPageTransitionsSubtitle": "Reklam yüklənmələri olmadan tətbiq daha yüngül və sürətli işləyir.",
+  "annualPlanRecommended": "İllik Plan (Tövsiyə olunan)",
+  "save30Percent": "%30 QƏNAƏT",
+  "annualPlanSubprice": "İllik ödəniş ilə ən sərfəli qiymət",
+  "monthlyPlanTitle": "Aylıq Plan",
+  "flexibleBadge": "ÇEVİK",
+  "cancelAnytimeSubprice": "İstədiyiniz vaxt asanlıqla ləğv edin",
+  "switchToAnnualPlan": "İllik Reklamsız Plana Keçin",
+  "switchToMonthlyPlan": "Aylıq Reklamsız Plana Keçin",
+  "cancelNoticeIos": "İstədiyiniz vaxt App Store / Apple ID tənzimləmələrinizdən ləğv edə bilərsiniz.",
+  "cancelNoticeAndroid": "İstədiyiniz vaxt Google Play Store tənzimləmələrinizdən ləğv edə bilərsiniz.",
+  "termsOfUseEula": "İstifadə Şərtləri (EULA)",
+  "adFreeActivatedToast": "🎉 Reklamsız göstəriş abunəliyiniz aktivləşdirildi!",
+  "purchasesRestoredToast": "🎉 Alışlar uğurla bərpa olundu!",
+  "signOutAnonymousTitle": "Qonaq Hesabından Çıxış Et",
+  "signOutAnonymousDesc": "Bütün məlumatlarınız və ailə girişiniz itiriləcək. Hesabınızı bağlamadan çıxış etmək istədiyinizdən əminsiniz?",
+  "signOutConfirmDesc": "Hesabınızdan çıxış etmək istədiyinizdən əminsiniz?",
+  "linkAccountBtn": "Hesabı Bağla"
 }

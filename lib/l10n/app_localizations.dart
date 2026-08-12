@@ -677,7 +677,7 @@ abstract class AppLocalizations {
   /// No description provided for @restorePurchases.
   ///
   /// In tr, this message translates to:
-  /// **'Geri Yükle'**
+  /// **'Satın Alımları Geri Yükle'**
   String get restorePurchases;
 
   /// No description provided for @introPopupTitle.
@@ -2125,6 +2125,510 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Misafir girişi başarısız: {error}'**
   String guestLoginFailed(String error);
+
+  /// No description provided for @noUpcomingWarranties.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yaklaşan garanti bitişi bulunmuyor. 👍'**
+  String get noUpcomingWarranties;
+
+  /// No description provided for @noUpcomingPayments.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yaklaşan ödeme bulunmuyor. 👍'**
+  String get noUpcomingPayments;
+
+  /// No description provided for @editProduct.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ürünü Düzenle'**
+  String get editProduct;
+
+  /// No description provided for @locationLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum'**
+  String get locationLabel;
+
+  /// No description provided for @locationHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Buzdolabı, Kiler...'**
+  String get locationHint;
+
+  /// No description provided for @locationRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Konum zorunludur.'**
+  String get locationRequired;
+
+  /// No description provided for @additionalNotesHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ek bilgi ekleyin...'**
+  String get additionalNotesHint;
+
+  /// No description provided for @selectExpirationDateWarning.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen son kullanma tarihini seçin.'**
+  String get selectExpirationDateWarning;
+
+  /// No description provided for @productNameExampleHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Örn: Süt, Yumurta...'**
+  String get productNameExampleHint;
+
+  /// No description provided for @selectDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarih Seçiniz'**
+  String get selectDate;
+
+  /// No description provided for @signInBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Giriş Yap'**
+  String get signInBtn;
+
+  /// No description provided for @signInFailed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Giriş yapılamadı.'**
+  String get signInFailed;
+
+  /// No description provided for @signUpBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıt Ol'**
+  String get signUpBtn;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap Oluştur'**
+  String get createAccount;
+
+  /// No description provided for @welcomeToApp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ev Asistanı dünyasına hoş geldiniz'**
+  String get welcomeToApp;
+
+  /// No description provided for @smartHomeTagline.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evindeki her şeyi akıllıca yönet'**
+  String get smartHomeTagline;
+
+  /// No description provided for @signInWithGoogle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile Giriş Yap'**
+  String get signInWithGoogle;
+
+  /// No description provided for @signInWithApple.
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple ile Giriş Yap'**
+  String get signInWithApple;
+
+  /// No description provided for @tryAsGuest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir Olarak Deneyin (Üyeliksiz)'**
+  String get tryAsGuest;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifremi Unuttum'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotPasswordDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınıza ait e-posta adresini girin. Size bir şifre sıfırlama bağlantısı göndereceğiz.'**
+  String get forgotPasswordDesc;
+
+  /// No description provided for @emailAddress.
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta Adresi'**
+  String get emailAddress;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre'**
+  String get passwordLabel;
+
+  /// No description provided for @confirmPasswordLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre Tekrarı'**
+  String get confirmPasswordLabel;
+
+  /// No description provided for @confirmPasswordHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifrenizi doğrulayın'**
+  String get confirmPasswordHint;
+
+  /// No description provided for @fullNameLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adınız Soyadınız'**
+  String get fullNameLabel;
+
+  /// No description provided for @fullNameRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adınız Soyadınız zorunludur.'**
+  String get fullNameRequired;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre zorunludur.'**
+  String get passwordRequired;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre tekrarı zorunludur.'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifreler birbiriyle eşleşmiyor.'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta adresi zorunludur.'**
+  String get emailRequired;
+
+  /// No description provided for @enterValidEmail.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lütfen geçerli bir e-posta adresi girin.'**
+  String get enterValidEmail;
+
+  /// No description provided for @passwordMinLength.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre en az 6 karakter olmalıdır.'**
+  String get passwordMinLength;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınız yok mu?'**
+  String get dontHaveAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zaten hesabınız var mı?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @orDivider.
+  ///
+  /// In tr, this message translates to:
+  /// **'veya'**
+  String get orDivider;
+
+  /// No description provided for @send.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönder'**
+  String get send;
+
+  /// No description provided for @passwordResetSent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre sıfırlama bağlantısı e-postanıza gönderildi! 📧'**
+  String get passwordResetSent;
+
+  /// No description provided for @googleLoginSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google hesabınızla giriş yapıldı. 👋'**
+  String get googleLoginSuccess;
+
+  /// No description provided for @appleLoginSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple hesabınızla giriş yapıldı. 👋'**
+  String get appleLoginSuccess;
+
+  /// No description provided for @verificationEmailSent.
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta adresinize onay bağlantısı gönderildi. Lütfen e-postanızı onaylayıp giriş yapın.'**
+  String get verificationEmailSent;
+
+  /// No description provided for @emailAlreadyInUse.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu e-posta adresi zaten kullanımda.'**
+  String get emailAlreadyInUse;
+
+  /// No description provided for @weakPassword.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre çok zayıf. En az 6 karakter kullanın.'**
+  String get weakPassword;
+
+  /// No description provided for @linkWithGoogle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile Bağla'**
+  String get linkWithGoogle;
+
+  /// No description provided for @linkWithApple.
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple ile Bağla'**
+  String get linkWithApple;
+
+  /// No description provided for @linkWithEmail.
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta ile Bağla'**
+  String get linkWithEmail;
+
+  /// No description provided for @connecting.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlanıyor...'**
+  String get connecting;
+
+  /// No description provided for @emailHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'ornek@gmail.com'**
+  String get emailHint;
+
+  /// No description provided for @guestUser.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir'**
+  String get guestUser;
+
+  /// No description provided for @deleteAccountConfirmDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınızı ve tüm kişisel verilerinizi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'**
+  String get deleteAccountConfirmDesc;
+
+  /// No description provided for @deleteAccountConfirmBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evet, Sil'**
+  String get deleteAccountConfirmBtn;
+
+  /// No description provided for @deleteAccountReauthNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenlik nedeniyle hesabınızı silmek için lütfen çıkış yapıp tekrar giriş yapın.'**
+  String get deleteAccountReauthNotice;
+
+  /// No description provided for @adFreeActiveTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reklamsız Gösterim Aktif ✨'**
+  String get adFreeActiveTitle;
+
+  /// No description provided for @adFreeActiveDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reklamlardan tamamen kurtuldunuz, uygulamanın keyfini çıkarın!'**
+  String get adFreeActiveDesc;
+
+  /// No description provided for @activeBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'AKTİF'**
+  String get activeBadge;
+
+  /// No description provided for @buyAdFreeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reklamsız Gösterim Satın Al'**
+  String get buyAdFreeTitle;
+
+  /// No description provided for @buyAdFreeDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama genelinde tüm reklamları kaldırın, kesintisiz bir deneyim yaşayın.'**
+  String get buyAdFreeDesc;
+
+  /// No description provided for @monthlyYearlyFlexiblePlans.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık & Yıllık Esnek Planlar'**
+  String get monthlyYearlyFlexiblePlans;
+
+  /// No description provided for @inspectAndBuyPlans.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planları İncele & Satın Al'**
+  String get inspectAndBuyPlans;
+
+  /// No description provided for @adFreeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reklamsız Gösterim'**
+  String get adFreeTitle;
+
+  /// No description provided for @adFreeHeaderSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm reklamları kaldırın, kesintisiz ve hızlı bir deneyim yaşayın.'**
+  String get adFreeHeaderSubtitle;
+
+  /// No description provided for @zeroAdsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıfır Reklam, Kesintisiz Kullanım'**
+  String get zeroAdsTitle;
+
+  /// No description provided for @zeroAdsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayfa geçişlerinde veya işlemlerde çıkan tüm reklamlar engellenir.'**
+  String get zeroAdsSubtitle;
+
+  /// No description provided for @allFamilyIncludedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm Aile Üyelerine Dahil'**
+  String get allFamilyIncludedTitle;
+
+  /// No description provided for @allFamilyIncludedSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ailenizdeki tüm bireyler otomatik olarak reklamsız kullanır.'**
+  String get allFamilyIncludedSubtitle;
+
+  /// No description provided for @fasterPageTransitionsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha Hızlı Sayfa Geçişleri'**
+  String get fasterPageTransitionsTitle;
+
+  /// No description provided for @fasterPageTransitionsSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Reklam yüklemeleri olmadan uygulama daha hafif ve hızlı çalışır.'**
+  String get fasterPageTransitionsSubtitle;
+
+  /// No description provided for @annualPlanRecommended.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yıllık Plan (Önerilen)'**
+  String get annualPlanRecommended;
+
+  /// No description provided for @save30Percent.
+  ///
+  /// In tr, this message translates to:
+  /// **'%30 TASARRUF'**
+  String get save30Percent;
+
+  /// No description provided for @annualPlanSubprice.
+  ///
+  /// In tr, this message translates to:
+  /// **'En avantajlı fiyat ile yıllık ödeme'**
+  String get annualPlanSubprice;
+
+  /// No description provided for @monthlyPlanTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık Plan'**
+  String get monthlyPlanTitle;
+
+  /// No description provided for @flexibleBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'ESNEK'**
+  String get flexibleBadge;
+
+  /// No description provided for @cancelAnytimeSubprice.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstediğin zaman kolayca iptal et'**
+  String get cancelAnytimeSubprice;
+
+  /// No description provided for @switchToAnnualPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yıllık Reklamsız Plana Geç'**
+  String get switchToAnnualPlan;
+
+  /// No description provided for @switchToMonthlyPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aylık Reklamsız Plana Geç'**
+  String get switchToMonthlyPlan;
+
+  /// No description provided for @cancelNoticeIos.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstediğiniz zaman App Store / Apple ID ayarlarınızdan iptal edebilirsiniz.'**
+  String get cancelNoticeIos;
+
+  /// No description provided for @cancelNoticeAndroid.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstediğiniz zaman Google Play Store ayarlarınızdan iptal edebilirsiniz.'**
+  String get cancelNoticeAndroid;
+
+  /// No description provided for @termsOfUseEula.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanım Koşulları (EULA)'**
+  String get termsOfUseEula;
+
+  /// No description provided for @adFreeActivatedToast.
+  ///
+  /// In tr, this message translates to:
+  /// **'🎉 Reklamsız gösterim aboneliğiniz aktifleştirildi!'**
+  String get adFreeActivatedToast;
+
+  /// No description provided for @purchasesRestoredToast.
+  ///
+  /// In tr, this message translates to:
+  /// **'🎉 Satın alımları başarıyla geri yüklendi!'**
+  String get purchasesRestoredToast;
+
+  /// No description provided for @signOutAnonymousTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Anonim Hesaptan Çıkış Yap'**
+  String get signOutAnonymousTitle;
+
+  /// No description provided for @signOutAnonymousDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm verileriniz ve aile erişiminiz kaybolacaktır. Hesabınızı bağlamadan çıkış yapmak istediğinize emin misiniz?'**
+  String get signOutAnonymousDesc;
+
+  /// No description provided for @signOutConfirmDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabınızdan çıkış yapmak istediğinize emin misiniz?'**
+  String get signOutConfirmDesc;
+
+  /// No description provided for @linkAccountBtn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabı Bağla'**
+  String get linkAccountBtn;
 }
 
 class _AppLocalizationsDelegate

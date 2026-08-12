@@ -31,13 +31,11 @@
   "azerbaijani": "Azerice",
   "greek": "Yunanca",
   "portuguese": "Portekizce",
-
   "navHome": "Ana Sayfa",
   "navInventory": "Envanter",
   "navShopping": "Alışveriş",
   "navFinance": "Finans",
   "navProfile": "Profil",
-
   "shoppingListTitle": "Alışveriş Listesi",
   "toBuyTab": "Alınacaklar",
   "purchasedTab": "Alınanlar",
@@ -46,7 +44,9 @@
   "itemsCount": "{count} Ürün",
   "@itemsCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "addShoppingItemTitle": "Alışveriş Listesine Ürün Ekle",
@@ -56,11 +56,12 @@
   "itemAddedToast": "\"{name}\" alışveriş listesine eklendi! 🛒",
   "@itemAddedToast": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "emptyShoppingList": "Alışveriş listeniz boş.",
-
   "financeOverviewTab": "Genel Bakış",
   "householdWalletTab": "Ev Cüzdanı",
   "accountsTab": "Hesaplar",
@@ -75,11 +76,12 @@
   "accountScheduleHeader": "Hesap / Takvim",
   "monthlyFreeBudget": "Kalan Serbest Bütçe",
   "quickAddExpense": "Hızlı Gider Ekle",
-
   "greetingUser": "Merhaba, {name}",
   "@greetingUser": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "quickAdd": "Hızlı Ekle",
@@ -90,16 +92,19 @@
   "urgentExpirationsCount": "{count} Acil Ürün",
   "@urgentExpirationsCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "urgentWarrantiesCount": "{count} Acil Garanti",
   "@urgentWarrantiesCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-
   "inventoryTitle": "Ev Envanteri",
   "expirationTab": "Son Kullanma",
   "warrantyTab": "Garantiler",
@@ -109,7 +114,6 @@
   "periodicMaintenance": "Periyodik Bakım Takvimi",
   "homeGuideWifi": "Ev Rehberi & Wi-Fi",
   "digitalVaultSubtitle": "Evinizle ilgili tüm kritik belgeler, rehberler ve acil durum numaraları şifreli olarak güvenle saklanır.",
-
   "myHomeAndFamily": "Evim & Aile Yönetimi",
   "inviteCode": "Davet Kodu",
   "familyMembers": "Aile Üyeleri",
@@ -123,14 +127,16 @@
   "memberCount": "{count} Üye",
   "@memberCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "removeAdsSubtitle": "Tek seferlik ödeme ile kalıcı olarak reklamsız kullanın!",
   "removeAdsActive": "Reklamsız Sürüm Aktif ✅",
   "specialPriceOffer": "Özel Fiyat! Sadece bir kahve fiyatına.",
   "buyNow": "Satın Al",
-  "restorePurchases": "Geri Yükle",
+  "restorePurchases": "Satın Alımları Geri Yükle",
   "introPopupTitle": "Ev Asistanı'nı Reklamsız Kullanın!",
   "introPopupDesc": "Çok uygun fiyata tek seferlik ödeme yaparak tüm reklamları kalıcı olarak kaldırabilirsiniz.",
   "skipForNow": "Şimdilik Geç",
@@ -147,7 +153,9 @@
   "statementCutoff": "Fatura kesim: {day}",
   "@statementCutoff": {
     "placeholders": {
-      "day": { "type": "String" }
+      "day": {
+        "type": "String"
+      }
     }
   },
   "planBudget": "Bütçeni Planla",
@@ -376,20 +384,103 @@
   "editHomeNameTitle": "Ev Adını Düzenle",
   "editHomeNameLabel": "Ev Adı",
   "editHomeNameHint": "Örn: Kalaycı Home, Güneş Apt. No:4",
-  "homeNameRequired": "Ev adı zorunludur.",
   "homeNameUpdatedToast": "Ev adı başarıyla güncellendi! 🏠",
   "customRoleOption": "✏️ Özel Rol...",
   "customRoleHint": "Rol adını yazın (örn. Amca, Misafir)...",
   "aboutDeveloper": "Geliştirici: Samed Kalaycı",
-  "aboutDescription": "Açıklama: Ev içi düzen ve ortak liste yönetimi uygulaması.",
   "aboutCopyright": "© 2026 Ev Asistanı. Tüm hakları saklıdır.",
   "addShoppingItemSub": "Eksilen gıda, temizlik ve ev ihtiyaçları",
   "guestLoginSuccess": "Misafir oturumu ile giriş yapıldı. 👋",
   "guestLoginFailed": "Misafir girişi başarısız: {error}",
   "@guestLoginFailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "noUpcomingWarranties": "Yaklaşan garanti bitişi bulunmuyor. 👍",
+  "noUpcomingPayments": "Yaklaşan ödeme bulunmuyor. 👍",
+  "editProduct": "Ürünü Düzenle",
+  "locationLabel": "Konum",
+  "locationHint": "Örn: Buzdolabı, Kiler...",
+  "locationRequired": "Konum zorunludur.",
+  "additionalNotesHint": "Ek bilgi ekleyin...",
+  "selectExpirationDateWarning": "Lütfen son kullanma tarihini seçin.",
+  "productNameExampleHint": "Örn: Süt, Yumurta...",
+  "selectDate": "Tarih Seçiniz",
+  "signInBtn": "Giriş Yap",
+  "signInFailed": "Giriş yapılamadı.",
+  "signUpBtn": "Kayıt Ol",
+  "createAccount": "Hesap Oluştur",
+  "welcomeToApp": "Ev Asistanı dünyasına hoş geldiniz",
+  "smartHomeTagline": "Evindeki her şeyi akıllıca yönet",
+  "signInWithGoogle": "Google ile Giriş Yap",
+  "signInWithApple": "Apple ile Giriş Yap",
+  "tryAsGuest": "Misafir Olarak Deneyin (Üyeliksiz)",
+  "forgotPassword": "Şifremi Unuttum",
+  "forgotPasswordDesc": "Hesabınıza ait e-posta adresini girin. Size bir şifre sıfırlama bağlantısı göndereceğiz.",
+  "emailAddress": "E-posta Adresi",
+  "passwordLabel": "Şifre",
+  "confirmPasswordLabel": "Şifre Tekrarı",
+  "confirmPasswordHint": "Şifrenizi doğrulayın",
+  "fullNameLabel": "Adınız Soyadınız",
+  "fullNameRequired": "Adınız Soyadınız zorunludur.",
+  "passwordRequired": "Şifre zorunludur.",
+  "confirmPasswordRequired": "Şifre tekrarı zorunludur.",
+  "passwordsDoNotMatch": "Şifreler birbiriyle eşleşmiyor.",
+  "emailRequired": "E-posta adresi zorunludur.",
+  "enterValidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+  "passwordMinLength": "Şifre en az 6 karakter olmalıdır.",
+  "dontHaveAccount": "Hesabınız yok mu?",
+  "alreadyHaveAccount": "Zaten hesabınız var mı?",
+  "orDivider": "veya",
+  "send": "Gönder",
+  "passwordResetSent": "Şifre sıfırlama bağlantısı e-postanıza gönderildi! 📧",
+  "googleLoginSuccess": "Google hesabınızla giriş yapıldı. 👋",
+  "appleLoginSuccess": "Apple hesabınızla giriş yapıldı. 👋",
+  "verificationEmailSent": "E-posta adresinize onay bağlantısı gönderildi. Lütfen e-postanızı onaylayıp giriş yapın.",
+  "emailAlreadyInUse": "Bu e-posta adresi zaten kullanımda.",
+  "weakPassword": "Şifre çok zayıf. En az 6 karakter kullanın.",
+  "linkWithGoogle": "Google ile Bağla",
+  "linkWithApple": "Apple ile Bağla",
+  "linkWithEmail": "E-posta ile Bağla",
+  "connecting": "Bağlanıyor...",
+  "emailHint": "ornek@gmail.com",
+  "guestUser": "Misafir",
+  "deleteAccountConfirmDesc": "Hesabınızı ve tüm kişisel verilerinizi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+  "deleteAccountConfirmBtn": "Evet, Sil",
+  "deleteAccountReauthNotice": "Güvenlik nedeniyle hesabınızı silmek için lütfen çıkış yapıp tekrar giriş yapın.",
+  "adFreeActiveTitle": "Reklamsız Gösterim Aktif ✨",
+  "adFreeActiveDesc": "Reklamlardan tamamen kurtuldunuz, uygulamanın keyfini çıkarın!",
+  "activeBadge": "AKTİF",
+  "buyAdFreeTitle": "Reklamsız Gösterim Satın Al",
+  "buyAdFreeDesc": "Uygulama genelinde tüm reklamları kaldırın, kesintisiz bir deneyim yaşayın.",
+  "monthlyYearlyFlexiblePlans": "Aylık & Yıllık Esnek Planlar",
+  "inspectAndBuyPlans": "Planları İncele & Satın Al",
+  "adFreeTitle": "Reklamsız Gösterim",
+  "adFreeHeaderSubtitle": "Tüm reklamları kaldırın, kesintisiz ve hızlı bir deneyim yaşayın.",
+  "zeroAdsTitle": "Sıfır Reklam, Kesintisiz Kullanım",
+  "zeroAdsSubtitle": "Sayfa geçişlerinde veya işlemlerde çıkan tüm reklamlar engellenir.",
+  "allFamilyIncludedTitle": "Tüm Aile Üyelerine Dahil",
+  "allFamilyIncludedSubtitle": "Ailenizdeki tüm bireyler otomatik olarak reklamsız kullanır.",
+  "fasterPageTransitionsTitle": "Daha Hızlı Sayfa Geçişleri",
+  "fasterPageTransitionsSubtitle": "Reklam yüklemeleri olmadan uygulama daha hafif ve hızlı çalışır.",
+  "annualPlanRecommended": "Yıllık Plan (Önerilen)",
+  "save30Percent": "%30 TASARRUF",
+  "annualPlanSubprice": "En avantajlı fiyat ile yıllık ödeme",
+  "monthlyPlanTitle": "Aylık Plan",
+  "flexibleBadge": "ESNEK",
+  "cancelAnytimeSubprice": "İstediğin zaman kolayca iptal et",
+  "switchToAnnualPlan": "Yıllık Reklamsız Plana Geç",
+  "switchToMonthlyPlan": "Aylık Reklamsız Plana Geç",
+  "cancelNoticeIos": "İstediğiniz zaman App Store / Apple ID ayarlarınızdan iptal edebilirsiniz.",
+  "cancelNoticeAndroid": "İstediğiniz zaman Google Play Store ayarlarınızdan iptal edebilirsiniz.",
+  "termsOfUseEula": "Kullanım Koşulları (EULA)",
+  "adFreeActivatedToast": "🎉 Reklamsız gösterim aboneliğiniz aktifleştirildi!",
+  "purchasesRestoredToast": "🎉 Satın alımları başarıyla geri yüklendi!",
+  "signOutAnonymousTitle": "Anonim Hesaptan Çıkış Yap",
+  "signOutAnonymousDesc": "Tüm verileriniz ve aile erişiminiz kaybolacaktır. Hesabınızı bağlamadan çıkış yapmak istediğinize emin misiniz?",
+  "signOutConfirmDesc": "Hesabınızdan çıkış yapmak istediğinize emin misiniz?",
+  "linkAccountBtn": "Hesabı Bağla"
 }
-

@@ -87,7 +87,8 @@ class UserModel {
   // ── Takma adlar / Getters ──────────────────────────────────────────────────
 
   String get id => uid;
-  String get displayName => name.isNotEmpty ? name : (email.isNotEmpty ? email.split('@').first : 'Kullanıcı');
+  String get displayName => name.isNotEmpty ? name : (email.isNotEmpty ? email.split('@').first : '');
+  bool get isAnonymous => name.isEmpty && email.isEmpty;
   bool get isOwner => role == UserRole.owner || role == UserRole.admin;
 
   /// Kesinlikle null dönmeyen güvenli avatarType getter'ı.

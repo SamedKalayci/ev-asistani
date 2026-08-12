@@ -309,7 +309,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get buyNow => 'Αγορά Τώρα';
 
   @override
-  String get restorePurchases => 'Επαναφορά Αγορών';
+  String get restorePurchases => 'Επαναφορά αγορών';
 
   @override
   String get introPopupTitle =>
@@ -1077,4 +1077,281 @@ class AppLocalizationsEl extends AppLocalizations {
   String guestLoginFailed(String error) {
     return 'Σύνδεση επισκέπτη απέτυχε: $error';
   }
+
+  @override
+  String get noUpcomingWarranties =>
+      'Δεν υπάρχουν προσεχείς λήξεις εγγύησης. 👍';
+
+  @override
+  String get noUpcomingPayments => 'Δεν υπάρχουν προσεχείς πληρωμές. 👍';
+
+  @override
+  String get editProduct => 'Επεξεργασία προϊόντος';
+
+  @override
+  String get locationLabel => 'Τοποθεσία';
+
+  @override
+  String get locationHint => 'Π.χ.: Ψυγείο, Τροφοθήκη...';
+
+  @override
+  String get locationRequired => 'Η τοποθεσία είναι υποχρεωτική.';
+
+  @override
+  String get additionalNotesHint => 'Προσθήκη επιπλέον σημειώσεων...';
+
+  @override
+  String get selectExpirationDateWarning =>
+      'Παρακαλώ επιλέξτε ημερομηνία λήξης.';
+
+  @override
+  String get productNameExampleHint => 'Π.χ.: Γάλα, Αυγά...';
+
+  @override
+  String get selectDate => 'Επιλέξτε ημερομηνία';
+
+  @override
+  String get signInBtn => 'Σύνδεση';
+
+  @override
+  String get signInFailed => 'Η σύνδεση απέτυχε.';
+
+  @override
+  String get signUpBtn => 'Εγγραφή';
+
+  @override
+  String get createAccount => 'Δημιουργία λογαριασμού';
+
+  @override
+  String get welcomeToApp => 'Καλώς ορίσατε στο Home Assistant';
+
+  @override
+  String get smartHomeTagline => 'Διαχειριστείτε το σπίτι σας έξυπνα';
+
+  @override
+  String get signInWithGoogle => 'Σύνδεση με Google';
+
+  @override
+  String get signInWithApple => 'Σύνδεση με Apple';
+
+  @override
+  String get tryAsGuest => 'Δοκιμάστε ως επισκέπτης';
+
+  @override
+  String get forgotPassword => 'Ξεχάσατε τον κωδικό πρόσβασης;';
+
+  @override
+  String get forgotPasswordDesc =>
+      'Εισάγετε το email σας. Θα σας στείλουμε ένα σύνδεσμο επαναφοράς.';
+
+  @override
+  String get emailAddress => 'Διεύθυνση Email';
+
+  @override
+  String get passwordLabel => 'Κωδικός πρόσβασης';
+
+  @override
+  String get confirmPasswordLabel => 'Επιβεβαίωση κωδικού';
+
+  @override
+  String get confirmPasswordHint => 'Επιβεβαιώστε τον κωδικό σας';
+
+  @override
+  String get fullNameLabel => 'Ονοματεπώνυμο';
+
+  @override
+  String get fullNameRequired => 'Το ονοματεπώνυμο είναι υποχρεωτικό.';
+
+  @override
+  String get passwordRequired => 'Ο κωδικός πρόσβασης είναι υποχρεωτικός.';
+
+  @override
+  String get confirmPasswordRequired =>
+      'Η επιβεβαίωση κωδικού είναι υποχρεωτική.';
+
+  @override
+  String get passwordsDoNotMatch => 'Οι κωδικοί πρόσβασης δεν ταιριάζουν.';
+
+  @override
+  String get emailRequired => 'Η διεύθυνση email είναι υποχρεωτική.';
+
+  @override
+  String get enterValidEmail => 'Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email.';
+
+  @override
+  String get passwordMinLength =>
+      'Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.';
+
+  @override
+  String get dontHaveAccount => 'Δεν έχετε λογαριασμό;';
+
+  @override
+  String get alreadyHaveAccount => 'Έχετε ήδη λογαριασμό;';
+
+  @override
+  String get orDivider => 'ή';
+
+  @override
+  String get send => 'Αποστολή';
+
+  @override
+  String get passwordResetSent =>
+      'Ο σύνδεσμος επαναφοράς εστάλη στο email σας! 📧';
+
+  @override
+  String get googleLoginSuccess => 'Σύνδεση με Google επιτυχής. 👋';
+
+  @override
+  String get appleLoginSuccess => 'Σύνδεση με Apple επιτυχής. 👋';
+
+  @override
+  String get verificationEmailSent =>
+      'Εστάλη σύνδεσμος επιβεβαίωσης. Παρακαλώ επιβεβαιώστε το email σας.';
+
+  @override
+  String get emailAlreadyInUse => 'Αυτή η διεύθυνση email χρησιμοποιείται ήδη.';
+
+  @override
+  String get weakPassword =>
+      'Ο κωδικός είναι πολύ αδύναμος. Χρησιμοποιήστε τουλάχιστον 6 χαρακτήρες.';
+
+  @override
+  String get linkWithGoogle => 'Σύνδεση με Google';
+
+  @override
+  String get linkWithApple => 'Σύνδεση με Apple';
+
+  @override
+  String get linkWithEmail => 'Σύνδεση με Email';
+
+  @override
+  String get connecting => 'Σύνδεση...';
+
+  @override
+  String get emailHint => 'paradeigma@gmail.com';
+
+  @override
+  String get guestUser => 'Επισκέπτης';
+
+  @override
+  String get deleteAccountConfirmDesc =>
+      'Είστε βέβαιοι ότι θέλετε να διαγράψετε το λογαριασμό σας και όλα τα προσωπικά σας δεδομένα; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.';
+
+  @override
+  String get deleteAccountConfirmBtn => 'Ναι, διαγραφή';
+
+  @override
+  String get deleteAccountReauthNotice =>
+      'Για λόγους ασφαλείας, παρακαλώ αποσυνδεθείτε και συνδεθείτε ξανά για να διαγράψετε το λογαριασμό σας.';
+
+  @override
+  String get adFreeActiveTitle => 'Έκδοση χωρίς διαφημίσεις ενεργή ✨';
+
+  @override
+  String get adFreeActiveDesc =>
+      'Έχετε αφαιρέσει εντελώς τις διαφημίσεις, απολαύστε την εφαρμογή!';
+
+  @override
+  String get activeBadge => 'ΕΝΕΡΓΟ';
+
+  @override
+  String get buyAdFreeTitle => 'Αγορά έκδοσης χωρίς διαφημίσεις';
+
+  @override
+  String get buyAdFreeDesc =>
+      'Αφαιρέστε όλες τις διαφημίσεις για μια εμπειρία χωρίς διακοπές.';
+
+  @override
+  String get monthlyYearlyFlexiblePlans => 'Μηνιαία & Ετήσια Ευέλικτα Σχέδια';
+
+  @override
+  String get inspectAndBuyPlans => 'Προβολή σχεδίων & αγορά';
+
+  @override
+  String get adFreeTitle => 'Έκδοση χωρίς διαφημίσεις';
+
+  @override
+  String get adFreeHeaderSubtitle =>
+      'Αφαιρέστε όλες τις διαφημίσεις για μια γρήγορη και ομαλή εμπειρία.';
+
+  @override
+  String get zeroAdsTitle => 'Μηδέν διαφημίσεις, ομαλή χρήση';
+
+  @override
+  String get zeroAdsSubtitle =>
+      'Όλες οι διαφημίσεις στις μεταβάσεις σελίδων αποκλείονται.';
+
+  @override
+  String get allFamilyIncludedTitle =>
+      'Περιλαμβάνεται για όλα τα μέλη της οικογένειας';
+
+  @override
+  String get allFamilyIncludedSubtitle =>
+      'Όλοι στην οικογένειά σας αποκτούν αυτόματα πρόσβαση χωρίς διαφημίσεις.';
+
+  @override
+  String get fasterPageTransitionsTitle => 'Ταχύτερες μεταβάσεις σελίδων';
+
+  @override
+  String get fasterPageTransitionsSubtitle =>
+      'Η εφαρμογή εκτελείται πιο γρήγορα χωρίς τη φόρτωση διαφημίσεων.';
+
+  @override
+  String get annualPlanRecommended => 'Ετήσιο σχέδιο (Συνιστάται)';
+
+  @override
+  String get save30Percent => 'ΕΞΟΙΚΟΝΟΜΗΣΤΕ 30%';
+
+  @override
+  String get annualPlanSubprice => 'Καλύτερη τιμή με ετήσια πληρωμή';
+
+  @override
+  String get monthlyPlanTitle => 'Μηνιαίο σχέδιο';
+
+  @override
+  String get flexibleBadge => 'ΕΥΕΛΙΚΤΟ';
+
+  @override
+  String get cancelAnytimeSubprice => 'Ακυρώστε εύκολα ανά πάσα στιγμή';
+
+  @override
+  String get switchToAnnualPlan =>
+      'Μετάβαση στο ετήσιο σχέδιο χωρίς διαφημίσεις';
+
+  @override
+  String get switchToMonthlyPlan =>
+      'Μετάβαση στο μηνιαίο σχέδιο χωρίς διαφημίσεις';
+
+  @override
+  String get cancelNoticeIos =>
+      'Μπορείτε να ακυρώσετε ανά πάσα στιγμή στις ρυθμίσεις του App Store / Apple ID.';
+
+  @override
+  String get cancelNoticeAndroid =>
+      'Μπορείτε να ακυρώσετε ανά πάσα στιγμή στις ρυθμίσεις του Google Play Store.';
+
+  @override
+  String get termsOfUseEula => 'Όροι χρήσης (EULA)';
+
+  @override
+  String get adFreeActivatedToast =>
+      '🎉 Η συνδρομή σας χωρίς διαφημίσεις ενεργοποιήθηκε!';
+
+  @override
+  String get purchasesRestoredToast =>
+      '🎉 Οι αγορές αποκαταστάθηκαν με επιτυχία!';
+
+  @override
+  String get signOutAnonymousTitle => 'Αποσύνδεση από λογαριασμό επισκέπτη';
+
+  @override
+  String get signOutAnonymousDesc =>
+      'Όλα τα δεδομένα σας και η πρόσβαση στην οικογένεια θα χαθούν. Είστε βέβαιοι ότι θέλετε να αποσυνδεθείτε χωρίς να συνδέσετε το λογαριασμό σας;';
+
+  @override
+  String get signOutConfirmDesc =>
+      'Είστε βέβαιοι ότι θέλετε να αποσυνδεθείτε από το λογαριασμό σας;';
+
+  @override
+  String get linkAccountBtn => 'Σύνδεση λογαριασμού';
 }

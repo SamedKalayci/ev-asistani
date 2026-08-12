@@ -11,7 +11,7 @@
   "about": "About",
   "aboutSubtitle": "Home Assistant v1.1.0 (Firebase Enabled)",
   "developerLabel": "Developer: Samed Kalaycı",
-  "aboutDescription": "Description: Household organization and shared list management app.",
+  "aboutDescription": "Description: Smart home organization & family management app.",
   "allRightsReserved": "© 2026 Home Assistant. All rights reserved.",
   "privacyPolicy": "Privacy Policy & Terms of Service",
   "privacyPolicySubtitle": "Review legal information and usage conditions",
@@ -31,26 +31,37 @@
   "azerbaijani": "Azerbaijani",
   "greek": "Greek",
   "portuguese": "Portuguese",
-
   "navHome": "Home",
   "navInventory": "Inventory",
   "navShopping": "Shopping",
   "navFinance": "Finance",
   "navProfile": "Profile",
-
   "shoppingListTitle": "Shopping List",
   "toBuyTab": "To Buy",
   "purchasedTab": "Purchased",
   "clearCompleted": "Clear",
   "newProductHint": "Add new item...",
   "itemsCount": "{count} Items",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "addShoppingItemTitle": "Add Item to Shopping List",
   "productNameLabel": "Item Name",
   "productNameHint": "E.g. Milk, Bread, Eggs...",
   "addToListBtn": "Add to List",
   "itemAddedToast": "\"{name}\" added to shopping list! 🛒",
+  "@itemAddedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "emptyShoppingList": "Your shopping list is empty.",
-
   "financeOverviewTab": "Overview",
   "householdWalletTab": "Household Wallet",
   "accountsTab": "Accounts",
@@ -65,16 +76,35 @@
   "accountScheduleHeader": "Account / Schedule",
   "monthlyFreeBudget": "Remaining Free Budget",
   "quickAddExpense": "Quick Add Expense",
-
   "greetingUser": "Hello, {name}",
+  "@greetingUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "quickAdd": "Quick Add",
   "expiringSoonTitle": "Expirations Approaching",
   "warrantiesExpiringTitle": "Warranties Expiring & Ended",
   "shoppingSummaryTitle": "Shopping List Summary",
   "viewAll": "View All",
   "urgentExpirationsCount": "{count} Urgent Items",
+  "@urgentExpirationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "urgentWarrantiesCount": "{count} Urgent Warranties",
-
+  "@urgentWarrantiesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "inventoryTitle": "Home Inventory",
   "expirationTab": "Expiration",
   "warrantyTab": "Warranties",
@@ -84,7 +114,6 @@
   "periodicMaintenance": "Maintenance Schedule",
   "homeGuideWifi": "Home Guide & Wi-Fi",
   "digitalVaultSubtitle": "Critical home documents, guides, and emergency numbers are encrypted and safely stored.",
-
   "myHomeAndFamily": "My Home & Family Management",
   "inviteCode": "Invite Code",
   "familyMembers": "Family Members",
@@ -93,14 +122,16 @@
   "houseOwner": "Homeowner",
   "legalSection": "Legal",
   "legalAndInfo": "Legal & Info",
+  "accountActions": "Account Actions",
+  "removeAdsTitle": "Remove Ads (Ad-Free)",
   "memberCount": "{count} Member",
   "@memberCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "accountActions": "Account Actions",
-  "removeAdsTitle": "Remove Ads (Ad-Free)",
   "removeAdsSubtitle": "Permanently remove ads with a one-time purchase!",
   "removeAdsActive": "Ad-Free Version Active ✅",
   "specialPriceOffer": "Special Price! Only the cost of a coffee.",
@@ -122,7 +153,9 @@
   "statementCutoff": "Statement cutoff: {day}",
   "@statementCutoff": {
     "placeholders": {
-      "day": { "type": "String" }
+      "day": {
+        "type": "String"
+      }
     }
   },
   "planBudget": "Plan Budget",
@@ -351,20 +384,103 @@
   "editHomeNameTitle": "Edit Home Name",
   "editHomeNameLabel": "Home Name",
   "editHomeNameHint": "e.g. Smith Home, Apartment #4",
-  "homeNameRequired": "Home name is required.",
   "homeNameUpdatedToast": "Home name updated successfully! 🏠",
   "customRoleOption": "✏️ Custom Role...",
   "customRoleHint": "Type role name (e.g. Guest, Uncle)...",
   "aboutDeveloper": "Developer: Samed Kalaycı",
-  "aboutDescription": "Description: Smart home organization & family management app.",
   "aboutCopyright": "© 2026 Ev Asistanı. All rights reserved.",
   "addShoppingItemSub": "Missing groceries, cleaning and household needs",
   "guestLoginSuccess": "Guest session started. 👋",
   "guestLoginFailed": "Guest sign-in failed: {error}",
   "@guestLoginFailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "noUpcomingWarranties": "No upcoming warranty expirations. 👍",
+  "noUpcomingPayments": "No upcoming payments. 👍",
+  "editProduct": "Edit Product",
+  "locationLabel": "Location",
+  "locationHint": "Ex: Fridge, Pantry...",
+  "locationRequired": "Location is required.",
+  "additionalNotesHint": "Add additional notes...",
+  "selectExpirationDateWarning": "Please select expiration date.",
+  "productNameExampleHint": "Ex: Milk, Eggs...",
+  "selectDate": "Select Date",
+  "signInBtn": "Sign In",
+  "signInFailed": "Sign-in failed.",
+  "signUpBtn": "Sign Up",
+  "createAccount": "Create Account",
+  "welcomeToApp": "Welcome to Home Assistant",
+  "smartHomeTagline": "Manage everything in your home smartly",
+  "signInWithGoogle": "Sign in with Google",
+  "signInWithApple": "Sign in with Apple",
+  "tryAsGuest": "Try as Guest (Without Account)",
+  "forgotPassword": "Forgot Password",
+  "forgotPasswordDesc": "Enter your account email. We will send you a password reset link.",
+  "emailAddress": "Email Address",
+  "passwordLabel": "Password",
+  "confirmPasswordLabel": "Confirm Password",
+  "confirmPasswordHint": "Confirm your password",
+  "fullNameLabel": "Full Name",
+  "fullNameRequired": "Full name is required.",
+  "passwordRequired": "Password is required.",
+  "confirmPasswordRequired": "Password confirmation is required.",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "emailRequired": "Email address is required.",
+  "enterValidEmail": "Please enter a valid email address.",
+  "passwordMinLength": "Password must be at least 6 characters.",
+  "dontHaveAccount": "Don't have an account?",
+  "alreadyHaveAccount": "Already have an account?",
+  "orDivider": "or",
+  "send": "Send",
+  "passwordResetSent": "Password reset link sent to your email! 📧",
+  "googleLoginSuccess": "Signed in with Google. 👋",
+  "appleLoginSuccess": "Signed in with Apple. 👋",
+  "verificationEmailSent": "Verification email sent. Please verify your email and sign in.",
+  "emailAlreadyInUse": "This email address is already in use.",
+  "weakPassword": "Password is too weak. Use at least 6 characters.",
+  "linkWithGoogle": "Link with Google",
+  "linkWithApple": "Link with Apple",
+  "linkWithEmail": "Link with Email",
+  "connecting": "Connecting...",
+  "emailHint": "example@gmail.com",
+  "guestUser": "Guest",
+  "deleteAccountConfirmDesc": "Are you sure you want to delete your account and all personal data? This action cannot be undone.",
+  "deleteAccountConfirmBtn": "Yes, Delete",
+  "deleteAccountReauthNotice": "For security reasons, please log out and log back in to delete your account.",
+  "adFreeActiveTitle": "Ad-Free Version Active ✨",
+  "adFreeActiveDesc": "You've completely removed ads, enjoy the app experience!",
+  "activeBadge": "ACTIVE",
+  "buyAdFreeTitle": "Get Ad-Free Version",
+  "buyAdFreeDesc": "Remove all ads across the app, enjoy an uninterrupted experience.",
+  "monthlyYearlyFlexiblePlans": "Monthly & Yearly Flexible Plans",
+  "inspectAndBuyPlans": "Inspect & Choose Plan",
+  "adFreeTitle": "Ad-Free Version",
+  "adFreeHeaderSubtitle": "Remove all ads for a seamless and fast home experience.",
+  "zeroAdsTitle": "Zero Ads, Seamless Usage",
+  "zeroAdsSubtitle": "All pop-up and banner ads across screens are blocked.",
+  "allFamilyIncludedTitle": "Included for All Family Members",
+  "allFamilyIncludedSubtitle": "Everyone in your household gets ad-free access automatically.",
+  "fasterPageTransitionsTitle": "Faster Page Transitions",
+  "fasterPageTransitionsSubtitle": "App runs lighter and faster without ad loading overhead.",
+  "annualPlanRecommended": "Annual Plan (Recommended)",
+  "save30Percent": "SAVE 30%",
+  "annualPlanSubprice": "Best value with yearly payment",
+  "monthlyPlanTitle": "Monthly Plan",
+  "flexibleBadge": "FLEXIBLE",
+  "cancelAnytimeSubprice": "Cancel easily anytime",
+  "switchToAnnualPlan": "Switch to Annual Ad-Free Plan",
+  "switchToMonthlyPlan": "Switch to Monthly Ad-Free Plan",
+  "cancelNoticeIos": "You can cancel anytime in your App Store / Apple ID settings.",
+  "cancelNoticeAndroid": "You can cancel anytime in your Google Play Store settings.",
+  "termsOfUseEula": "Terms of Use (EULA)",
+  "adFreeActivatedToast": "🎉 Your ad-free subscription has been activated!",
+  "purchasesRestoredToast": "🎉 Purchases successfully restored!",
+  "signOutAnonymousTitle": "Sign Out from Guest Account",
+  "signOutAnonymousDesc": "All your data and family access will be lost. Are you sure you want to sign out without linking your account?",
+  "signOutConfirmDesc": "Are you sure you want to sign out from your account?",
+  "linkAccountBtn": "Link Account"
 }
-

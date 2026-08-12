@@ -13,7 +13,9 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../core/utils/l10n_helper.dart';
 import '../../../shared/widgets/primary_button.dart';
+import 'package:ev_asistani/l10n/app_localizations.dart';
 
 /// RevenueCat üzerinden dynamic Offerings getiren provider.
 final offeringsProvider = FutureProvider<Offerings?>((ref) async {
@@ -63,8 +65,8 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
           if (mounted) {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('🎉 Reklamsız gösterim aboneliğiniz aktifleştirildi!'),
+              SnackBar(
+                content: Text(context.l10n.adFreeActivatedToast),
                 backgroundColor: AppColors.primary,
                 behavior: SnackBarBehavior.floating,
               ),
@@ -99,8 +101,8 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('🎉 Reklamsız gösterim modunuz başarıyla aktifleştirildi!'),
+          SnackBar(
+            content: Text(context.l10n.adFreeActivatedToast),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
@@ -130,8 +132,8 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
         if (success) {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('🎉 Satın alımlarınız başarıyla geri yüklendi!'),
+            SnackBar(
+              content: Text(context.l10n.purchasesRestoredToast),
               backgroundColor: AppColors.primary,
               behavior: SnackBarBehavior.floating,
             ),
@@ -158,12 +160,13 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isIOS = !kIsWeb && Platform.isIOS;
     final cancelNoticeText = isIOS
-        ? 'İstediğiniz zaman App Store / Apple ID ayarlarınızdan iptal edebilirsiniz.'
-        : 'İstediğiniz zaman Google Play Store ayarlarınızdan iptal edebilirsiniz.';
+        ? l10n.cancelNoticeIos
+        : l10n.cancelNoticeAndroid;
 
     // RevenueCat dynamic offerings dinleme
     final offeringsAsync = ref.watch(offeringsProvider);
@@ -181,8 +184,8 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
     final monthlyPriceText = monthlyPkg?.storeProduct.priceString ?? '₺29.99 / Ay';
 
     final ctaLabel = _selectedPlanIndex == 0
-        ? 'Yıllık Reklamsız Plana Geç ($annualPriceText)'
-        : 'Aylık Reklamsız Plana Geç ($monthlyPriceText)';
+        ? '${l10n.switchToAnnualPlan} ($annualPriceText)'
+        : '${l10n.switchToMonthlyPlan} ($monthlyPriceText)';
 
     return Container(
       constraints: BoxConstraints(
@@ -250,7 +253,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
 
             // Başlık & Alt Başlık
             Text(
-              'Reklamsız Gösterim',
+              l10n.adFreeTitle,
               style: AppTypography.headlineSmall.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,
@@ -258,7 +261,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Tüm reklamları kaldırın, kesintisiz ve hızlı bir deneyim yaşayın.',
+              l10n.adFreeHeaderSubtitle,
               textAlign: TextAlign.center,
               style: AppTypography.bodyMedium.copyWith(
                 color: colorScheme.onSurfaceVariant,
@@ -271,22 +274,22 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
             _buildFeatureTile(
               colorScheme,
               icon: Icons.flash_on_rounded,
-              title: 'Sıfır Reklam, Kesintisiz Kullanım',
-              subtitle: 'Sayfa geçişlerinde veya işlemlerde çıkan tüm reklamlar engellenir.',
+              title: l10n.zeroAdsTitle,
+              subtitle: l10n.zeroAdsSubtitle,
             ),
             const SizedBox(height: AppSpacing.sm),
             _buildFeatureTile(
               colorScheme,
               icon: Icons.groups_rounded,
-              title: 'Tüm Aile Üyelerine Dahil',
-              subtitle: 'Ailenizdeki tüm bireyler otomatik olarak reklamsız kullanır.',
+              title: l10n.allFamilyIncludedTitle,
+              subtitle: l10n.allFamilyIncludedSubtitle,
             ),
             const SizedBox(height: AppSpacing.sm),
             _buildFeatureTile(
               colorScheme,
               icon: Icons.speed_rounded,
-              title: 'Daha Hızlı Sayfa Geçişleri',
-              subtitle: 'Reklam yüklemeleri olmadan uygulama daha hafif ve hızlı çalışır.',
+              title: l10n.fasterPageTransitionsTitle,
+              subtitle: l10n.fasterPageTransitionsSubtitle,
             ),
 
             const SizedBox(height: AppSpacing.xl),
@@ -294,20 +297,20 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
             // Plan Seçenekleri
             _buildPlanOptionTile(
               index: 0,
-              title: 'Yıllık Plan (Önerilen)',
+              title: l10n.annualPlanRecommended,
               priceText: annualPriceText,
-              subPriceText: 'Aylık sadece ₺20.83 • En avantajlı fiyat',
-              badgeText: '%30 TASARRUF',
+              subPriceText: l10n.annualPlanSubprice,
+              badgeText: l10n.save30Percent,
               badgeIsGold: true,
               colorScheme: colorScheme,
             ),
             const SizedBox(height: AppSpacing.sm),
             _buildPlanOptionTile(
               index: 1,
-              title: 'Aylık Plan',
+              title: l10n.monthlyPlanTitle,
               priceText: monthlyPriceText,
-              subPriceText: 'İstediğin zaman kolayca iptal et',
-              badgeText: 'ESNEK',
+              subPriceText: l10n.cancelAnytimeSubprice,
+              badgeText: l10n.flexibleBadge,
               badgeIsGold: false,
               colorScheme: colorScheme,
             ),
@@ -346,7 +349,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
                     }
                   },
                   child: Text(
-                    'Kullanım Koşulları (EULA)',
+                    l10n.termsOfUseEula,
                     style: AppTypography.labelSmall.copyWith(
                       color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                       decoration: TextDecoration.underline,
@@ -369,7 +372,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
                     }
                   },
                   child: Text(
-                    'Gizlilik Politikası',
+                    l10n.privacyPolicy,
                     style: AppTypography.labelSmall.copyWith(
                       color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
                       decoration: TextDecoration.underline,
@@ -382,7 +385,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
             TextButton(
               onPressed: _isLoading ? null : _handleRestore,
               child: Text(
-                'Satın Alımları Geri Yükle',
+                l10n.restorePurchases,
                 style: AppTypography.labelMedium.copyWith(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,

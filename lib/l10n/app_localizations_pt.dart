@@ -308,7 +308,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get buyNow => 'Comprar Agora';
 
   @override
-  String get restorePurchases => 'Restaurar Compras';
+  String get restorePurchases => 'Restaurar compras';
 
   @override
   String get introPopupTitle => 'Use o App Sem Anúncios!';
@@ -1076,4 +1076,276 @@ class AppLocalizationsPt extends AppLocalizations {
   String guestLoginFailed(String error) {
     return 'Falha no login de convidado: $error';
   }
+
+  @override
+  String get noUpcomingWarranties =>
+      'Nenhum vencimento de garantia próximo. 👍';
+
+  @override
+  String get noUpcomingPayments => 'Nenhum pagamento próximo. 👍';
+
+  @override
+  String get editProduct => 'Editar produto';
+
+  @override
+  String get locationLabel => 'Localização';
+
+  @override
+  String get locationHint => 'Ex: Geladeira, Despensa...';
+
+  @override
+  String get locationRequired => 'Localização é obrigatória.';
+
+  @override
+  String get additionalNotesHint => 'Adicionar notas adicionais...';
+
+  @override
+  String get selectExpirationDateWarning =>
+      'Por favor selecione a data de validade.';
+
+  @override
+  String get productNameExampleHint => 'Ex: Leite, Ovos...';
+
+  @override
+  String get selectDate => 'Selecionar data';
+
+  @override
+  String get signInBtn => 'Entrar';
+
+  @override
+  String get signInFailed => 'Falha ao entrar.';
+
+  @override
+  String get signUpBtn => 'Cadastrar';
+
+  @override
+  String get createAccount => 'Criar conta';
+
+  @override
+  String get welcomeToApp => 'Bem-vindo ao Assistente de Casa';
+
+  @override
+  String get smartHomeTagline =>
+      'Gerencie tudo em sua casa de forma inteligente';
+
+  @override
+  String get signInWithGoogle => 'Entrar com o Google';
+
+  @override
+  String get signInWithApple => 'Entrar com a Apple';
+
+  @override
+  String get tryAsGuest => 'Experimentar como convidado (Sem conta)';
+
+  @override
+  String get forgotPassword => 'Esqueceu a senha?';
+
+  @override
+  String get forgotPasswordDesc =>
+      'Insira seu e-mail. Enviaremos um link de redefinição de senha.';
+
+  @override
+  String get emailAddress => 'Endereço de e-mail';
+
+  @override
+  String get passwordLabel => 'Senha';
+
+  @override
+  String get confirmPasswordLabel => 'Confirmar senha';
+
+  @override
+  String get confirmPasswordHint => 'Confirme sua senha';
+
+  @override
+  String get fullNameLabel => 'Nome completo';
+
+  @override
+  String get fullNameRequired => 'O nome completo é obrigatório.';
+
+  @override
+  String get passwordRequired => 'A senha é obrigatória.';
+
+  @override
+  String get confirmPasswordRequired => 'A confirmação de senha é obrigatória.';
+
+  @override
+  String get passwordsDoNotMatch => 'As senhas não coincidem.';
+
+  @override
+  String get emailRequired => 'O e-mail é obrigatório.';
+
+  @override
+  String get enterValidEmail => 'Por favor insira um e-mail válido.';
+
+  @override
+  String get passwordMinLength => 'A senha deve ter pelo menos 6 caracteres.';
+
+  @override
+  String get dontHaveAccount => 'Não tem uma conta?';
+
+  @override
+  String get alreadyHaveAccount => 'Já tem uma conta?';
+
+  @override
+  String get orDivider => 'ou';
+
+  @override
+  String get send => 'Enviar';
+
+  @override
+  String get passwordResetSent => 'Link de redefinição de senha enviado! 📧';
+
+  @override
+  String get googleLoginSuccess => 'Conectado com o Google. 👋';
+
+  @override
+  String get appleLoginSuccess => 'Conectado com a Apple. 👋';
+
+  @override
+  String get verificationEmailSent =>
+      'Link de verificação enviado. Por favor verifique seu e-mail.';
+
+  @override
+  String get emailAlreadyInUse => 'Este e-mail já está em uso.';
+
+  @override
+  String get weakPassword =>
+      'A senha é muito fraca. Use pelo menos 6 caracteres.';
+
+  @override
+  String get linkWithGoogle => 'Vincular com Google';
+
+  @override
+  String get linkWithApple => 'Vincular com Apple';
+
+  @override
+  String get linkWithEmail => 'Vincular com e-mail';
+
+  @override
+  String get connecting => 'Conectando...';
+
+  @override
+  String get emailHint => 'exemplo@gmail.com';
+
+  @override
+  String get guestUser => 'Convidado';
+
+  @override
+  String get deleteAccountConfirmDesc =>
+      'Tem certeza de que deseja excluir sua conta e todos os seus dados pessoais? Esta ação não pode ser desfeita.';
+
+  @override
+  String get deleteAccountConfirmBtn => 'Sim, excluir';
+
+  @override
+  String get deleteAccountReauthNotice =>
+      'Por razões de segurança, faça login novamente para excluir sua conta.';
+
+  @override
+  String get adFreeActiveTitle => 'Versão sem anúncios ativa ✨';
+
+  @override
+  String get adFreeActiveDesc =>
+      'Você removeu todos os anúncios, aproveite o aplicativo!';
+
+  @override
+  String get activeBadge => 'ATIVO';
+
+  @override
+  String get buyAdFreeTitle => 'Obter versão sem anúncios';
+
+  @override
+  String get buyAdFreeDesc =>
+      'Remova todos os anúncios do app para uma experiência sem interrupções.';
+
+  @override
+  String get monthlyYearlyFlexiblePlans => 'Planos flexíveis mensais e anuais';
+
+  @override
+  String get inspectAndBuyPlans => 'Ver planos e adquirir';
+
+  @override
+  String get adFreeTitle => 'Versão sem anúncios';
+
+  @override
+  String get adFreeHeaderSubtitle =>
+      'Remova todos os anúncios para uma experiência rápida e contínua.';
+
+  @override
+  String get zeroAdsTitle => 'Zero anúncios, uso contínuo';
+
+  @override
+  String get zeroAdsSubtitle =>
+      'Todos os anúncios em transições de página são bloqueados.';
+
+  @override
+  String get allFamilyIncludedTitle =>
+      'Incluído para todos os membros da família';
+
+  @override
+  String get allFamilyIncludedSubtitle =>
+      'Todos na sua família recebem acesso sem anúncios automaticamente.';
+
+  @override
+  String get fasterPageTransitionsTitle => 'Transições de página mais rápidas';
+
+  @override
+  String get fasterPageTransitionsSubtitle =>
+      'O aplicativo roda mais leve e rápido sem carregamento de anúncios.';
+
+  @override
+  String get annualPlanRecommended => 'Plano anual (Recomendado)';
+
+  @override
+  String get save30Percent => 'ECONOMIZE 30%';
+
+  @override
+  String get annualPlanSubprice => 'Melhor valor com pagamento anual';
+
+  @override
+  String get monthlyPlanTitle => 'Plano mensal';
+
+  @override
+  String get flexibleBadge => 'FLEXÍVEL';
+
+  @override
+  String get cancelAnytimeSubprice => 'Cancele facilmente a qualquer momento';
+
+  @override
+  String get switchToAnnualPlan => 'Mudar para o plano anual sem anúncios';
+
+  @override
+  String get switchToMonthlyPlan => 'Mudar para o plano mensal sem anúncios';
+
+  @override
+  String get cancelNoticeIos =>
+      'Você pode cancelar a qualquer momento nas configurações da App Store / Apple ID.';
+
+  @override
+  String get cancelNoticeAndroid =>
+      'Você pode cancelar a qualquer momento nas configurações da Google Play Store.';
+
+  @override
+  String get termsOfUseEula => 'Termos de uso (EULA)';
+
+  @override
+  String get adFreeActivatedToast =>
+      '🎉 Sua assinatura sem anúncios foi activada!';
+
+  @override
+  String get purchasesRestoredToast => '🎉 Compras restauradas com sucesso!';
+
+  @override
+  String get signOutAnonymousTitle => 'Sair da conta de convidado';
+
+  @override
+  String get signOutAnonymousDesc =>
+      'Todos os seus dados e o acesso familiar serão perdidos. Tem certeza de que deseja sair sem vincular sua conta?';
+
+  @override
+  String get signOutConfirmDesc =>
+      'Tem certeza de que deseja sair da sua conta?';
+
+  @override
+  String get linkAccountBtn => 'Vincular conta';
 }

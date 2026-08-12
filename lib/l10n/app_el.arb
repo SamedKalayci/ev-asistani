@@ -11,7 +11,7 @@
   "about": "Σχετικά",
   "aboutSubtitle": "Βοηθός Σπιτιού v1.1.0 (Firebase Ενεργό)",
   "developerLabel": "Προγραμματιστής: Samed Kalaycı",
-  "aboutDescription": "Περιγραφή: Εφαρμογή οργάνωσης σπιτιού και διαχείρισης κοινόχρηστων λιστών.",
+  "aboutDescription": "Περιγραφή: Έξυπνη οργάνωση σπιτιού.",
   "allRightsReserved": "© 2026 Βοηθός Σπιτιού. Με επιφύλαξη παντός δικαιώματος.",
   "privacyPolicy": "Πολιτική Απορρήτου & Όροι",
   "privacyPolicySubtitle": "Δείτε νομικές πληροφορίες και όρους",
@@ -31,26 +31,37 @@
   "azerbaijani": "Αζερμπαϊτζανικά",
   "greek": "Ελληνικά",
   "portuguese": "Πορτογαλικά",
-
   "navHome": "Αρχική",
   "navInventory": "Απογραφή",
   "navShopping": "Αγορές",
   "navFinance": "Οικονομικά",
   "navProfile": "Προφίλ",
-
   "shoppingListTitle": "Λίστα Αγορών",
   "toBuyTab": "Προς Αγορά",
   "purchasedTab": "Αγορασμένα",
   "clearCompleted": "Καθαρισμός",
   "newProductHint": "Προσθήκη νέου προϊόντος...",
   "itemsCount": "{count} Προϊόντα",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "addShoppingItemTitle": "Προσθήκη στη Λίστα Αγορών",
   "productNameLabel": "Όνομα Προϊόντος",
   "productNameHint": "π.χ. Γάλα, Ψωμί, Αυγά...",
   "addToListBtn": "Προσθήκη στη Λίστα",
   "itemAddedToast": "Το \"{name}\" προστέθηκε στη λίστα! 🛒",
+  "@itemAddedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "emptyShoppingList": "Η λίστα αγορών είναι άδεια.",
-
   "financeOverviewTab": "Επισκόπηση",
   "householdWalletTab": "Πορτοφόλι Σπιτιού",
   "accountsTab": "Λογαριασμοί",
@@ -65,16 +76,35 @@
   "accountScheduleHeader": "Λογαριασμός / Πρόγραμμα",
   "monthlyFreeBudget": "Υπόλοιπο Διαθέσιμο Budget",
   "quickAddExpense": "Γρήγορη Προσθήκη Εξόδου",
-
   "greetingUser": "Γεια σου, {name}",
+  "@greetingUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "quickAdd": "Γρήγορη Προσθήκη",
   "expiringSoonTitle": "Προϊόντα που Λήγουν Σύντομα",
   "warrantiesExpiringTitle": "Εγγυήσεις που Λήγουν",
   "shoppingSummaryTitle": "Σύνοψη Λίστας Αγορών",
   "viewAll": "Προβολή Όλων",
   "urgentExpirationsCount": "{count} Επείγοντα Προϊόντα",
+  "@urgentExpirationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "urgentWarrantiesCount": "{count} Επείγουσες Εγγυήσεις",
-
+  "@urgentWarrantiesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "inventoryTitle": "Απογραφή Σπιτιού",
   "expirationTab": "Ημερομηνία Λήξης",
   "warrantyTab": "Εγγυήσεις",
@@ -84,7 +114,6 @@
   "periodicMaintenance": "Πρόγραμμα Συντήρησης",
   "homeGuideWifi": "Οδηγός Σπιτιού & Wi-Fi",
   "digitalVaultSubtitle": "Σημαντικά έγγραφα και τηλέφωνα ανάγκης είναι κρυπτογραφημένα.",
-
   "myHomeAndFamily": "Το Σπίτι μου & Οικογένεια",
   "inviteCode": "Κωδικός Πρόσκλησης",
   "familyMembers": "Μέλη Οικογένειας",
@@ -93,19 +122,21 @@
   "houseOwner": "Ιδιοκτήτης Σπιτιού",
   "legalSection": "Νομικά",
   "legalAndInfo": "Νομικά & Πληροφορίες",
+  "accountActions": "Ενέργειες Λογαριασμού",
+  "removeAdsTitle": "Αφαίρεση Διαφημίσεων",
   "memberCount": "{count} Μέλος",
   "@memberCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "accountActions": "Ενέργειες Λογαριασμού",
-  "removeAdsTitle": "Αφαίρεση Διαφημίσεων",
   "removeAdsSubtitle": "Χωρίς διαφημίσεις για πάντα με μία εφάπαξ πληρωμή!",
   "removeAdsActive": "Έκδοση Χωρίς Διαφημίσεις Ενεργή ✅",
   "specialPriceOffer": "Ειδική Τιμή! Στην τιμή ενός καφέ.",
   "buyNow": "Αγορά Τώρα",
-  "restorePurchases": "Επαναφορά Αγορών",
+  "restorePurchases": "Επαναφορά αγορών",
   "introPopupTitle": "Χρησιμοποιήστε την Εφαρμογή Χωρίς Διαφημίσεις!",
   "introPopupDesc": "Αφαιρέστε μόνιμα όλες τις διαφημίσεις με μία μικρή εφάπαξ πληρωμή.",
   "skipForNow": "Παράκαμψη προς το παρόν",
@@ -122,7 +153,9 @@
   "statementCutoff": "Ημερομηνία έκδοσης: {day}",
   "@statementCutoff": {
     "placeholders": {
-      "day": { "type": "String" }
+      "day": {
+        "type": "String"
+      }
     }
   },
   "planBudget": "Προγραμματισμός Προϋπολογισμού",
@@ -351,19 +384,103 @@
   "editHomeNameTitle": "Επεξεργασία Ονόματος Σπιτιού",
   "editHomeNameLabel": "Όνομα Σπιτιού",
   "editHomeNameHint": "π.χ. Σπίτι Παπαδόπουλου",
-  "homeNameRequired": "Το όνομα σπιτιού είναι υποχρεωτικό.",
   "homeNameUpdatedToast": "Το όνομα σπιτιού ενημερώθηκε επιτυχώς! 🏠",
   "customRoleOption": "✏️ Προσαρμοσμένος Ρόλος...",
   "customRoleHint": "Πληκτρολογήστε ρόλο...",
   "aboutDeveloper": "Δημιουργός: Samed Kalaycı",
-  "aboutDescription": "Περιγραφή: Έξυπνη οργάνωση σπιτιού.",
   "aboutCopyright": "© 2026 Ev Asistanı. Με την επιφύλαξη παντός δικαιώματος.",
   "addShoppingItemSub": "Τρόφιμα, καθαρισμός και οικιακές ανάγκες",
   "guestLoginSuccess": "Η συνεδρία επισκέπτη ξεκίνησε. 👋",
   "guestLoginFailed": "Σύνδεση επισκέπτη απέτυχε: {error}",
   "@guestLoginFailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "noUpcomingWarranties": "Δεν υπάρχουν προσεχείς λήξεις εγγύησης. 👍",
+  "noUpcomingPayments": "Δεν υπάρχουν προσεχείς πληρωμές. 👍",
+  "editProduct": "Επεξεργασία προϊόντος",
+  "locationLabel": "Τοποθεσία",
+  "locationHint": "Π.χ.: Ψυγείο, Τροφοθήκη...",
+  "locationRequired": "Η τοποθεσία είναι υποχρεωτική.",
+  "additionalNotesHint": "Προσθήκη επιπλέον σημειώσεων...",
+  "selectExpirationDateWarning": "Παρακαλώ επιλέξτε ημερομηνία λήξης.",
+  "productNameExampleHint": "Π.χ.: Γάλα, Αυγά...",
+  "selectDate": "Επιλέξτε ημερομηνία",
+  "signInBtn": "Σύνδεση",
+  "signInFailed": "Η σύνδεση απέτυχε.",
+  "signUpBtn": "Εγγραφή",
+  "createAccount": "Δημιουργία λογαριασμού",
+  "welcomeToApp": "Καλώς ορίσατε στο Home Assistant",
+  "smartHomeTagline": "Διαχειριστείτε το σπίτι σας έξυπνα",
+  "signInWithGoogle": "Σύνδεση με Google",
+  "signInWithApple": "Σύνδεση με Apple",
+  "tryAsGuest": "Δοκιμάστε ως επισκέπτης",
+  "forgotPassword": "Ξεχάσατε τον κωδικό πρόσβασης;",
+  "forgotPasswordDesc": "Εισάγετε το email σας. Θα σας στείλουμε ένα σύνδεσμο επαναφοράς.",
+  "emailAddress": "Διεύθυνση Email",
+  "passwordLabel": "Κωδικός πρόσβασης",
+  "confirmPasswordLabel": "Επιβεβαίωση κωδικού",
+  "confirmPasswordHint": "Επιβεβαιώστε τον κωδικό σας",
+  "fullNameLabel": "Ονοματεπώνυμο",
+  "fullNameRequired": "Το ονοματεπώνυμο είναι υποχρεωτικό.",
+  "passwordRequired": "Ο κωδικός πρόσβασης είναι υποχρεωτικός.",
+  "confirmPasswordRequired": "Η επιβεβαίωση κωδικού είναι υποχρεωτική.",
+  "passwordsDoNotMatch": "Οι κωδικοί πρόσβασης δεν ταιριάζουν.",
+  "emailRequired": "Η διεύθυνση email είναι υποχρεωτική.",
+  "enterValidEmail": "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email.",
+  "passwordMinLength": "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.",
+  "dontHaveAccount": "Δεν έχετε λογαριασμό;",
+  "alreadyHaveAccount": "Έχετε ήδη λογαριασμό;",
+  "orDivider": "ή",
+  "send": "Αποστολή",
+  "passwordResetSent": "Ο σύνδεσμος επαναφοράς εστάλη στο email σας! 📧",
+  "googleLoginSuccess": "Σύνδεση με Google επιτυχής. 👋",
+  "appleLoginSuccess": "Σύνδεση με Apple επιτυχής. 👋",
+  "verificationEmailSent": "Εστάλη σύνδεσμος επιβεβαίωσης. Παρακαλώ επιβεβαιώστε το email σας.",
+  "emailAlreadyInUse": "Αυτή η διεύθυνση email χρησιμοποιείται ήδη.",
+  "weakPassword": "Ο κωδικός είναι πολύ αδύναμος. Χρησιμοποιήστε τουλάχιστον 6 χαρακτήρες.",
+  "linkWithGoogle": "Σύνδεση με Google",
+  "linkWithApple": "Σύνδεση με Apple",
+  "linkWithEmail": "Σύνδεση με Email",
+  "connecting": "Σύνδεση...",
+  "emailHint": "paradeigma@gmail.com",
+  "guestUser": "Επισκέπτης",
+  "deleteAccountConfirmDesc": "Είστε βέβαιοι ότι θέλετε να διαγράψετε το λογαριασμό σας και όλα τα προσωπικά σας δεδομένα; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+  "deleteAccountConfirmBtn": "Ναι, διαγραφή",
+  "deleteAccountReauthNotice": "Για λόγους ασφαλείας, παρακαλώ αποσυνδεθείτε και συνδεθείτε ξανά για να διαγράψετε το λογαριασμό σας.",
+  "adFreeActiveTitle": "Έκδοση χωρίς διαφημίσεις ενεργή ✨",
+  "adFreeActiveDesc": "Έχετε αφαιρέσει εντελώς τις διαφημίσεις, απολαύστε την εφαρμογή!",
+  "activeBadge": "ΕΝΕΡΓΟ",
+  "buyAdFreeTitle": "Αγορά έκδοσης χωρίς διαφημίσεις",
+  "buyAdFreeDesc": "Αφαιρέστε όλες τις διαφημίσεις για μια εμπειρία χωρίς διακοπές.",
+  "monthlyYearlyFlexiblePlans": "Μηνιαία & Ετήσια Ευέλικτα Σχέδια",
+  "inspectAndBuyPlans": "Προβολή σχεδίων & αγορά",
+  "adFreeTitle": "Έκδοση χωρίς διαφημίσεις",
+  "adFreeHeaderSubtitle": "Αφαιρέστε όλες τις διαφημίσεις για μια γρήγορη και ομαλή εμπειρία.",
+  "zeroAdsTitle": "Μηδέν διαφημίσεις, ομαλή χρήση",
+  "zeroAdsSubtitle": "Όλες οι διαφημίσεις στις μεταβάσεις σελίδων αποκλείονται.",
+  "allFamilyIncludedTitle": "Περιλαμβάνεται για όλα τα μέλη της οικογένειας",
+  "allFamilyIncludedSubtitle": "Όλοι στην οικογένειά σας αποκτούν αυτόματα πρόσβαση χωρίς διαφημίσεις.",
+  "fasterPageTransitionsTitle": "Ταχύτερες μεταβάσεις σελίδων",
+  "fasterPageTransitionsSubtitle": "Η εφαρμογή εκτελείται πιο γρήγορα χωρίς τη φόρτωση διαφημίσεων.",
+  "annualPlanRecommended": "Ετήσιο σχέδιο (Συνιστάται)",
+  "save30Percent": "ΕΞΟΙΚΟΝΟΜΗΣΤΕ 30%",
+  "annualPlanSubprice": "Καλύτερη τιμή με ετήσια πληρωμή",
+  "monthlyPlanTitle": "Μηνιαίο σχέδιο",
+  "flexibleBadge": "ΕΥΕΛΙΚΤΟ",
+  "cancelAnytimeSubprice": "Ακυρώστε εύκολα ανά πάσα στιγμή",
+  "switchToAnnualPlan": "Μετάβαση στο ετήσιο σχέδιο χωρίς διαφημίσεις",
+  "switchToMonthlyPlan": "Μετάβαση στο μηνιαίο σχέδιο χωρίς διαφημίσεις",
+  "cancelNoticeIos": "Μπορείτε να ακυρώσετε ανά πάσα στιγμή στις ρυθμίσεις του App Store / Apple ID.",
+  "cancelNoticeAndroid": "Μπορείτε να ακυρώσετε ανά πάσα στιγμή στις ρυθμίσεις του Google Play Store.",
+  "termsOfUseEula": "Όροι χρήσης (EULA)",
+  "adFreeActivatedToast": "🎉 Η συνδρομή σας χωρίς διαφημίσεις ενεργοποιήθηκε!",
+  "purchasesRestoredToast": "🎉 Οι αγορές αποκαταστάθηκαν με επιτυχία!",
+  "signOutAnonymousTitle": "Αποσύνδεση από λογαριασμό επισκέπτη",
+  "signOutAnonymousDesc": "Όλα τα δεδομένα σας και η πρόσβαση στην οικογένεια θα χαθούν. Είστε βέβαιοι ότι θέλετε να αποσυνδεθείτε χωρίς να συνδέσετε το λογαριασμό σας;",
+  "signOutConfirmDesc": "Είστε βέβαιοι ότι θέλετε να αποσυνδεθείτε από το λογαριασμό σας;",
+  "linkAccountBtn": "Σύνδεση λογαριασμού"
 }

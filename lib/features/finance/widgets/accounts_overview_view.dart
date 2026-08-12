@@ -6,7 +6,6 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../shared/widgets/empty_state.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/providers/currency_provider.dart';
 import '../models/account_model.dart';
@@ -154,11 +153,37 @@ class AccountsOverviewView extends ConsumerWidget {
   List<Widget> _buildAccountsList(BuildContext context, List<AccountModel> accounts, String currencySymbol) {
     final l10n = AppLocalizations.of(context)!;
     if (accounts.isEmpty) {
+      final colorScheme = Theme.of(context).colorScheme;
       return [
-        EmptyState(
-          icon: Icons.account_balance_wallet_outlined,
-          title: l10n.noAccountYet,
-        )
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm + 2,
+          ),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerLow,
+            borderRadius: AppRadius.borderLg,
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.account_balance_wallet_outlined,
+                size: 18,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Text(
+                l10n.noAccountYet,
+                style: AppTypography.bodySmall.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
       ];
     }
 
@@ -275,11 +300,21 @@ class AccountsOverviewView extends ConsumerWidget {
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with Month Selector
+          // Header: Ödeme Takvimi
+          Text(l10n.paymentSchedule, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: AppSpacing.xs),
+
+          // Ay Seçeneği (Ödeme Takvimi Altında)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.paymentSchedule, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                formattedMonthYear,
+                style: AppTypography.bodyMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
               Row(
                 children: [
                   IconButton(
@@ -291,12 +326,7 @@ class AccountsOverviewView extends ConsumerWidget {
                           DateTime(selectedMonth.year, selectedMonth.month - 1);
                     },
                   ),
-                  const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    formattedMonthYear,
-                    style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: AppSpacing.xs),
+                  const SizedBox(width: AppSpacing.sm),
                   IconButton(
                     icon: const Icon(Icons.chevron_right_rounded),
                     padding: EdgeInsets.zero,
@@ -310,7 +340,7 @@ class AccountsOverviewView extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: AppSpacing.md),
 
           if (filteredSchedules.isEmpty)
             Padding(
@@ -343,11 +373,13 @@ class AccountsOverviewView extends ConsumerWidget {
   Widget _buildScheduleList(BuildContext context, WidgetRef ref, List<PaymentScheduleModel> schedulesList, String currencySymbol) {
     final now = DateTime.now();
     final localeCode = Localizations.localeOf(context).toString();
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: schedulesList.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.xs),
       itemBuilder: (context, index) {
         final s = schedulesList[index];
         final isOverdue = !s.isPaid && s.date.isBefore(DateTime(now.year, now.month, now.day));
@@ -355,89 +387,101 @@ class AccountsOverviewView extends ConsumerWidget {
             ? Colors.grey
             : (isOverdue ? AppColors.error : (s.isIncome ? AppColors.success : AppColors.error));
 
+        final formattedDate = DateFormat.MMMd(localeCode).format(s.date);
+
         return InkWell(
           onTap: () => PaymentScheduleBottomSheet.show(context, scheduleToEdit: s),
           borderRadius: AppRadius.borderMd,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs, horizontal: AppSpacing.xs),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
             child: Row(
               children: [
-                Checkbox(
-                  value: s.isPaid,
-                  onChanged: (val) {
-                    if (val != null) {
-                      final repo = ref.read(financeRepositoryProvider);
-                      final familyId = ref.read(activeFamilyIdProvider);
-                      repo.updatePaymentSchedule(familyId, s.id, {'isPaid': val});
-                    }
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: Checkbox(
+                    value: s.isPaid,
+                    onChanged: (val) {
+                      if (val != null) {
+                        final repo = ref.read(financeRepositoryProvider);
+                        final familyId = ref.read(activeFamilyIdProvider);
+                        repo.updatePaymentSchedule(familyId, s.id, {'isPaid': val});
+                      }
+                    },
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                  ),
                 ),
+                const SizedBox(width: 4),
                 Container(
-                  width: 4,
-                  height: 40,
+                  width: 3.5,
+                  height: 32,
                   decoration: BoxDecoration(
                     color: color,
                     borderRadius: AppRadius.borderFull,
                   ),
-                  margin: const EdgeInsets.only(right: AppSpacing.sm),
                 ),
-                SizedBox(
-                  width: 60,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        DateFormat.MMMd(localeCode).format(s.date),
-                        style: AppTypography.bodyMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: s.isPaid ? Theme.of(context).colorScheme.onSurfaceVariant : null,
-                        ),
-                      ),
-                      if (s.recurringGroupId != null)
-                        Text(
-                          '🔄',
-                          style: AppTypography.labelSmall.copyWith(fontSize: 9, color: Colors.blue),
-                        ),
-                    ],
-                  ),
-                ),
+                const SizedBox(width: 8),
+
+                // Başlık & Tarih / Hesap Adı Subtitle
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              s.title,
+                              style: AppTypography.bodyMedium.copyWith(
+                                fontWeight: FontWeight.bold,
+                                decoration: s.isPaid ? TextDecoration.lineThrough : null,
+                                color: s.isPaid ? colorScheme.onSurfaceVariant : null,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (s.recurringGroupId != null) ...[
+                            const SizedBox(width: 4),
+                            const Text('🔄', style: TextStyle(fontSize: 10)),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 1),
                       Text(
-                        s.title,
-                        style: AppTypography.bodyLarge.copyWith(
-                          fontWeight: FontWeight.w600,
-                          decoration: s.isPaid ? TextDecoration.lineThrough : null,
-                          color: s.isPaid ? Theme.of(context).colorScheme.onSurfaceVariant : null,
+                        s.accountName != null && s.accountName!.isNotEmpty
+                            ? '$formattedDate • ${s.accountName}'
+                            : formattedDate,
+                        style: AppTypography.labelSmall.copyWith(
+                          color: isOverdue && !s.isPaid
+                              ? AppColors.error
+                              : colorScheme.onSurfaceVariant,
+                          fontWeight: isOverdue && !s.isPaid ? FontWeight.bold : FontWeight.w500,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      if (s.accountName != null)
-                        Text(
-                          s.accountName!,
-                          style: AppTypography.bodySmall.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                        ),
                     ],
                   ),
                 ),
-                const SizedBox(width: AppSpacing.sm),
+
+                const SizedBox(width: 8),
+
+                // Tutar
                 Text(
                   (s.isIncome ? '+' : '-') + _formatCurrency(s.amount, currencySymbol),
-                  style: AppTypography.titleMedium.copyWith(
+                  style: AppTypography.titleSmall.copyWith(
                     fontWeight: FontWeight.bold,
                     decoration: s.isPaid ? TextDecoration.lineThrough : null,
                     color: s.isPaid
-                        ? Theme.of(context).colorScheme.onSurfaceVariant
+                        ? colorScheme.onSurfaceVariant
                         : (s.isIncome ? AppColors.success : AppColors.error),
                   ),
                 ),
-                const SizedBox(width: AppSpacing.xs),
+                const SizedBox(width: 4),
+
                 IconButton(
-                  icon: Icon(Icons.close_rounded, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  icon: Icon(Icons.close_rounded, size: 16, color: colorScheme.onSurfaceVariant),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () => _handleDeleteSchedule(context, ref, s),

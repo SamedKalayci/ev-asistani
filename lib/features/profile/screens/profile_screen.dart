@@ -21,6 +21,7 @@ import '../../../shared/models/user_model.dart';
 import '../../../shared/widgets/app_header.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import '../providers/family_provider.dart';
 import '../widgets/link_account_bottom_sheet.dart';
 import '../widgets/profile_edit_bottom_sheet.dart';
@@ -191,24 +192,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   // ── Hesabımı Sil ──────────────────────────────────────────────────────────
 
   Future<void> _deleteAccount() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Hesabımı Sil'),
-        content: const Text(
-          'Hesabınızı ve tüm kişisel verilerinizi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
-        ),
+        title: Text(l10n.deleteAccount),
+        content: Text(l10n.deleteAccountConfirmDesc),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Evet, Sil'),
+            child: Text(l10n.deleteAccountConfirmBtn),
           ),
         ],
       ),
@@ -228,12 +228,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         if (e.toString().contains('requires-recent-login')) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Güvenlik nedeniyle hesabınızı silmek için lütfen çıkış yapıp tekrar giriş yapın.',
-                ),
+              SnackBar(
+                content: Text(l10n.deleteAccountReauthNotice),
                 backgroundColor: AppColors.error,
-                duration: Duration(seconds: 5),
+                duration: const Duration(seconds: 5),
               ),
             );
           }
@@ -710,21 +708,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 _buildNoFamilyCard(colorScheme),
               ],
 
-              const SizedBox(height: AppSpacing.sectionGap),
 
-              // ── İşlemler ─────────────────────────────────────────────
-              _buildSectionHeader(colorScheme, l10n.transactionsTitle),
-              const SizedBox(height: AppSpacing.sm),
-              ProfileSettingTile(
-                icon: Icons.calendar_today_rounded,
-                title: l10n.periodAndRolloverSettings,
-                subtitle: l10n.periodAndRolloverSettingsDesc,
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.comingSoon)),
-                  );
-                },
-              ),
 
               const SizedBox(height: AppSpacing.sectionGap),
 
@@ -870,13 +854,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     builder: (ctx) => AlertDialog(
                       title: Text(
                         isAnonymous
-                            ? 'Anonim Hesaptan Çıkış Yap'
+                            ? l10n.signOutAnonymousTitle
                             : l10n.signOut,
                       ),
                       content: Text(
                         isAnonymous
-                            ? 'Tüm verileriniz ve aile erişiminiz kaybolacaktır. Hesabınızı bağlamadan çıkış yapmak istediğinize emin misiniz?'
-                            : 'Hesabınızdan çıkış yapmak istediğinize emin misiniz?',
+                            ? l10n.signOutAnonymousDesc
+                            : l10n.signOutConfirmDesc,
                       ),
                       actions: [
                         TextButton(
@@ -889,7 +873,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               Navigator.of(ctx).pop(false);
                               LinkAccountBottomSheet.show(context);
                             },
-                            child: const Text('Hesabı Bağla'),
+                            child: Text(l10n.linkAccountBtn),
                           ),
                         FilledButton(
                           style: FilledButton.styleFrom(
@@ -932,7 +916,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _buildUserProfileCard(ColorScheme colorScheme, UserModel? user) {
     final l10n = AppLocalizations.of(context)!;
-    final displayName = user?.displayName.isNotEmpty == true ? user!.displayName : l10n.userRoleLabel;
+    final displayName = user?.displayName.isNotEmpty == true
+        ? user!.displayName
+        : (user?.isAnonymous == true ? l10n.guestUser : l10n.userRoleLabel);
     final email = user?.email.isNotEmpty == true ? user!.email : l10n.anonymousSession;
 
     final avatarUrl = user?.effectiveAvatarUrl ?? '';
@@ -1096,14 +1082,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Reklamsız Gösterim Aktif ✨',
+                    l10n.adFreeActiveTitle,
                     style: AppTypography.titleSmall.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'Reklamlardan tamamen kurtuldunuz, uygulamanın keyfini çıkarın!',
+                    l10n.adFreeActiveDesc,
                     style: AppTypography.bodySmall.copyWith(
                       color: Colors.white.withValues(alpha: 0.85),
                     ),
@@ -1118,7 +1104,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 borderRadius: AppRadius.borderSm,
               ),
               child: Text(
-                'AKTİF',
+                l10n.activeBadge,
                 style: AppTypography.labelSmall.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -1164,7 +1150,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Reklamsız Gösterim Satın Al',
+                      l10n.buyAdFreeTitle,
                       style: AppTypography.titleMedium.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -1172,7 +1158,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Uygulama genelinde tüm reklamları kaldırın, kesintisiz bir deneyim yaşayın.',
+                      l10n.buyAdFreeDesc,
                       style: AppTypography.bodySmall.copyWith(
                         color: Colors.white.withValues(alpha: 0.8),
                       ),
@@ -1195,7 +1181,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const Icon(Icons.stars_rounded, color: Color(0xFFFBBF24), size: 16),
                 const SizedBox(width: 6),
                 Text(
-                  'Aylık & Yıllık Esnek Planlar',
+                  l10n.monthlyYearlyFlexiblePlans,
                   style: AppTypography.bodySmall.copyWith(
                     color: const Color(0xFFFBBF24),
                     fontWeight: FontWeight.bold,
@@ -1217,7 +1203,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.payment_rounded, size: 18),
-                  label: const Text('Planları İncele & Satın Al', style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: Text(l10n.inspectAndBuyPlans, style: const TextStyle(fontWeight: FontWeight.bold)),
                   onPressed: () => PaywallBottomSheet.show(context),
                 ),
               ),
@@ -1315,9 +1301,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.home_outlined, color: colorScheme.primary, size: 28),
-              const SizedBox(width: AppSpacing.md),
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Icon(Icons.home_outlined, color: colorScheme.primary, size: 28),
+              ),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1342,32 +1332,82 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          Row(
-            children: [
-              Expanded(
-                child: PrimaryButton(
-                  text: l10n.createHome,
-                  icon: Icons.add_home_rounded,
-                  onPressed: _showCreateFamilyDialog,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _showJoinFamilyDialog,
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppSpacing.md,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 340;
+              if (isNarrow) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    PrimaryButton(
+                      text: l10n.createHome,
+                      icon: Icons.add_home_rounded,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.md,
+                      ),
+                      onPressed: _showCreateFamilyDialog,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppRadius.borderFull,
+                    const SizedBox(height: AppSpacing.sm),
+                    OutlinedButton.icon(
+                      onPressed: _showJoinFamilyDialog,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.md,
+                          horizontal: AppSpacing.sm,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: AppRadius.borderFull,
+                        ),
+                      ),
+                      icon: const Icon(Icons.qr_code_rounded, size: 18),
+                      label: Text(
+                        l10n.enterCode,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  Expanded(
+                    child: PrimaryButton(
+                      text: l10n.createHome,
+                      icon: Icons.add_home_rounded,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xs,
+                        vertical: AppSpacing.md,
+                      ),
+                      onPressed: _showCreateFamilyDialog,
                     ),
                   ),
-                  icon: const Icon(Icons.qr_code_rounded, size: 18),
-                  label: Text(l10n.enterCode),
-                ),
-              ),
-            ],
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _showJoinFamilyDialog,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.md,
+                          horizontal: AppSpacing.xs,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: AppRadius.borderFull,
+                        ),
+                      ),
+                      icon: const Icon(Icons.qr_code_rounded, size: 18),
+                      label: Text(
+                        l10n.enterCode,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -1492,7 +1532,205 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  // ── Aile Üyeleri Listesi ──────────────────────────────────────────────────
+  // ── Aile Üyeleri Listesi & Yönetimi ──────────────────────────────────────
+
+  void _handleManageMembers(
+    BuildContext context,
+    FamilyModel family,
+    List<UserModel> members,
+    bool isCurrentOwner,
+  ) {
+    if (!isCurrentOwner) {
+      showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Yetki Gerekli 🔐'),
+          content: const Text(
+            'Aile üyelerini yönetme ve gruptan çıkarma yetkisi sadece ev sahibine (aile kurucusuna) aittir.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Anladım'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    _showManageMembersBottomSheet(context, family, members);
+  }
+
+  void _showManageMembersBottomSheet(
+    BuildContext context,
+    FamilyModel family,
+    List<UserModel> members,
+  ) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        final otherMembers = members.where((m) => m.uid != family.createdBy).toList();
+
+        return Consumer(
+          builder: (context, ref, child) {
+            return Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.7,
+              ),
+              decoration: BoxDecoration(
+                color: cs.surfaceContainerLowest,
+                borderRadius: AppRadius.borderTopXl,
+              ),
+              padding: const EdgeInsets.all(AppSpacing.xl),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: cs.outlineVariant,
+                        borderRadius: AppRadius.borderFull,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text(
+                    'Aile Üyelerini Yönet 👥',
+                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Ev grubunuzdan çıkarmak istediğiniz üyenin yanındaki sil butonuna dokunabilirsiniz.',
+                    style: AppTypography.bodySmall.copyWith(color: cs.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  if (otherMembers.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
+                      child: Center(
+                        child: Text(
+                          'Ev grubunuzda henüz başka üye bulunmuyor.',
+                          style: AppTypography.bodyMedium.copyWith(color: cs.onSurfaceVariant),
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: otherMembers.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
+                        itemBuilder: (context, index) {
+                          final member = otherMembers[index];
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: AppSpacing.sm,
+                            ),
+                            decoration: BoxDecoration(
+                              color: cs.surfaceContainerLow,
+                              borderRadius: AppRadius.borderLg,
+                              border: Border.all(
+                                color: cs.outlineVariant.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                UserAvatar(user: member, radius: 18),
+                                const SizedBox(width: AppSpacing.md),
+                                Expanded(
+                                  child: Text(
+                                    member.displayName,
+                                    style: AppTypography.bodyMedium.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: cs.onSurface,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.person_remove_rounded,
+                                    color: AppColors.error,
+                                    size: 22,
+                                  ),
+                                  tooltip: 'Aileden Çıkar',
+                                  onPressed: () => _confirmRemoveMember(ctx, member),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmRemoveMember(BuildContext modalContext, UserModel member) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Üyeyi Aileden Çıkar'),
+        content: Text(
+          '${member.displayName} kişisini ev grubunuzdan çıkarmak istediğinizden emin misiniz?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('İptal'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Evet, Çıkar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      try {
+        await ref
+            .read(familyNotifierProvider.notifier)
+            .removeMember(member.uid);
+
+        if (modalContext.mounted) {
+          Navigator.of(modalContext).pop();
+        }
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('👋 ${member.displayName} aileden çıkarıldı.'),
+              backgroundColor: AppColors.primary,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Üye çıkarılırken hata oluştu: $e'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
+    }
+  }
 
   Widget _buildMembersSection(
     ColorScheme colorScheme,
@@ -1501,15 +1739,47 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     UserModel? currentUser,
   ) {
     final l10n = AppLocalizations.of(context)!;
+    final isCurrentOwner = family.createdBy == currentUser?.uid;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${l10n.familyMembers} (${members.length})',
-          style: AppTypography.titleSmall.copyWith(
-            color: colorScheme.onSurface,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '${l10n.familyMembers} (${members.length})',
+              style: AppTypography.titleSmall.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            InkWell(
+              onTap: () => _handleManageMembers(context, family, members, isCurrentOwner),
+              borderRadius: AppRadius.borderFull,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.edit_rounded,
+                      size: 16,
+                      color: colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Yönet',
+                      style: AppTypography.labelSmall.copyWith(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: AppSpacing.xs),
         ListView.separated(
@@ -1534,39 +1804,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               child: Row(
                 children: [
-                  CircleAvatar(
+                  UserAvatar(
+                    user: member,
                     radius: 16,
-                    backgroundColor: colorScheme.primaryContainer,
-                    child: Text(
-                      member.displayName.isNotEmpty
-                          ? member.displayName[0].toUpperCase()
-                          : 'Ü',
-                      style: AppTypography.labelMedium.copyWith(
-                        color: colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                   ),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          member.displayName,
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: colorScheme.onSurface,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (member.email.isNotEmpty)
-                          Text(
-                            member.email,
-                            style: AppTypography.bodySmall.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                      ],
+                    child: Text(
+                      member.displayName,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: colorScheme.onSurface,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   // —— Üye Rozeti ——————————

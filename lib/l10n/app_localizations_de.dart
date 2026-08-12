@@ -707,7 +707,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Erstellen Sie ein Zuhause oder treten Sie einem bestehenden bei, um Artikel und Einkaufslisten zu synchronisieren.';
 
   @override
-  String get createHome => 'Zuhause erstellen';
+  String get createHome => 'Neues Zuhause';
 
   @override
   String get enterCode => 'Code eingeben';
@@ -1069,4 +1069,278 @@ class AppLocalizationsDe extends AppLocalizations {
   String guestLoginFailed(String error) {
     return 'Gastanmeldung fehlgeschlagen: $error';
   }
+
+  @override
+  String get noUpcomingWarranties => 'Keine anstehenden Garantieabläufe. 👍';
+
+  @override
+  String get noUpcomingPayments => 'Keine anstehenden Zahlungen. 👍';
+
+  @override
+  String get editProduct => 'Produkt bearbeiten';
+
+  @override
+  String get locationLabel => 'Standort';
+
+  @override
+  String get locationHint => 'Z.B.: Kühlschrank, Speisekammer...';
+
+  @override
+  String get locationRequired => 'Standort ist erforderlich.';
+
+  @override
+  String get additionalNotesHint => 'Zusätzliche Notizen hinzufügen...';
+
+  @override
+  String get selectExpirationDateWarning => 'Bitte Ablaufdatum auswählen.';
+
+  @override
+  String get productNameExampleHint => 'Z.B.: Milch, Eier...';
+
+  @override
+  String get selectDate => 'Datum auswählen';
+
+  @override
+  String get signInBtn => 'Anmelden';
+
+  @override
+  String get signInFailed => 'Anmeldung fehlgeschlagen.';
+
+  @override
+  String get signUpBtn => 'Registrieren';
+
+  @override
+  String get createAccount => 'Konto erstellen';
+
+  @override
+  String get welcomeToApp => 'Willkommen bei Home Assistant';
+
+  @override
+  String get smartHomeTagline => 'Verwalten Sie Ihr Zuhause intelligent';
+
+  @override
+  String get signInWithGoogle => 'Mit Google anmelden';
+
+  @override
+  String get signInWithApple => 'Mit Apple anmelden';
+
+  @override
+  String get tryAsGuest => 'Als Gast testen (Ohne Konto)';
+
+  @override
+  String get forgotPassword => 'Passwort vergessen?';
+
+  @override
+  String get forgotPasswordDesc =>
+      'Geben Sie Ihre E-Mail-Adresse ein. Wir senden Ihnen einen Link zum Zurücksetzen.';
+
+  @override
+  String get emailAddress => 'E-Mail-Adresse';
+
+  @override
+  String get passwordLabel => 'Passwort';
+
+  @override
+  String get confirmPasswordLabel => 'Passwort bestätigen';
+
+  @override
+  String get confirmPasswordHint => 'Bestätigen Sie Ihr Passwort';
+
+  @override
+  String get fullNameLabel => 'Vor- und Nachname';
+
+  @override
+  String get fullNameRequired => 'Vollständiger Name ist erforderlich.';
+
+  @override
+  String get passwordRequired => 'Passwort ist erforderlich.';
+
+  @override
+  String get confirmPasswordRequired => 'Passwortbestätigung ist erforderlich.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwörter stimmen nicht überein.';
+
+  @override
+  String get emailRequired => 'E-Mail-Adresse ist erforderlich.';
+
+  @override
+  String get enterValidEmail =>
+      'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+
+  @override
+  String get passwordMinLength =>
+      'Passwort muss mindestens 6 Zeichen lang sein.';
+
+  @override
+  String get dontHaveAccount => 'Noch kein Konto?';
+
+  @override
+  String get alreadyHaveAccount => 'Bereits ein Konto?';
+
+  @override
+  String get orDivider => 'oder';
+
+  @override
+  String get send => 'Senden';
+
+  @override
+  String get passwordResetSent =>
+      'Link zum Zurücksetzen des Passworts gesendet! 📧';
+
+  @override
+  String get googleLoginSuccess => 'Mit Google angemeldet. 👋';
+
+  @override
+  String get appleLoginSuccess => 'Mit Apple angemeldet. 👋';
+
+  @override
+  String get verificationEmailSent =>
+      'Bestätigungslink gesendet. Bitte E-Mail bestätigen und anmelden.';
+
+  @override
+  String get emailAlreadyInUse =>
+      'Diese E-Mail-Adresse wird bereits verwendet.';
+
+  @override
+  String get weakPassword =>
+      'Passwort ist zu schwach. Verwenden Sie mindestens 6 Zeichen.';
+
+  @override
+  String get linkWithGoogle => 'Mit Google verknüpfen';
+
+  @override
+  String get linkWithApple => 'Mit Apple verknüpfen';
+
+  @override
+  String get linkWithEmail => 'Mit E-Mail verknüpfen';
+
+  @override
+  String get connecting => 'Verbinden...';
+
+  @override
+  String get emailHint => 'beispiel@gmail.com';
+
+  @override
+  String get guestUser => 'Gast';
+
+  @override
+  String get deleteAccountConfirmDesc =>
+      'Möchten Sie Ihr Konto und alle persönlichen Daten wirklich löschen? Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get deleteAccountConfirmBtn => 'Ja, löschen';
+
+  @override
+  String get deleteAccountReauthNotice =>
+      'Aus Sicherheitsgründen melden Sie sich bitte ab und wieder an, um Ihr Konto zu löschen.';
+
+  @override
+  String get adFreeActiveTitle => 'Werbefreie Version aktiv ✨';
+
+  @override
+  String get adFreeActiveDesc =>
+      'Sie haben Werbung vollständig entfernt, genießen Sie die App!';
+
+  @override
+  String get activeBadge => 'AKTIV';
+
+  @override
+  String get buyAdFreeTitle => 'Werbefreie Version kaufen';
+
+  @override
+  String get buyAdFreeDesc =>
+      'Entfernen Sie alle Anzeigen in der App für ein unterbrechungsfreies Erlebnis.';
+
+  @override
+  String get monthlyYearlyFlexiblePlans =>
+      'Monatliche & Jährliche Flexible Pläne';
+
+  @override
+  String get inspectAndBuyPlans => 'Pläne ansehen & wählen';
+
+  @override
+  String get adFreeTitle => 'Werbefreie Version';
+
+  @override
+  String get adFreeHeaderSubtitle =>
+      'Entfernen Sie alle Anzeigen für ein nahtloses und schnelles Erlebnis.';
+
+  @override
+  String get zeroAdsTitle => 'Null Werbung, Nahtlose Nutzung';
+
+  @override
+  String get zeroAdsSubtitle =>
+      'Alle Anzeigen bei Seitenübergängen und Aktionen werden blockiert.';
+
+  @override
+  String get allFamilyIncludedTitle => 'Für alle Familienmitglieder enthalten';
+
+  @override
+  String get allFamilyIncludedSubtitle =>
+      'Jeder in Ihrem Haushalt erhält automatisch werbefreien Zugriff.';
+
+  @override
+  String get fasterPageTransitionsTitle => 'Schnellere Seitenübergänge';
+
+  @override
+  String get fasterPageTransitionsSubtitle =>
+      'Die App läuft leichter und schneller ohne Werbelasten.';
+
+  @override
+  String get annualPlanRecommended => 'Jahresplan (Empfohlen)';
+
+  @override
+  String get save30Percent => '30% SPAREN';
+
+  @override
+  String get annualPlanSubprice => 'Bestes Angebot bei jährlicher Zahlung';
+
+  @override
+  String get monthlyPlanTitle => 'Monatsplan';
+
+  @override
+  String get flexibleBadge => 'FLEXIBEL';
+
+  @override
+  String get cancelAnytimeSubprice => 'Jederzeit einfach kündbar';
+
+  @override
+  String get switchToAnnualPlan => 'Zum jährlichen werbefreien Plan wechseln';
+
+  @override
+  String get switchToMonthlyPlan => 'Zum monatlichen werbefreien Plan wechseln';
+
+  @override
+  String get cancelNoticeIos =>
+      'Sie können jederzeit in Ihren App Store / Apple ID Einstellungen kündigen.';
+
+  @override
+  String get cancelNoticeAndroid =>
+      'Sie können jederzeit in Ihren Google Play Store Einstellungen kündigen.';
+
+  @override
+  String get termsOfUseEula => 'Nutzungsbedingungen (EULA)';
+
+  @override
+  String get adFreeActivatedToast =>
+      '🎉 Ihr werbefreies Abonnement wurde aktiviert!';
+
+  @override
+  String get purchasesRestoredToast =>
+      '🎉 Käufe erfolgreich wiederhergestellt!';
+
+  @override
+  String get signOutAnonymousTitle => 'Vom Gastkonto abmelden';
+
+  @override
+  String get signOutAnonymousDesc =>
+      'Alle Ihre Daten und der Familienzugriff gehen verloren. Möchten Sie sich wirklich abmelden, ohne Ihr Konto zu verknüpfen?';
+
+  @override
+  String get signOutConfirmDesc =>
+      'Möchten Sie sich wirklich von Ihrem Konto abmelden?';
+
+  @override
+  String get linkAccountBtn => 'Konto verknüpfen';
 }

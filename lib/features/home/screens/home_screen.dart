@@ -91,7 +91,7 @@ class HomeScreen extends ConsumerWidget {
 
     final userName = (user?.displayName.isNotEmpty == true)
         ? user!.displayName.split(' ').first
-        : 'Samed';
+        : (user?.isAnonymous == true ? l10n.guestUser : l10n.userRoleLabel);
 
     final familyName = (family?.name.isNotEmpty == true)
         ? family!.name
@@ -306,7 +306,7 @@ class HomeScreen extends ConsumerWidget {
                     color: Color(0xFFEF4444),
                     size: 26,
                   ),
-                  onTap: () => context.go(AppRoutes.inventory),
+                  onTap: () => context.go(AppRoutes.expiration),
                 ),
               ),
             ],
@@ -327,7 +327,7 @@ class HomeScreen extends ConsumerWidget {
                     color: Color(0xFF2563EB),
                     size: 26,
                   ),
-                  onTap: () => context.go(AppRoutes.inventory),
+                  onTap: () => context.go(AppRoutes.warranty),
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
@@ -725,7 +725,7 @@ class HomeScreen extends ConsumerWidget {
               borderRadius: AppRadius.borderLg,
             ),
             child: Text(
-              'Yaklaşan garanti bitişi bulunmuyor. 👍',
+              l10n.noUpcomingWarranties,
               style: AppTypography.bodyMedium.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -877,7 +877,7 @@ class HomeScreen extends ConsumerWidget {
               borderRadius: AppRadius.borderLg,
             ),
             child: Text(
-              'Yaklaşan ödeme bulunmuyor. 👍',
+              l10n.noUpcomingPayments,
               style: AppTypography.bodyMedium.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -1046,19 +1046,17 @@ class HomeScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Başlık & Tümünü Gör — Flexible ile taşmayı önle
+        // Başlık & Tümünü Gör — 2 satırlı başlık ile kesintiyi önle
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Flexible(
+            Expanded(
               child: Text(
-                l10n.periodicMaintenance,
+                'Periyodik Bakım\nTakibi',
                 style: AppTypography.titleLarge.copyWith(
                   color: colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
             TextButton(

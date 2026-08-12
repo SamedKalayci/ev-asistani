@@ -7,12 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/user_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/utils/l10n_helper.dart';
 import '../../../router/app_router.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -43,8 +45,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   // ── E-posta ile Giriş Yap ───────────────────────────────────────────────
 
-  // ── E-posta ile Giriş Yap ───────────────────────────────────────────────
-
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -62,17 +62,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        String message = 'Giriş yapılamadı.';
+        final l10n = context.l10n;
+        String message = l10n.signInFailed;
         if (e.code == 'email-not-verified') {
-          message = 'Lütfen önce e-posta adresinize gönderilen onay bağlantısına tıklayın.';
+          message = l10n.verificationEmailSent;
         } else if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
-          message = 'E-posta veya şifre hatalı.';
+          message = l10n.enterValidEmail;
         } else if (e.code == 'wrong-password') {
-          message = 'Şifre hatalı.';
+          message = l10n.passwordRequired;
         } else if (e.code == 'invalid-email') {
-          message = 'Geçersiz e-posta adresi.';
-        } else if (e.code == 'user-disabled') {
-          message = 'Bu hesap dondurulmuş.';
+          message = l10n.enterValidEmail;
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -109,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await auth.signInAnonymously();
 
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.guestLoginSuccess),
@@ -121,7 +120,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.guestLoginFailed(e.toString())),
@@ -146,15 +145,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final authRepo = ref.read(authRepositoryProvider);
       final credential = await authRepo.signInWithGoogle();
 
-      if (credential == null) {
-        // Kullanıcı seçimi iptal etti veya çıkış yaptı
-        return;
-      }
+      if (credential == null) return;
 
       if (mounted) {
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Google hesabınızla giriş yapıldı. 👋'),
+          SnackBar(
+            content: Text(l10n.googleLoginSuccess),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
@@ -165,7 +162,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Google girişi başarısız: ${e.message ?? e.code}'),
+            content: Text(e.message ?? e.code),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
           ),
@@ -179,7 +176,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Google girişi sırasında bir hata oluştu: $e'),
+            content: Text('Hata: $e'),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
           ),
@@ -202,9 +199,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final credential = await authRepo.signInWithApple();
 
       if (credential != null && mounted) {
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Apple hesabınızla giriş yapıldı. 👋'),
+          SnackBar(
+            content: Text(l10n.appleLoginSuccess),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
@@ -215,7 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Apple girişi başarısız: ${e.message ?? e.code}'),
+            content: Text(e.message ?? e.code),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
           ),
@@ -238,36 +236,150 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  // ── Dil Seçimi Diyaloğu & Butonu ──────────────────────────────────────────
+
+  void _showLanguageSelectorDialog(BuildContext context) {
+    final l10n = context.l10n;
+    final currentLocale = ref.read(localeProvider);
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text(
+            l10n.selectLanguage,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildLanguageOption(ctx, 'tr', '🇹🇷 ${l10n.turkish}', currentLocale.languageCode == 'tr'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'en', '🇬🇧 ${l10n.english}', currentLocale.languageCode == 'en'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'de', '🇩🇪 ${l10n.german}', currentLocale.languageCode == 'de'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'es', '🇪🇸 ${l10n.spanish}', currentLocale.languageCode == 'es'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'fr', '🇫🇷 ${l10n.french}', currentLocale.languageCode == 'fr'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'az', '🇦🇿 ${l10n.azerbaijani}', currentLocale.languageCode == 'az'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'el', '🇬🇷 ${l10n.greek}', currentLocale.languageCode == 'el'),
+                const Divider(height: 1),
+                _buildLanguageOption(ctx, 'pt', '🇧🇷 ${l10n.portuguese}', currentLocale.languageCode == 'pt'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(l10n.cancel),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext dialogContext,
+    String code,
+    String label,
+    bool isSelected,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return ListTile(
+      dense: true,
+      title: Text(
+        label,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+        ),
+      ),
+      trailing: isSelected ? Icon(Icons.check_rounded, color: colorScheme.primary) : null,
+      onTap: () {
+        ref.read(localeProvider.notifier).setLocale(code);
+        Navigator.of(dialogContext).pop();
+      },
+    );
+  }
+
+  Widget _buildLanguageSelectorButton(ColorScheme colorScheme) {
+    final currentLocale = ref.watch(localeProvider);
+    final flag = switch (currentLocale.languageCode) {
+      'en' => '🇬🇧 EN',
+      'de' => '🇩🇪 DE',
+      'es' => '🇪🇸 ES',
+      'fr' => '🇫🇷 FR',
+      'az' => '🇦🇿 AZ',
+      'el' => '🇬🇷 EL',
+      'pt' => '🇧🇷 PT',
+      'tr' => '🇹🇷 TR',
+      _ => '🌐 ${currentLocale.languageCode.toUpperCase()}',
+    };
+
+    return InkWell(
+      onTap: () => _showLanguageSelectorDialog(context),
+      borderRadius: AppRadius.borderFull,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerLow,
+          borderRadius: AppRadius.borderFull,
+          border: Border.all(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.language_rounded, size: 16),
+            const SizedBox(width: 4),
+            Text(
+              flag,
+              style: AppTypography.labelMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   // ── Şifremi Unuttum Diyaloğu ─────────────────────────────────────────────
 
   Future<void> _showForgotPasswordDialog() async {
+    final l10n = context.l10n;
     final resetCtrl = TextEditingController(text: _emailController.text.trim());
     final dialogKey = GlobalKey<FormState>();
 
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Şifremi Unuttum'),
+        title: Text(l10n.forgotPassword),
         content: Form(
           key: dialogKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Hesabınıza ait e-posta adresini girin. Size bir şifre sıfırlama bağlantısı göndereceğiz.',
-              ),
+              Text(l10n.forgotPasswordDesc),
               const SizedBox(height: AppSpacing.md),
               AppTextField(
-                label: 'E-posta Adresi',
-                hintText: 'ornek@email.com',
+                label: l10n.emailAddress,
+                hintText: l10n.emailHint,
                 controller: resetCtrl,
                 keyboardType: TextInputType.emailAddress,
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) {
-                    return 'E-posta adresi girmelisiniz.';
+                    return l10n.emailRequired;
                   }
                   if (!v.contains('@') || !v.contains('.')) {
-                    return 'Geçerli bir e-posta girin.';
+                    return l10n.enterValidEmail;
                   }
                   return null;
                 },
@@ -278,7 +390,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () async {
@@ -291,10 +403,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       .sendPasswordResetEmail(email);
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Şifre sıfırlama bağlantısı e-postanıza gönderildi! 📧',
-                        ),
+                      SnackBar(
+                        content: Text(l10n.passwordResetSent),
                         backgroundColor: AppColors.primary,
                         behavior: SnackBarBehavior.floating,
                       ),
@@ -313,7 +423,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 }
               }
             },
-            child: const Text('Gönder'),
+            child: Text(l10n.send),
           ),
         ],
       ),
@@ -326,238 +436,250 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: colorScheme.surfaceContainerLowest,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.pageHorizontal,
-              vertical: AppSpacing.xl,
+        child: Stack(
+          children: [
+            // Top Right Language Selector Button
+            Positioned(
+              top: AppSpacing.sm,
+              right: AppSpacing.pageHorizontal,
+              child: _buildLanguageSelectorButton(colorScheme),
             ),
-            child: Container(
-              constraints: const BoxConstraints(maxWidth: 440),
-              alignment: Alignment.center,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // ── Logo & Başlık ─────────────────────────────────────
-                    Center(
-                      child: Image.asset(
-                        'assets/icon/app_logo.png',
-                        width: 120,
-                        height: 120,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    Text(
-                      'Ev Asistanı',
-                      style: AppTypography.displayMedium.copyWith(
-                        color: colorScheme.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    Text(
-                      'Evindeki her şeyi akıllıca yönet',
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-
-                    const SizedBox(height: AppSpacing.xxl),
-
-                    // ── E-posta Girdi Alanı ────────────────────────────────
-                    AppTextField(
-                      label: 'E-posta Adresi',
-                      hintText: 'ornek@email.com',
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return 'E-posta adresi zorunludur.';
-                        }
-                        final emailRegex = RegExp(
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-                        if (!emailRegex.hasMatch(v.trim())) {
-                          return 'Lütfen geçerli bir e-posta adresi girin.';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: AppSpacing.md),
-
-                    // ── Şifre Girdi Alanı ──────────────────────────────────
-                    AppTextField(
-                      label: 'Şifre',
-                      hintText: '••••••••',
-                      controller: _passwordController,
-                      obscureText: _isObscure,
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _login(),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isObscure
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                        onPressed: () =>
-                            setState(() => _isObscure = !_isObscure),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.isEmpty) {
-                          return 'Şifre zorunludur.';
-                        }
-                        if (v.length < 6) {
-                          return 'Şifre en az 6 karakter olmalıdır.';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    // ── Şifremi Unuttum Bağlantısı ─────────────────────────
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: _showForgotPasswordDialog,
-                        child: Text(
-                          'Şifremi Unuttum',
-                          style: AppTypography.labelMedium.copyWith(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w600,
+            Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.pageHorizontal,
+                  vertical: AppSpacing.xl,
+                ),
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 440),
+                  alignment: Alignment.center,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: AppSpacing.xl),
+                        // ── Logo & Başlık ─────────────────────────────────────
+                        Center(
+                          child: Image.asset(
+                            'assets/icon/app_logo.png',
+                            width: 110,
+                            height: 110,
                           ),
                         ),
-                      ),
-                    ),
-
-                    const SizedBox(height: AppSpacing.lg),
-
-                    // ── Giriş Yap Butonu ───────────────────────────────────
-                    PrimaryButton(
-                      text: 'Giriş Yap',
-                      icon: Icons.login_rounded,
-                      isLoading: _isLoading,
-                      onPressed: _login,
-                    ),
-
-                    const SizedBox(height: AppSpacing.sm),
-
-                    // ── Google ile Giriş Yap Butonu ─────────────────────────
-                    OutlinedButton.icon(
-                      onPressed: _isLoading ? null : _googleLogin,
-                      icon: const Icon(
-                        Icons.g_mobiledata_rounded,
-                        size: 28,
-                        color: AppColors.primary,
-                      ),
-                      label: const Text('Google ile Giriş Yap'),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppSpacing.md,
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: AppRadius.borderFull,
-                        ),
-                      ),
-                    ),
-
-                    if (!kIsWeb && Platform.isIOS) ...[
-                      const SizedBox(height: AppSpacing.sm),
-                      SignInWithAppleButton(
-                        onPressed: _isLoading ? () {} : _appleLogin,
-                        text: 'Apple ile Giriş Yap',
-                        height: 52,
-                        borderRadius: const BorderRadius.all(Radius.circular(100)),
-                      ),
-                    ],
-
-                    const SizedBox(height: AppSpacing.md),
-                    _buildConsentText(),
-                    const SizedBox(height: AppSpacing.md),
-
-                    // ── Kayıt Ol Bağlantısı ─────────────────────────────────
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                        const SizedBox(height: AppSpacing.md),
                         Text(
-                          'Hesabınız yok mu?',
+                          l10n.appName,
+                          style: AppTypography.displayMedium.copyWith(
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          l10n.smartHomeTagline,
                           style: AppTypography.bodyMedium.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
+                          textAlign: TextAlign.center,
                         ),
-                        TextButton(
-                          onPressed: () => context.go(AppRoutes.register),
-                          child: Text(
-                            'Kayıt Olun',
-                            style: AppTypography.labelLarge.copyWith(
-                              color: colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
 
-                    const SizedBox(height: AppSpacing.sm),
+                        const SizedBox(height: AppSpacing.xl),
 
-                    // ── Seperatör ─────────────────────────────────────────
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: colorScheme.outlineVariant
-                                .withValues(alpha: 0.5),
-                          ),
+                        // ── E-posta Girdi Alanı ────────────────────────────────
+                        AppTextField(
+                          label: l10n.emailAddress,
+                          hintText: l10n.emailHint,
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: (v) {
+                            if (v == null || v.trim().isEmpty) {
+                              return l10n.emailRequired;
+                            }
+                            final emailRegex = RegExp(
+                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                            if (!emailRegex.hasMatch(v.trim())) {
+                              return l10n.enterValidEmail;
+                            }
+                            return null;
+                          },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.sm),
-                          child: Text(
-                            'veya',
-                            style: AppTypography.bodySmall.copyWith(
+
+                        const SizedBox(height: AppSpacing.md),
+
+                        // ── Şifre Girdi Alanı ──────────────────────────────────
+                        AppTextField(
+                          label: l10n.passwordLabel,
+                          hintText: '••••••••',
+                          controller: _passwordController,
+                          obscureText: _isObscure,
+                          textInputAction: TextInputAction.done,
+                          onSubmitted: (_) => _login(),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isObscure
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
                               color: colorScheme.onSurfaceVariant,
                             ),
+                            onPressed: () =>
+                                setState(() => _isObscure = !_isObscure),
+                          ),
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return l10n.passwordRequired;
+                            }
+                            if (v.length < 6) {
+                              return l10n.passwordMinLength;
+                            }
+                            return null;
+                          },
+                        ),
+
+                        // ── Şifremi Unuttum Bağlantısı ─────────────────────────
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: _showForgotPasswordDialog,
+                            child: Text(
+                              l10n.forgotPassword,
+                              style: AppTypography.labelMedium.copyWith(
+                                color: colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
-                        Expanded(
-                          child: Divider(
-                            color: colorScheme.outlineVariant
-                                .withValues(alpha: 0.5),
+
+                        const SizedBox(height: AppSpacing.lg),
+
+                        // ── Giriş Yap Butonu ───────────────────────────────────
+                        PrimaryButton(
+                          text: l10n.signInBtn,
+                          icon: Icons.login_rounded,
+                          isLoading: _isLoading,
+                          onPressed: _login,
+                        ),
+
+                        const SizedBox(height: AppSpacing.sm),
+
+                        // ── Google ile Giriş Yap Butonu ─────────────────────────
+                        OutlinedButton.icon(
+                          onPressed: _isLoading ? null : _googleLogin,
+                          icon: const Icon(
+                            Icons.g_mobiledata_rounded,
+                            size: 28,
+                            color: AppColors.primary,
+                          ),
+                          label: Text(l10n.signInWithGoogle),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: AppSpacing.md,
+                            ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: AppRadius.borderFull,
+                            ),
+                          ),
+                        ),
+
+                        if (!kIsWeb && Platform.isIOS) ...[
+                          const SizedBox(height: AppSpacing.sm),
+                          SignInWithAppleButton(
+                            onPressed: _isLoading ? () {} : _appleLogin,
+                            text: l10n.signInWithApple,
+                            height: 52,
+                            borderRadius: const BorderRadius.all(Radius.circular(100)),
+                          ),
+                        ],
+
+                        const SizedBox(height: AppSpacing.md),
+                        _buildConsentText(),
+                        const SizedBox(height: AppSpacing.md),
+
+                        // ── Kayıt Ol Bağlantısı ─────────────────────────────────
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              l10n.dontHaveAccount,
+                              style: AppTypography.bodyMedium.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => context.go(AppRoutes.register),
+                              child: Text(
+                                l10n.signUpBtn,
+                                style: AppTypography.labelLarge.copyWith(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: AppSpacing.sm),
+
+                        // ── Seperatör ─────────────────────────────────────────
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                color: colorScheme.outlineVariant
+                                    .withValues(alpha: 0.5),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.sm),
+                              child: Text(
+                                l10n.orDivider,
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                color: colorScheme.outlineVariant
+                                    .withValues(alpha: 0.5),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: AppSpacing.md),
+
+                        // ── Misafir Girişi Butonu ──────────────────────────────
+                        OutlinedButton.icon(
+                          onPressed: _isLoading ? null : _guestLogin,
+                          icon: const Icon(Icons.person_outline_rounded),
+                          label: Text(l10n.tryAsGuest),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: AppSpacing.md,
+                            ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: AppRadius.borderFull,
+                            ),
                           ),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: AppSpacing.md),
-
-                    // ── Misafir Girişi Butonu ──────────────────────────────
-                    OutlinedButton.icon(
-                      onPressed: _isLoading ? null : _guestLogin,
-                      icon: const Icon(Icons.person_outline_rounded),
-                      label: const Text('Misafir Olarak Deneyin (Üyeliksiz)'),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppSpacing.md,
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: AppRadius.borderFull,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

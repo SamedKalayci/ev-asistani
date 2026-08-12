@@ -96,11 +96,21 @@ class PrimaryButton extends StatelessWidget {
           children: [
             leadingIcon,
             const SizedBox(width: AppSpacing.iconTextGap),
-            Text(text),
+            Flexible(
+              child: Text(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         );
       } else {
-        childContent = Text(text);
+        childContent = Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        );
       }
     }
 

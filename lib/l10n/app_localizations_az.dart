@@ -308,7 +308,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get buyNow => 'İndi Al';
 
   @override
-  String get restorePurchases => 'Bərpa Et';
+  String get restorePurchases => 'Alışları Bərpa Et';
 
   @override
   String get introPopupTitle => 'Proqramı Reklamsız İşlədin!';
@@ -1068,4 +1068,275 @@ class AppLocalizationsAz extends AppLocalizations {
   String guestLoginFailed(String error) {
     return 'Qonaq girişi uğursuz oldu: $error';
   }
+
+  @override
+  String get noUpcomingWarranties => 'Yaxınlaşan zəmanət müddəti yoxdur. 👍';
+
+  @override
+  String get noUpcomingPayments => 'Yaxınlaşan ödəniş yoxdur. 👍';
+
+  @override
+  String get editProduct => 'Məhsulu Redaktə Et';
+
+  @override
+  String get locationLabel => 'Məkan';
+
+  @override
+  String get locationHint => 'Məs: Soyuducu, Qida anbarı...';
+
+  @override
+  String get locationRequired => 'Məkan tələb olunur.';
+
+  @override
+  String get additionalNotesHint => 'Əlavə qeydlər əlavə edin...';
+
+  @override
+  String get selectExpirationDateWarning =>
+      'Zəhmət olmasa son istifadə tarixini seçin.';
+
+  @override
+  String get productNameExampleHint => 'Məs: Süd, Yumurta...';
+
+  @override
+  String get selectDate => 'Tarix seçin';
+
+  @override
+  String get signInBtn => 'Giriş et';
+
+  @override
+  String get signInFailed => 'Giriş uğursuz oldu.';
+
+  @override
+  String get signUpBtn => 'Qeydiyyatdan keç';
+
+  @override
+  String get createAccount => 'Hesab yaradın';
+
+  @override
+  String get welcomeToApp => 'Ev Asistanı dünyasına xoş gəlmisiniz';
+
+  @override
+  String get smartHomeTagline => 'Evindəki hər şeyi ağıllı idarə et';
+
+  @override
+  String get signInWithGoogle => 'Google ilə giriş et';
+
+  @override
+  String get signInWithApple => 'Apple ilə giriş et';
+
+  @override
+  String get tryAsGuest => 'Qonaq olaraq sınayın (Üzvlüksüz)';
+
+  @override
+  String get forgotPassword => 'Şifrəni unutmusunuz?';
+
+  @override
+  String get forgotPasswordDesc =>
+      'Hesabınızın e-poçt ünvanını daxil edin. Sizə şifrə sıfırlama keçidi göndərəcəyik.';
+
+  @override
+  String get emailAddress => 'E-poçt ünvanı';
+
+  @override
+  String get passwordLabel => 'Şifrə';
+
+  @override
+  String get confirmPasswordLabel => 'Şifrə təkrarı';
+
+  @override
+  String get confirmPasswordHint => 'Şifrənizi təsdiqləyin';
+
+  @override
+  String get fullNameLabel => 'Adınız Soyadınız';
+
+  @override
+  String get fullNameRequired => 'Adınız Soyadınız tələb olunur.';
+
+  @override
+  String get passwordRequired => 'Şifrə tələb olunur.';
+
+  @override
+  String get confirmPasswordRequired => 'Şifrə təkrarı tələb olunur.';
+
+  @override
+  String get passwordsDoNotMatch => 'Şifrələr uyğun gəlmir.';
+
+  @override
+  String get emailRequired => 'E-poçt ünvanı tələb olunur.';
+
+  @override
+  String get enterValidEmail =>
+      'Zəhmət olmasa düzgün e-poçt ünvanı daxil edin.';
+
+  @override
+  String get passwordMinLength => 'Şifrə ən azı 6 simvol olmalıdır.';
+
+  @override
+  String get dontHaveAccount => 'Hesabınız yoxdur?';
+
+  @override
+  String get alreadyHaveAccount => 'Artıq hesabınız var?';
+
+  @override
+  String get orDivider => 'və ya';
+
+  @override
+  String get send => 'Göndər';
+
+  @override
+  String get passwordResetSent =>
+      'Şifrə sıfırlama keçidi e-poçtunuza gönderildi! 📧';
+
+  @override
+  String get googleLoginSuccess => 'Google hesabınızla giriş edildi. 👋';
+
+  @override
+  String get appleLoginSuccess => 'Apple hesabınızla giriş edildi. 👋';
+
+  @override
+  String get verificationEmailSent =>
+      'E-poçt ünvanınıza təsdiq keçidi gönderildi. Zəhmət olmasa təsdiqləyib daxil olun.';
+
+  @override
+  String get emailAlreadyInUse => 'Bu e-poçt ünvanı artıq istifadədədir.';
+
+  @override
+  String get weakPassword =>
+      'Şifrə çox zəifdir. Ən azı 6 simvol istifadə edin.';
+
+  @override
+  String get linkWithGoogle => 'Google ilə bağla';
+
+  @override
+  String get linkWithApple => 'Apple ilə bağla';
+
+  @override
+  String get linkWithEmail => 'E-poçt ilə bağla';
+
+  @override
+  String get connecting => 'Qoşulur...';
+
+  @override
+  String get emailHint => 'ornek@gmail.com';
+
+  @override
+  String get guestUser => 'Qonaq';
+
+  @override
+  String get deleteAccountConfirmDesc =>
+      'Hesabınızı və bütün şəxsi məlumatlarınızı silmək istədiyinizdən əminsiniz? Bu əməliyyat geri qaytarıla bilməz.';
+
+  @override
+  String get deleteAccountConfirmBtn => 'Bəli, sil';
+
+  @override
+  String get deleteAccountReauthNotice =>
+      'Təhlükəsizlik səbəbiylə hesabınızı silmək üçün zəhmət olmasa çıxış edib yenidən daxil olun.';
+
+  @override
+  String get adFreeActiveTitle => 'Reklamsız Versiya Aktivdir ✨';
+
+  @override
+  String get adFreeActiveDesc =>
+      'Reklamlardan tamamilə azad oldunuz, tətbiqdən həzz alın!';
+
+  @override
+  String get activeBadge => 'AKTİV';
+
+  @override
+  String get buyAdFreeTitle => 'Reklamsız Versiya Alın';
+
+  @override
+  String get buyAdFreeDesc =>
+      'Tətbiq daxilində bütün reklamları silin, fasiləsiz təcrübə yaşayın.';
+
+  @override
+  String get monthlyYearlyFlexiblePlans => 'Aylıq və İllik Çevik Planlar';
+
+  @override
+  String get inspectAndBuyPlans => 'Planları İncələ və Al';
+
+  @override
+  String get adFreeTitle => 'Reklamsız Göstəriş';
+
+  @override
+  String get adFreeHeaderSubtitle =>
+      'Bütün reklamları silin, fasiləsiz və sürətli təcrübə yaşayın.';
+
+  @override
+  String get zeroAdsTitle => 'Sıfır Reklam, Fasiləsiz İstifadə';
+
+  @override
+  String get zeroAdsSubtitle =>
+      'Səhifə keçidlərində və əməliyyatlarda bütün reklamlar bloklanır.';
+
+  @override
+  String get allFamilyIncludedTitle => 'Bütün Ailə Üvləri Üçün Daxildir';
+
+  @override
+  String get allFamilyIncludedSubtitle =>
+      'Ailənizdəki bütün fərdlər avtomatik olaraq reklamsız istifadə edir.';
+
+  @override
+  String get fasterPageTransitionsTitle => 'Daha Sürətli Səhifə Keçidləri';
+
+  @override
+  String get fasterPageTransitionsSubtitle =>
+      'Reklam yüklənmələri olmadan tətbiq daha yüngül və sürətli işləyir.';
+
+  @override
+  String get annualPlanRecommended => 'İllik Plan (Tövsiyə olunan)';
+
+  @override
+  String get save30Percent => '%30 QƏNAƏT';
+
+  @override
+  String get annualPlanSubprice => 'İllik ödəniş ilə ən sərfəli qiymət';
+
+  @override
+  String get monthlyPlanTitle => 'Aylıq Plan';
+
+  @override
+  String get flexibleBadge => 'ÇEVİK';
+
+  @override
+  String get cancelAnytimeSubprice => 'İstədiyiniz vaxt asanlıqla ləğv edin';
+
+  @override
+  String get switchToAnnualPlan => 'İllik Reklamsız Plana Keçin';
+
+  @override
+  String get switchToMonthlyPlan => 'Aylıq Reklamsız Plana Keçin';
+
+  @override
+  String get cancelNoticeIos =>
+      'İstədiyiniz vaxt App Store / Apple ID tənzimləmələrinizdən ləğv edə bilərsiniz.';
+
+  @override
+  String get cancelNoticeAndroid =>
+      'İstədiyiniz vaxt Google Play Store tənzimləmələrinizdən ləğv edə bilərsiniz.';
+
+  @override
+  String get termsOfUseEula => 'İstifadə Şərtləri (EULA)';
+
+  @override
+  String get adFreeActivatedToast =>
+      '🎉 Reklamsız göstəriş abunəliyiniz aktivləşdirildi!';
+
+  @override
+  String get purchasesRestoredToast => '🎉 Alışlar uğurla bərpa olundu!';
+
+  @override
+  String get signOutAnonymousTitle => 'Qonaq Hesabından Çıxış Et';
+
+  @override
+  String get signOutAnonymousDesc =>
+      'Bütün məlumatlarınız və ailə girişiniz itiriləcək. Hesabınızı bağlamadan çıxış etmək istədiyinizdən əminsiniz?';
+
+  @override
+  String get signOutConfirmDesc =>
+      'Hesabınızdan çıxış etmək istədiyinizdən əminsiniz?';
+
+  @override
+  String get linkAccountBtn => 'Hesabı Bağla';
 }

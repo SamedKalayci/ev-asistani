@@ -9,6 +9,7 @@ import '../../../core/theme/app_shadows.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/utils/l10n_helper.dart';
 import '../../../router/app_router.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/primary_button.dart';
@@ -51,7 +52,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!_isAccepted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.registerConsentError),
+          content: Text(context.l10n.registerConsentError),
           backgroundColor: AppColors.error,
           behavior: SnackBarBehavior.floating,
         ),
@@ -70,11 +71,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       );
 
       if (mounted) {
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'E-posta adresinize onay bağlantısı gönderildi. Lütfen e-postanızı onaylayıp giriş yapın.',
-            ),
+          SnackBar(
+            content: Text(l10n.verificationEmailSent),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
@@ -83,13 +83,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        String message = 'Kayıt olunamadı.';
+        final l10n = context.l10n;
+        String message = l10n.signUpBtn;
         if (e.code == 'email-already-in-use') {
-          message = 'Bu e-posta adresi zaten kullanımda.';
+          message = l10n.emailAlreadyInUse;
         } else if (e.code == 'weak-password') {
-          message = 'Şifre çok zayıf. En az 6 karakter kullanın.';
+          message = l10n.passwordMinLength;
         } else if (e.code == 'invalid-email') {
-          message = 'Geçersiz e-posta adresi.';
+          message = l10n.enterValidEmail;
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -122,6 +123,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -160,7 +162,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'Hesap Oluştur',
+                      l10n.createAccount,
                       style: AppTypography.displayMedium.copyWith(
                         color: colorScheme.onSurface,
                         fontWeight: FontWeight.bold,
@@ -169,7 +171,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      'Ev Asistanı dünyasına hoş geldiniz',
+                      l10n.welcomeToApp,
                       style: AppTypography.bodyMedium.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -180,13 +182,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // ── Ad Soyad Girdi Alanı ───────────────────────────────
                     AppTextField(
-                      label: 'Adınız Soyadınız',
+                      label: l10n.fullNameLabel,
                       hintText: 'Ahmet Yılmaz',
                       controller: _nameController,
                       textInputAction: TextInputAction.next,
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
-                          return 'Adınız Soyadınız zorunludur.';
+                          return l10n.fullNameRequired;
                         }
                         return null;
                       },
@@ -196,19 +198,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // ── E-posta Girdi Alanı ────────────────────────────────
                     AppTextField(
-                      label: 'E-posta Adresi',
-                      hintText: 'ornek@email.com',
+                      label: l10n.emailAddress,
+                      hintText: l10n.emailHint,
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
-                          return 'E-posta adresi zorunludur.';
+                          return l10n.emailRequired;
                         }
                         final emailRegex = RegExp(
                             r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                         if (!emailRegex.hasMatch(v.trim())) {
-                          return 'Geçerli bir e-posta adresi girin.';
+                          return l10n.enterValidEmail;
                         }
                         return null;
                       },
@@ -218,7 +220,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // ── Şifre Girdi Alanı ──────────────────────────────────
                     AppTextField(
-                      label: 'Şifre',
+                      label: l10n.passwordLabel,
                       hintText: 'En az 6 karakter',
                       controller: _passwordController,
                       obscureText: _isPasswordObscure,
@@ -235,10 +237,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
-                          return 'Şifre zorunludur.';
+                          return l10n.passwordRequired;
                         }
                         if (v.length < 6) {
-                          return 'Şifre en az 6 karakter olmalıdır.';
+                          return l10n.passwordMinLength;
                         }
                         return null;
                       },
@@ -248,8 +250,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // ── Şifre Tekrar Girdi Alanı ────────────────────────────
                     AppTextField(
-                      label: 'Şifre Tekrarı',
-                      hintText: 'Şifrenizi doğrulayın',
+                      label: l10n.confirmPasswordLabel,
+                      hintText: l10n.confirmPasswordHint,
                       controller: _confirmPasswordController,
                       obscureText: _isConfirmPasswordObscure,
                       textInputAction: TextInputAction.done,
@@ -267,10 +269,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       ),
                       validator: (v) {
                         if (v == null || v.isEmpty) {
-                          return 'Şifre tekrarı zorunludur.';
+                          return l10n.confirmPasswordRequired;
                         }
                         if (v != _passwordController.text) {
-                          return 'Şifreler birbiriyle eşleşmiyor.';
+                          return l10n.passwordsDoNotMatch;
                         }
                         return null;
                       },
@@ -282,7 +284,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // ── Kayıt Ol Butonu ────────────────────────────────────
                     PrimaryButton(
-                      text: 'Kayıt Ol',
+                      text: l10n.signUpBtn,
                       icon: Icons.check_circle_outline_rounded,
                       isLoading: _isLoading,
                       onPressed: _register,
@@ -295,7 +297,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Zaten hesabınız var mı?',
+                          l10n.alreadyHaveAccount,
                           style: AppTypography.bodyMedium.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -303,7 +305,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         TextButton(
                           onPressed: () => context.go(AppRoutes.login),
                           child: Text(
-                            'Giriş Yapın',
+                            l10n.signInBtn,
                             style: AppTypography.labelLarge.copyWith(
                               color: colorScheme.primary,
                               fontWeight: FontWeight.bold,

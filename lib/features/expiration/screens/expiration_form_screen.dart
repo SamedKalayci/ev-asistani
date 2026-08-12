@@ -8,6 +8,8 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/date_picker_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../../core/utils/icon_helper.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../core/utils/l10n_helper.dart';
 import '../models/expiration_model.dart';
 import '../providers/expiration_provider.dart';
 
@@ -75,7 +77,7 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDate == null) {
-      _showError('Lütfen son kullanma tarihini seçin.');
+      _showError(context.l10n.selectExpirationDateWarning);
       return;
     }
 
@@ -127,13 +129,14 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
     final isLoading = ref.watch(expirationNotifierProvider).isLoading;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          _isEditMode ? 'Ürünü Düzenle' : 'Ürün Ekle',
+          _isEditMode ? l10n.editProduct : l10n.addProduct,
           style: AppTypography.titleLarge.copyWith(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.w700,
@@ -160,30 +163,30 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
               children: [
                 // ── Ürün Adı ────────────────────────────────────────────────
                 AppTextField(
-                  label: 'Ürün Adı',
-                  hintText: 'Örn: Süt, Yumurta...',
+                  label: l10n.productNameLabel,
+                  hintText: l10n.productNameExampleHint,
                   controller: _titleCtrl,
                   textInputAction: TextInputAction.next,
                   validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Ürün adı zorunludur.' : null,
+                      (v == null || v.trim().isEmpty) ? l10n.productNameRequired : null,
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
                 // ── Konum ────────────────────────────────────────────────────
                 AppTextField(
-                  label: 'Konum',
-                  hintText: 'Örn: Buzdolabı, Kiler...',
+                  label: l10n.locationLabel,
+                  hintText: l10n.locationHint,
                   controller: _locationCtrl,
                   textInputAction: TextInputAction.next,
                   validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Konum zorunludur.' : null,
+                      (v == null || v.trim().isEmpty) ? l10n.locationRequired : null,
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
                 // ── Son Kullanma Tarihi ───────────────────────────────────────
                 DatePickerField(
-                  label: 'Son Kullanma Tarihi',
-                  hintText: 'Tarih Seçiniz',
+                  label: l10n.expirationDateLabel,
+                  hintText: l10n.selectDate,
                   selectedDate: _selectedDate,
                   onDateSelected: (date) =>
                       setState(() => _selectedDate = date),
@@ -191,13 +194,13 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 // ── İkon Seçici ───────────────────────────────────────────────
-                _buildIconPicker(colorScheme),
+                _buildIconPicker(colorScheme, l10n),
                 const SizedBox(height: AppSpacing.lg),
 
                 // ── Notlar (isteğe bağlı) ─────────────────────────────────────
                 AppTextField(
-                  label: 'Notlar (İsteğe Bağlı)',
-                  hintText: 'Ek bilgi ekleyin...',
+                  label: l10n.optionalNotes,
+                  hintText: l10n.additionalNotesHint,
                   controller: _notesCtrl,
                   maxLines: 3,
                   textInputAction: TextInputAction.done,
@@ -206,7 +209,7 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
 
                 // ── Kaydet Butonu ─────────────────────────────────────────────
                 PrimaryButton(
-                  text: _isEditMode ? 'Değişiklikleri Kaydet' : 'Ürünü Ekle',
+                  text: _isEditMode ? l10n.saveChanges : l10n.addProduct,
                   icon: _isEditMode
                       ? Icons.check_rounded
                       : Icons.add_rounded,
@@ -225,12 +228,12 @@ class _ExpirationFormScreenState extends ConsumerState<ExpirationFormScreen> {
 
   // ── İkon Seçici Widget ────────────────────────────────────────────────────
 
-  Widget _buildIconPicker(ColorScheme colorScheme) {
+  Widget _buildIconPicker(ColorScheme colorScheme, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'İkon',
+          l10n.icon,
           style: AppTypography.labelMedium.copyWith(
             color: colorScheme.onSurface,
             fontWeight: FontWeight.w600,

@@ -58,6 +58,20 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   }
 
   @override
+  void didUpdateWidget(covariant InventoryScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialTabIndex != oldWidget.initialTabIndex) {
+      final targetIndex = widget.initialTabIndex.clamp(0, 2);
+      _tabController.animateTo(targetIndex);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ref.read(inventoryTabProvider.notifier).state = targetIndex;
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();

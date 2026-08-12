@@ -1077,4 +1077,271 @@ class AppLocalizationsEn extends AppLocalizations {
   String guestLoginFailed(String error) {
     return 'Guest sign-in failed: $error';
   }
+
+  @override
+  String get noUpcomingWarranties => 'No upcoming warranty expirations. 👍';
+
+  @override
+  String get noUpcomingPayments => 'No upcoming payments. 👍';
+
+  @override
+  String get editProduct => 'Edit Product';
+
+  @override
+  String get locationLabel => 'Location';
+
+  @override
+  String get locationHint => 'Ex: Fridge, Pantry...';
+
+  @override
+  String get locationRequired => 'Location is required.';
+
+  @override
+  String get additionalNotesHint => 'Add additional notes...';
+
+  @override
+  String get selectExpirationDateWarning => 'Please select expiration date.';
+
+  @override
+  String get productNameExampleHint => 'Ex: Milk, Eggs...';
+
+  @override
+  String get selectDate => 'Select Date';
+
+  @override
+  String get signInBtn => 'Sign In';
+
+  @override
+  String get signInFailed => 'Sign-in failed.';
+
+  @override
+  String get signUpBtn => 'Sign Up';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get welcomeToApp => 'Welcome to Home Assistant';
+
+  @override
+  String get smartHomeTagline => 'Manage everything in your home smartly';
+
+  @override
+  String get signInWithGoogle => 'Sign in with Google';
+
+  @override
+  String get signInWithApple => 'Sign in with Apple';
+
+  @override
+  String get tryAsGuest => 'Try as Guest (Without Account)';
+
+  @override
+  String get forgotPassword => 'Forgot Password';
+
+  @override
+  String get forgotPasswordDesc =>
+      'Enter your account email. We will send you a password reset link.';
+
+  @override
+  String get emailAddress => 'Email Address';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get confirmPasswordLabel => 'Confirm Password';
+
+  @override
+  String get confirmPasswordHint => 'Confirm your password';
+
+  @override
+  String get fullNameLabel => 'Full Name';
+
+  @override
+  String get fullNameRequired => 'Full name is required.';
+
+  @override
+  String get passwordRequired => 'Password is required.';
+
+  @override
+  String get confirmPasswordRequired => 'Password confirmation is required.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get emailRequired => 'Email address is required.';
+
+  @override
+  String get enterValidEmail => 'Please enter a valid email address.';
+
+  @override
+  String get passwordMinLength => 'Password must be at least 6 characters.';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get orDivider => 'or';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get passwordResetSent => 'Password reset link sent to your email! 📧';
+
+  @override
+  String get googleLoginSuccess => 'Signed in with Google. 👋';
+
+  @override
+  String get appleLoginSuccess => 'Signed in with Apple. 👋';
+
+  @override
+  String get verificationEmailSent =>
+      'Verification email sent. Please verify your email and sign in.';
+
+  @override
+  String get emailAlreadyInUse => 'This email address is already in use.';
+
+  @override
+  String get weakPassword => 'Password is too weak. Use at least 6 characters.';
+
+  @override
+  String get linkWithGoogle => 'Link with Google';
+
+  @override
+  String get linkWithApple => 'Link with Apple';
+
+  @override
+  String get linkWithEmail => 'Link with Email';
+
+  @override
+  String get connecting => 'Connecting...';
+
+  @override
+  String get emailHint => 'example@gmail.com';
+
+  @override
+  String get guestUser => 'Guest';
+
+  @override
+  String get deleteAccountConfirmDesc =>
+      'Are you sure you want to delete your account and all personal data? This action cannot be undone.';
+
+  @override
+  String get deleteAccountConfirmBtn => 'Yes, Delete';
+
+  @override
+  String get deleteAccountReauthNotice =>
+      'For security reasons, please log out and log back in to delete your account.';
+
+  @override
+  String get adFreeActiveTitle => 'Ad-Free Version Active ✨';
+
+  @override
+  String get adFreeActiveDesc =>
+      'You\'ve completely removed ads, enjoy the app experience!';
+
+  @override
+  String get activeBadge => 'ACTIVE';
+
+  @override
+  String get buyAdFreeTitle => 'Get Ad-Free Version';
+
+  @override
+  String get buyAdFreeDesc =>
+      'Remove all ads across the app, enjoy an uninterrupted experience.';
+
+  @override
+  String get monthlyYearlyFlexiblePlans => 'Monthly & Yearly Flexible Plans';
+
+  @override
+  String get inspectAndBuyPlans => 'Inspect & Choose Plan';
+
+  @override
+  String get adFreeTitle => 'Ad-Free Version';
+
+  @override
+  String get adFreeHeaderSubtitle =>
+      'Remove all ads for a seamless and fast home experience.';
+
+  @override
+  String get zeroAdsTitle => 'Zero Ads, Seamless Usage';
+
+  @override
+  String get zeroAdsSubtitle =>
+      'All pop-up and banner ads across screens are blocked.';
+
+  @override
+  String get allFamilyIncludedTitle => 'Included for All Family Members';
+
+  @override
+  String get allFamilyIncludedSubtitle =>
+      'Everyone in your household gets ad-free access automatically.';
+
+  @override
+  String get fasterPageTransitionsTitle => 'Faster Page Transitions';
+
+  @override
+  String get fasterPageTransitionsSubtitle =>
+      'App runs lighter and faster without ad loading overhead.';
+
+  @override
+  String get annualPlanRecommended => 'Annual Plan (Recommended)';
+
+  @override
+  String get save30Percent => 'SAVE 30%';
+
+  @override
+  String get annualPlanSubprice => 'Best value with yearly payment';
+
+  @override
+  String get monthlyPlanTitle => 'Monthly Plan';
+
+  @override
+  String get flexibleBadge => 'FLEXIBLE';
+
+  @override
+  String get cancelAnytimeSubprice => 'Cancel easily anytime';
+
+  @override
+  String get switchToAnnualPlan => 'Switch to Annual Ad-Free Plan';
+
+  @override
+  String get switchToMonthlyPlan => 'Switch to Monthly Ad-Free Plan';
+
+  @override
+  String get cancelNoticeIos =>
+      'You can cancel anytime in your App Store / Apple ID settings.';
+
+  @override
+  String get cancelNoticeAndroid =>
+      'You can cancel anytime in your Google Play Store settings.';
+
+  @override
+  String get termsOfUseEula => 'Terms of Use (EULA)';
+
+  @override
+  String get adFreeActivatedToast =>
+      '🎉 Your ad-free subscription has been activated!';
+
+  @override
+  String get purchasesRestoredToast => '🎉 Purchases successfully restored!';
+
+  @override
+  String get signOutAnonymousTitle => 'Sign Out from Guest Account';
+
+  @override
+  String get signOutAnonymousDesc =>
+      'All your data and family access will be lost. Are you sure you want to sign out without linking your account?';
+
+  @override
+  String get signOutConfirmDesc =>
+      'Are you sure you want to sign out from your account?';
+
+  @override
+  String get linkAccountBtn => 'Link Account';
 }

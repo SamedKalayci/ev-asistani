@@ -95,6 +95,7 @@ class _LinkAccountBottomSheetState
   }
 
   Future<void> _showEmailLinkDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     final formKey = GlobalKey<FormState>();
@@ -113,7 +114,8 @@ class _LinkAccountBottomSheetState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AppTextField(
-                    label: 'E-posta Adresi',
+                    label: l10n.emailAddress,
+                    hintText: l10n.emailHint,
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (v) {
@@ -265,7 +267,7 @@ class _LinkAccountBottomSheetState
                   )
                 : const Icon(Icons.g_mobiledata_rounded, size: 28),
             label: Text(
-              _isLinkingGoogle ? 'Bağlanıyor...' : 'Google ile Bağla',
+              _isLinkingGoogle ? l10n.connecting : l10n.linkWithGoogle,
               style: AppTypography.titleSmall.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onPrimary,
@@ -296,7 +298,7 @@ class _LinkAccountBottomSheetState
                     )
                   : const Icon(Icons.apple_rounded, size: 24),
               label: Text(
-                _isLinkingApple ? 'Bağlanıyor...' : 'Apple ile Bağla',
+                _isLinkingApple ? l10n.connecting : l10n.linkWithApple,
                 style: AppTypography.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.surface,
@@ -317,7 +319,7 @@ class _LinkAccountBottomSheetState
             ),
             icon: const Icon(Icons.email_rounded, size: 20),
             label: Text(
-              'E-posta ile Bağla',
+              l10n.linkWithEmail,
               style: AppTypography.titleSmall.copyWith(
                 fontWeight: FontWeight.bold,
               ),

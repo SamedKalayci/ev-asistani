@@ -11,7 +11,7 @@
   "about": "Sobre",
   "aboutSubtitle": "Assistente Doméstico v1.1.0 (Firebase Ativo)",
   "developerLabel": "Desenvolvedor: Samed Kalaycı",
-  "aboutDescription": "Descrição: Aplicativo de organização doméstica e gerenciamento de listas compartilhadas.",
+  "aboutDescription": "Descrição: Organização inteligente da casa.",
   "allRightsReserved": "© 2026 Assistente Doméstico. Todos os direitos reservados.",
   "privacyPolicy": "Política de Privacidade e Termos",
   "privacyPolicySubtitle": "Revisar informações legais e condições",
@@ -31,26 +31,37 @@
   "azerbaijani": "Azerbaijano",
   "greek": "Grego",
   "portuguese": "Português",
-
   "navHome": "Início",
   "navInventory": "Inventário",
   "navShopping": "Compras",
   "navFinance": "Finanças",
   "navProfile": "Perfil",
-
   "shoppingListTitle": "Lista de Compras",
   "toBuyTab": "A Comprar",
   "purchasedTab": "Comprados",
   "clearCompleted": "Limpar",
   "newProductHint": "Adicionar novo item...",
   "itemsCount": "{count} Itens",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "addShoppingItemTitle": "Adicionar Item à Lista",
   "productNameLabel": "Nome do Item",
   "productNameHint": "Ex: Leite, Pão, Ovos...",
   "addToListBtn": "Adicionar à Lista",
   "itemAddedToast": "\"{name}\" adicionado à lista! 🛒",
+  "@itemAddedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "emptyShoppingList": "Sua lista de compras está vazia.",
-
   "financeOverviewTab": "Visão Geral",
   "householdWalletTab": "Carteira da Casa",
   "accountsTab": "Contas",
@@ -65,16 +76,35 @@
   "accountScheduleHeader": "Conta / Agenda",
   "monthlyFreeBudget": "Orçamento Livre Restante",
   "quickAddExpense": "Adicionar Despesa Rápida",
-
   "greetingUser": "Olá, {name}",
+  "@greetingUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "quickAdd": "Adicionar Rápido",
   "expiringSoonTitle": "Vencimentos Próximos",
   "warrantiesExpiringTitle": "Garantias a Vencer",
   "shoppingSummaryTitle": "Resumo de Compras",
   "viewAll": "Ver Tudo",
   "urgentExpirationsCount": "{count} Itens Urgentes",
+  "@urgentExpirationsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "urgentWarrantiesCount": "{count} Garantias Urgentes",
-
+  "@urgentWarrantiesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "inventoryTitle": "Inventário da Casa",
   "expirationTab": "Validade",
   "warrantyTab": "Garantias",
@@ -84,7 +114,6 @@
   "periodicMaintenance": "Agenda de Manutenção",
   "homeGuideWifi": "Guia da Casa e Wi-Fi",
   "digitalVaultSubtitle": "Documentos importantes e contatos de emergência são criptografados.",
-
   "myHomeAndFamily": "Minha Casa e Família",
   "inviteCode": "Código de Convite",
   "familyMembers": "Membros da Família",
@@ -93,19 +122,21 @@
   "houseOwner": "Proprietário da Casa",
   "legalSection": "Legal",
   "legalAndInfo": "Legal & Info",
+  "accountActions": "Ações da Conta",
+  "removeAdsTitle": "Remover Anúncios",
   "memberCount": "{count} Membro",
   "@memberCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "accountActions": "Ações da Conta",
-  "removeAdsTitle": "Remover Anúncios",
   "removeAdsSubtitle": "Sem anúncios para sempre com um pagamento único!",
   "removeAdsActive": "Versão Sem Anúncios Ativa ✅",
   "specialPriceOffer": "Preço Especial! Pelo preço de um café.",
   "buyNow": "Comprar Agora",
-  "restorePurchases": "Restaurar Compras",
+  "restorePurchases": "Restaurar compras",
   "introPopupTitle": "Use o App Sem Anúncios!",
   "introPopupDesc": "Remova permanentemente todos os anúncios por um valor único baixo.",
   "skipForNow": "Pular por enquanto",
@@ -122,7 +153,9 @@
   "statementCutoff": "Fechamento da fatura: {day}",
   "@statementCutoff": {
     "placeholders": {
-      "day": { "type": "String" }
+      "day": {
+        "type": "String"
+      }
     }
   },
   "planBudget": "Planejar Orçamento",
@@ -351,19 +384,103 @@
   "editHomeNameTitle": "Editar Nome da Casa",
   "editHomeNameLabel": "Nome da Casa",
   "editHomeNameHint": "ex: Casa Silva",
-  "homeNameRequired": "O nome da casa é obrigatório.",
   "homeNameUpdatedToast": "Nome da casa atualizado com sucesso! 🏠",
   "customRoleOption": "✏️ Função Personalizada...",
   "customRoleHint": "Escreva a função...",
   "aboutDeveloper": "Desenvolvedor: Samed Kalaycı",
-  "aboutDescription": "Descrição: Organização inteligente da casa.",
   "aboutCopyright": "© 2026 Ev Asistanı. Todos os direitos reservados.",
   "addShoppingItemSub": "Mantimentos, limpeza e necessidades domésticas em falta",
   "guestLoginSuccess": "Sessão de convidado iniciada. 👋",
   "guestLoginFailed": "Falha no login de convidado: {error}",
   "@guestLoginFailed": {
     "placeholders": {
-      "error": { "type": "String" }
+      "error": {
+        "type": "String"
+      }
     }
-  }
+  },
+  "noUpcomingWarranties": "Nenhum vencimento de garantia próximo. 👍",
+  "noUpcomingPayments": "Nenhum pagamento próximo. 👍",
+  "editProduct": "Editar produto",
+  "locationLabel": "Localização",
+  "locationHint": "Ex: Geladeira, Despensa...",
+  "locationRequired": "Localização é obrigatória.",
+  "additionalNotesHint": "Adicionar notas adicionais...",
+  "selectExpirationDateWarning": "Por favor selecione a data de validade.",
+  "productNameExampleHint": "Ex: Leite, Ovos...",
+  "selectDate": "Selecionar data",
+  "signInBtn": "Entrar",
+  "signInFailed": "Falha ao entrar.",
+  "signUpBtn": "Cadastrar",
+  "createAccount": "Criar conta",
+  "welcomeToApp": "Bem-vindo ao Assistente de Casa",
+  "smartHomeTagline": "Gerencie tudo em sua casa de forma inteligente",
+  "signInWithGoogle": "Entrar com o Google",
+  "signInWithApple": "Entrar com a Apple",
+  "tryAsGuest": "Experimentar como convidado (Sem conta)",
+  "forgotPassword": "Esqueceu a senha?",
+  "forgotPasswordDesc": "Insira seu e-mail. Enviaremos um link de redefinição de senha.",
+  "emailAddress": "Endereço de e-mail",
+  "passwordLabel": "Senha",
+  "confirmPasswordLabel": "Confirmar senha",
+  "confirmPasswordHint": "Confirme sua senha",
+  "fullNameLabel": "Nome completo",
+  "fullNameRequired": "O nome completo é obrigatório.",
+  "passwordRequired": "A senha é obrigatória.",
+  "confirmPasswordRequired": "A confirmação de senha é obrigatória.",
+  "passwordsDoNotMatch": "As senhas não coincidem.",
+  "emailRequired": "O e-mail é obrigatório.",
+  "enterValidEmail": "Por favor insira um e-mail válido.",
+  "passwordMinLength": "A senha deve ter pelo menos 6 caracteres.",
+  "dontHaveAccount": "Não tem uma conta?",
+  "alreadyHaveAccount": "Já tem uma conta?",
+  "orDivider": "ou",
+  "send": "Enviar",
+  "passwordResetSent": "Link de redefinição de senha enviado! 📧",
+  "googleLoginSuccess": "Conectado com o Google. 👋",
+  "appleLoginSuccess": "Conectado com a Apple. 👋",
+  "verificationEmailSent": "Link de verificação enviado. Por favor verifique seu e-mail.",
+  "emailAlreadyInUse": "Este e-mail já está em uso.",
+  "weakPassword": "A senha é muito fraca. Use pelo menos 6 caracteres.",
+  "linkWithGoogle": "Vincular com Google",
+  "linkWithApple": "Vincular com Apple",
+  "linkWithEmail": "Vincular com e-mail",
+  "connecting": "Conectando...",
+  "emailHint": "exemplo@gmail.com",
+  "guestUser": "Convidado",
+  "deleteAccountConfirmDesc": "Tem certeza de que deseja excluir sua conta e todos os seus dados pessoais? Esta ação não pode ser desfeita.",
+  "deleteAccountConfirmBtn": "Sim, excluir",
+  "deleteAccountReauthNotice": "Por razões de segurança, faça login novamente para excluir sua conta.",
+  "adFreeActiveTitle": "Versão sem anúncios ativa ✨",
+  "adFreeActiveDesc": "Você removeu todos os anúncios, aproveite o aplicativo!",
+  "activeBadge": "ATIVO",
+  "buyAdFreeTitle": "Obter versão sem anúncios",
+  "buyAdFreeDesc": "Remova todos os anúncios do app para uma experiência sem interrupções.",
+  "monthlyYearlyFlexiblePlans": "Planos flexíveis mensais e anuais",
+  "inspectAndBuyPlans": "Ver planos e adquirir",
+  "adFreeTitle": "Versão sem anúncios",
+  "adFreeHeaderSubtitle": "Remova todos os anúncios para uma experiência rápida e contínua.",
+  "zeroAdsTitle": "Zero anúncios, uso contínuo",
+  "zeroAdsSubtitle": "Todos os anúncios em transições de página são bloqueados.",
+  "allFamilyIncludedTitle": "Incluído para todos os membros da família",
+  "allFamilyIncludedSubtitle": "Todos na sua família recebem acesso sem anúncios automaticamente.",
+  "fasterPageTransitionsTitle": "Transições de página mais rápidas",
+  "fasterPageTransitionsSubtitle": "O aplicativo roda mais leve e rápido sem carregamento de anúncios.",
+  "annualPlanRecommended": "Plano anual (Recomendado)",
+  "save30Percent": "ECONOMIZE 30%",
+  "annualPlanSubprice": "Melhor valor com pagamento anual",
+  "monthlyPlanTitle": "Plano mensal",
+  "flexibleBadge": "FLEXÍVEL",
+  "cancelAnytimeSubprice": "Cancele facilmente a qualquer momento",
+  "switchToAnnualPlan": "Mudar para o plano anual sem anúncios",
+  "switchToMonthlyPlan": "Mudar para o plano mensal sem anúncios",
+  "cancelNoticeIos": "Você pode cancelar a qualquer momento nas configurações da App Store / Apple ID.",
+  "cancelNoticeAndroid": "Você pode cancelar a qualquer momento nas configurações da Google Play Store.",
+  "termsOfUseEula": "Termos de uso (EULA)",
+  "adFreeActivatedToast": "🎉 Sua assinatura sem anúncios foi activada!",
+  "purchasesRestoredToast": "🎉 Compras restauradas com sucesso!",
+  "signOutAnonymousTitle": "Sair da conta de convidado",
+  "signOutAnonymousDesc": "Todos os seus dados e o acesso familiar serão perdidos. Tem certeza de que deseja sair sem vincular sua conta?",
+  "signOutConfirmDesc": "Tem certeza de que deseja sair da sua conta?",
+  "linkAccountBtn": "Vincular conta"
 }
