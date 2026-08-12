@@ -68,9 +68,8 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
-		<!-- TODO(Release): Buradaki Test AdMob Uygulama ID'sini CANLI ID'niz ile değiştirin aksi takdirde reklamlarınız görünmez. -->
 		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-3940256099942544~3347511713</string>
+		<string>ca-app-pub-9386038721369100~9809895612</string>
 		<!-- Google Sign-in URL Types -->
 		<key>CFBundleURLTypes</key>
 		<array>

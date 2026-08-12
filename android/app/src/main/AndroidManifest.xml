@@ -46,11 +46,9 @@
             </intent-filter>
         </receiver>
 
-        <!-- TODO(Release): Buradaki Test AdMob Uygulama ID'sini CANLI ID'niz ile değiştirin aksi takdirde reklamlarınız görünmez. -->
-        <!-- Google AdMob Application ID (Test ID) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-9386038721369100~7131761388"/>
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
