@@ -114,11 +114,14 @@ class FinanceRepository {
         .where('recurringGroupId', isEqualTo: recurringGroupId)
         .get();
 
+    // Gelecekteki kayıtların kendi tarihlerini korumak için updateData'dan 'date' alanını çıkarıyoruz
+    final updateData = Map<String, dynamic>.from(data)..remove('date');
+
     final batch = _firestoreService.batch();
     for (var doc in snapshot.docs) {
       final docDate = (doc.data()['date'] as Timestamp).toDate();
       if (docDate.isAfter(fromDate) || docDate.isAtSameMomentAs(fromDate)) {
-        batch.update(doc.reference, data);
+        batch.update(doc.reference, updateData);
       }
     }
     await batch.commit();

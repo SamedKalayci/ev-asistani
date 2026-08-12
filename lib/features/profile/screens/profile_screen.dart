@@ -1191,29 +1191,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF38BDF8),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppRadius.borderMd,
-                    ),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF38BDF8),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: AppRadius.borderMd,
                   ),
-                  icon: const Icon(Icons.payment_rounded, size: 18),
-                  label: Text(l10n.inspectAndBuyPlans, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  onPressed: () => PaywallBottomSheet.show(context),
                 ),
+                icon: const Icon(Icons.payment_rounded, size: 18),
+                label: Text(l10n.inspectAndBuyPlans, style: const TextStyle(fontWeight: FontWeight.bold)),
+                onPressed: () => PaywallBottomSheet.show(context),
               ),
-              const SizedBox(width: AppSpacing.sm),
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white.withValues(alpha: 0.7),
+              const SizedBox(height: AppSpacing.xs),
+              Center(
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white.withValues(alpha: 0.7),
+                  ),
+                  child: Text(l10n.restorePurchases, style: const TextStyle(decoration: TextDecoration.underline)),
+                  onPressed: () => _restoreRemoveAds(context),
                 ),
-                child: Text(l10n.restorePurchases, style: const TextStyle(decoration: TextDecoration.underline)),
-                onPressed: () => _restoreRemoveAds(context),
               ),
             ],
           ),
