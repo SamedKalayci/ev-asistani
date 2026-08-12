@@ -7,6 +7,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../shared/models/user_model.dart';
+import '../../../shared/widgets/user_avatar.dart';
 import 'quick_add_expense_bottom_sheet.dart';
 import '../../profile/providers/family_provider.dart';
 import '../models/finance_item_model.dart';
@@ -293,13 +294,13 @@ class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
     final l10n = AppLocalizations.of(context)!;
     List<Map<String, dynamic>> userData = [];
     userExpenses.forEach((uid, amount) {
-      final user = members.firstWhere((m) => m.uid == uid, orElse: () => UserModel(uid: '', name: l10n.unknown, email: ''));
+      final user = members.firstWhere((m) => m.uid == uid, orElse: () => UserModel(uid: uid, name: l10n.unknown, email: ''));
       final name = user.displayName.isNotEmpty ? user.displayName.split(' ').first : l10n.unknown;
       userData.add({
         'uid': uid,
         'name': name,
         'amount': amount,
-        'photoUrl': user.avatarUrl ?? user.photoUrl,
+        'user': user,
       });
     });
 
@@ -314,6 +315,7 @@ class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
         separatorBuilder: (context, index) => const SizedBox(width: AppSpacing.md),
         itemBuilder: (context, index) {
           final data = userData[index];
+          final user = data['user'] as UserModel?;
           return Container(
             width: 100,
             padding: const EdgeInsets.all(AppSpacing.md),
@@ -325,14 +327,9 @@ class _HouseholdWalletViewState extends ConsumerState<HouseholdWalletView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
+                UserAvatar(
+                  user: user,
                   radius: 24,
-                  backgroundImage: data['photoUrl'] != null && (data['photoUrl'] as String).isNotEmpty
-                      ? NetworkImage(data['photoUrl'] as String)
-                      : null,
-                  child: data['photoUrl'] == null || (data['photoUrl'] as String).isEmpty
-                      ? const Icon(Icons.person)
-                      : null,
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(

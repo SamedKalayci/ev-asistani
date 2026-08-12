@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import '../services/ad_service.dart';
 import 'purchase_provider.dart';
 import 'user_provider.dart';
@@ -36,8 +37,8 @@ class _AdFreeNotifier extends StateNotifier<bool> {
     }, fireImmediately: true);
 
     // RevenueCat müşteri bilgilerini de dinle (entitlement yenileme için)
-    _ref.listen(customerInfoProvider, (_, next) {
-      final customerInfo = next.valueOrNull;
+    _ref.listen<AsyncValue<CustomerInfo?>>(customerInfoProvider, (_, next) {
+      final customerInfo = next.value;
       if (customerInfo != null) {
         final activeEntitlements = customerInfo.entitlements.all;
         final hasEntitlement =
@@ -77,10 +78,10 @@ class _AdFreeNotifier extends StateNotifier<bool> {
   }
 }
 
-/// Aile Boyu PRO Üyelik sağlayıcısı.
-/// Tüm özellik kısıtlamalarını kaldırdığımız için ARTIK HER ZAMAN TRUE döner.
+/// Aile Boyu PRO / Reklamsız Üyelik sağlayıcısı.
+/// isAdFreeProvider durumunu dinler (Abonelik varsa true, yoksa false döner).
 final isPremiumProvider = Provider<bool>((ref) {
-  return true;
+  return ref.watch(isAdFreeProvider);
 });
 
 /// [AdService] singleton'ını sunan provider.

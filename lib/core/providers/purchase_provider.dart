@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import '../services/purchase_service.dart';
+import 'ad_provider.dart';
 
 /// PurchaseService singleton provider.
 final purchaseServiceProvider = Provider<PurchaseService>((ref) {
@@ -13,8 +14,7 @@ final customerInfoProvider = FutureProvider<CustomerInfo?>((ref) async {
   return await service.getCustomerInfo();
 });
 
-/// Kullanıcının PRO durumunu dinleyen temel Riverpod provider (`isProUserProvider`).
-/// Tüm özellik kısıtlamalarını kaldırdığımız için artık her zaman true döner.
+/// Kullanıcının PRO / Reklamsız durumunu dinleyen temel Riverpod provider (`isProUserProvider`).
 final isProUserProvider = Provider<bool>((ref) {
-  return true;
+  return ref.watch(isAdFreeProvider);
 });

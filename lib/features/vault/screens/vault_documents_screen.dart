@@ -77,27 +77,62 @@ class VaultDocumentsScreen extends ConsumerWidget {
     }
   }
 
-  /// Belge paylaşma / indirme işlevi.
+  /// Belge paylaşma / indirme işlevi (iOS/iPad popover uyumlu).
   Future<void> _handleShare(BuildContext context, VaultItemModel item) async {
+    final box = context.findRenderObject() as RenderBox?;
+    final Rect? sharePositionOrigin =
+        box != null ? (box.localToGlobal(Offset.zero) & box.size) : null;
+
     final fileUrl = item.fileUrl;
 
-    if (fileUrl != null && fileUrl.isNotEmpty) {
-      final textPrefix = AppLocalizations.of(context)!.localeName == 'tr'
-          ? 'Belgeyi görüntülemek için bağlantı'
-          : 'Link to view document';
-      final shareText = '${item.title} - $textPrefix: $fileUrl';
-      await Share.share(shareText);
-      return;
-    }
+    try {
+      if (fileUrl != null && fileUrl.isNotEmpty) {
+        if (fileUrl.startsWith('http://') || fileUrl.startsWith('https://')) {
+          final uri = Uri.tryParse(fileUrl);
+          if (uri != null) {
+            await Share.shareUri(
+              uri,
+              sharePositionOrigin: sharePositionOrigin,
+            );
+          } else {
+            await Share.share(
+              '${item.title}: $fileUrl',
+              sharePositionOrigin: sharePositionOrigin,
+            );
+          }
+          return;
+        } else {
+          final file = File(fileUrl);
+          if (await file.exists()) {
+            await Share.shareXFiles(
+              [XFile(file.path)],
+              text: item.title,
+              sharePositionOrigin: sharePositionOrigin,
+            );
+            return;
+          }
+        }
+      }
 
-    // Dosya yoksa belge bilgilerini kopyala ve bildir
-    await Clipboard.setData(
-      ClipboardData(text: '📄 ${item.title}\n${item.description}'),
-    );
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Belge bilgileri kopyalandı! 📋')),
+      // Dosya yoksa veya erişilemiyorsa metin olarak paylaş
+      final shareText = item.description.isNotEmpty
+          ? '📄 ${item.title}\n${item.description}'
+          : '📄 ${item.title}';
+
+      await Share.share(
+        shareText,
+        sharePositionOrigin: sharePositionOrigin,
       );
+    } catch (e) {
+      // Beklenmeyen hata durumunda panoya kopyalama fallback'i
+      await Clipboard.setData(
+        ClipboardData(text: '📄 ${item.title}\n${item.description}'),
+      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Belge bilgileri panoya kopyalandı! 📋')),
+        );
+      }
     }
   }
 
@@ -284,11 +319,15 @@ class VaultDocumentsScreen extends ConsumerWidget {
                 onPressed: () => _handleOpenDocument(context, item),
               ),
 
-            // Paylaş / İndir Butonu
-            IconButton(
-              icon: const Icon(Icons.share_rounded, size: 20),
-              tooltip: 'Paylaş / İndir',
-              onPressed: () => _handleShare(context, item),
+            // Paylaş / İndir Butonu (iOS/iPad popover uyumlu)
+            Builder(
+              builder: (btnContext) {
+                return IconButton(
+                  icon: const Icon(Icons.share_rounded, size: 20),
+                  tooltip: 'Paylaş / İndir',
+                  onPressed: () => _handleShare(btnContext, item),
+                );
+              },
             ),
 
             // Sil Butonu

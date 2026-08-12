@@ -1061,10 +1061,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _buildAdFreeCard(BuildContext context, ColorScheme colorScheme) {
     final l10n = AppLocalizations.of(context)!;
     final isAdFree = ref.watch(isAdFreeProvider);
-    final isPremium = ref.watch(isPremiumProvider);
-    final isActive = isAdFree || isPremium;
 
-    if (isActive) {
+    if (isAdFree) {
       return Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
@@ -1089,7 +1087,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                child: Text('👑', style: TextStyle(fontSize: 20)),
+                child: Text('⚡', style: TextStyle(fontSize: 20)),
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -1098,16 +1096,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isPremium ? 'PRO Üyelik Aktif ✨' : l10n.removeAdsActive,
+                    'Reklamsız Gösterim Aktif ✨',
                     style: AppTypography.titleSmall.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    isPremium
-                        ? 'Tüm PRO özelliklerine erisebilirsiniz.'
-                        : 'Reklamlardan tamamen kurtuldunuz!',
+                    'Reklamlardan tamamen kurtuldunuz, uygulamanın keyfini çıkarın!',
                     style: AppTypography.bodySmall.copyWith(
                       color: Colors.white.withValues(alpha: 0.85),
                     ),
@@ -1122,7 +1118,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 borderRadius: AppRadius.borderSm,
               ),
               child: Text(
-                'AKTIF',
+                'AKTİF',
                 style: AppTypography.labelSmall.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -1168,7 +1164,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.removeAdsTitle,
+                      'Reklamsız Gösterim Satın Al',
                       style: AppTypography.titleMedium.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -1176,7 +1172,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      l10n.removeAdsSubtitle,
+                      'Uygulama genelinde tüm reklamları kaldırın, kesintisiz bir deneyim yaşayın.',
                       style: AppTypography.bodySmall.copyWith(
                         color: Colors.white.withValues(alpha: 0.8),
                       ),
@@ -1199,7 +1195,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const Icon(Icons.stars_rounded, color: Color(0xFFFBBF24), size: 16),
                 const SizedBox(width: 6),
                 Text(
-                  l10n.specialPriceOffer,
+                  'Aylık & Yıllık Esnek Planlar',
                   style: AppTypography.bodySmall.copyWith(
                     color: const Color(0xFFFBBF24),
                     fontWeight: FontWeight.bold,
@@ -1221,7 +1217,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.payment_rounded, size: 18),
-                  label: Text(l10n.buyNow, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  label: const Text('Planları İncele & Satın Al', style: TextStyle(fontWeight: FontWeight.bold)),
                   onPressed: () => PaywallBottomSheet.show(context),
                 ),
               ),

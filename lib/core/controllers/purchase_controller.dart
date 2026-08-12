@@ -63,12 +63,14 @@ class PurchaseController extends StateNotifier<bool> {
       final familyId = _ref.read(activeFamilyIdProvider);
 
       await firestoreService.updateUserProfile(user.uid, {
+        'isAdFree': true,
         'isPremium': true,
         'premiumPurchasedAt': DateTime.now().toIso8601String(),
       });
 
       if (familyId.isNotEmpty) {
         await firestoreService.updateFamily(familyId, {
+          'isAdFree': true,
           'isPremium': true,
         });
       }
