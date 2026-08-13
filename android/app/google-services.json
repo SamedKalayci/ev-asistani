@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "687057369612-lfnhm40okn34ncvthp8vcbs7hg4ifsus.apps.googleusercontent.com",
+          "client_id": "687057369612-2qcmvob9rfhkba1f9i5na0edeku94on9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.evasisstani.ev_asistani",
-            "certificate_hash": "c11ade3bab3e2592a16f63b36f6f79283576efd9"
+            "certificate_hash": "912b2e0d0d0a36aaddaca20393daae1572657faf"
           }
         },
         {

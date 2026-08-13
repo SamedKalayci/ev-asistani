@@ -27,10 +27,12 @@ class LocaleNotifier extends StateNotifier<Locale> {
       if (savedCode != null && supportedLanguages.contains(savedCode)) {
         state = Locale(savedCode);
       } else {
-        // Cihaz dilini tespit et
-        final deviceLocale = PlatformDispatcher.instance.locale.languageCode;
-        if (supportedLanguages.contains(deviceLocale)) {
-          state = Locale(deviceLocale);
+        // Cihaz dilini tespit et (Örn: 'tr_TR', 'en_US', 'de-DE' vb. için sadece dil kodunu al)
+        final rawLocale = PlatformDispatcher.instance.locale;
+        final deviceLanguageCode = rawLocale.languageCode.toLowerCase().split('_').first.split('-').first;
+        
+        if (supportedLanguages.contains(deviceLanguageCode)) {
+          state = Locale(deviceLanguageCode);
         } else {
           state = const Locale('en'); // Desteklenmeyen diller için varsayılan İngilizce
         }

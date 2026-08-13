@@ -321,31 +321,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _ => '🌐 ${currentLocale.languageCode.toUpperCase()}',
     };
 
-    return InkWell(
-      onTap: () => _showLanguageSelectorDialog(context),
-      borderRadius: AppRadius.borderFull,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerLow,
-          borderRadius: AppRadius.borderFull,
-          border: Border.all(
-            color: colorScheme.outlineVariant.withValues(alpha: 0.5),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.language_rounded, size: 16),
-            const SizedBox(width: 4),
-            Text(
-              flag,
-              style: AppTypography.labelMedium.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _showLanguageSelectorDialog(context),
+        borderRadius: AppRadius.borderFull,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerLow,
+            borderRadius: AppRadius.borderFull,
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(alpha: 0.5),
             ),
-          ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.language_rounded, size: 18),
+              const SizedBox(width: 6),
+              Text(
+                flag,
+                style: AppTypography.labelMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -443,12 +446,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Top Right Language Selector Button
-            Positioned(
-              top: AppSpacing.sm,
-              right: AppSpacing.pageHorizontal,
-              child: _buildLanguageSelectorButton(colorScheme),
-            ),
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -678,6 +675,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
               ),
+            ),
+            // Top Right Language Selector Button (Her zaman ön katmanda ve tıklanabilir)
+            Positioned(
+              top: AppSpacing.sm,
+              right: AppSpacing.pageHorizontal,
+              child: _buildLanguageSelectorButton(colorScheme),
             ),
           ],
         ),

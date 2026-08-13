@@ -189,21 +189,24 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.92,
+        maxHeight: MediaQuery.of(context).size.height * 0.88,
       ),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: AppRadius.borderTopXl,
         boxShadow: AppShadows.lg,
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xl,
-        vertical: AppSpacing.lg,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
             // Üst Bar & Kapat Butonu
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -396,8 +399,10 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 
   Widget _buildFeatureTile(
     ColorScheme colorScheme, {
