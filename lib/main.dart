@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'app.dart';
-import 'core/services/ad_service.dart';
-import 'core/services/att_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/purchase_service.dart';
 import 'features/shopping/providers/shopping_provider.dart';
@@ -46,20 +44,6 @@ Future<void> main() async {
     await notificationService.requestPermissions();
   } catch (e) {
     debugPrint('NotificationService başlatılırken hata: $e');
-  }
-
-  // iOS'ta AdMob kişiselleştirme için App Tracking Transparency (ATT) iznini iste
-  try {
-    await ATTService.requestTrackingAuthorization();
-  } catch (e) {
-    debugPrint('ATT servisi başlatılırken hata: $e');
-  }
-
-  // AdMob Reklam servisini başlat
-  try {
-    await AdService.instance.init();
-  } catch (e) {
-    debugPrint('AdService başlatılırken hata: $e');
   }
 
   // RevenueCat In-App Purchase servisini başlat
