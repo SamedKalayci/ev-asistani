@@ -72,41 +72,16 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
               ),
             );
           }
-          return;
         }
-      }
-
-      // Mağaza paketi tanımlı değilse veya test modunda fallback güncellemesi
-      await ref.read(isAdFreeProvider.notifier).setAdFreeForFamily();
-
-      final user = ref.read(userProvider).valueOrNull;
-      if (user != null) {
-        final firestoreService = ref.read(firestoreServiceProvider);
-        final familyId = ref.read(activeFamilyIdProvider);
-
-        await firestoreService.updateUserProfile(user.uid, {
-          'isAdFree': true,
-          'isPremium': true,
-          'premiumPurchasedAt': DateTime.now().toIso8601String(),
-        });
-
-        if (familyId.isNotEmpty) {
-          await firestoreService.updateFamily(familyId, {
-            'isAdFree': true,
-            'isPremium': true,
-          });
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Paketler henüz yüklenmedi veya bulunamadı. Lütfen daha sonra tekrar deneyin.'),
+              backgroundColor: AppColors.error,
+            ),
+          );
         }
-      }
-
-      if (mounted) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.adFreeActivatedToast),
-            backgroundColor: AppColors.primary,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
       }
     } catch (e) {
       if (mounted) {
