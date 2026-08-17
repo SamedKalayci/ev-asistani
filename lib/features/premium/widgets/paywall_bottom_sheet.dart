@@ -75,10 +75,24 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
         }
       } else {
         if (mounted) {
+          // --- DIAGNOSTIC MODE ---
+          final offeringsAsync = ref.read(offeringsProvider);
+          final offerings = offeringsAsync.valueOrNull;
+          String diagnostic = "Bilinmeyen hata.";
+          if (offerings == null) {
+            diagnostic = "RevenueCat bağlantı hatası (Offerings null). Lütfen API Key veya Apple Sandbox bağlantınızı kontrol edin.";
+          } else if (offerings.current == null) {
+            diagnostic = "RevenueCat'te 'Current' (Geçerli) olarak işaretlenmiş bir Offering bulunamadı.";
+          } else {
+            diagnostic = "Offering bulundu fakat içinde Annual/Monthly paketler yok. Lütfen RevenueCat'ten paketleri ekleyin.";
+          }
+          // -----------------------
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Paketler henüz yüklenmedi veya bulunamadı. Lütfen daha sonra tekrar deneyin.'),
+              content: Text('Paket hatası: $diagnostic'),
               backgroundColor: AppColors.error,
+              duration: const Duration(seconds: 5),
             ),
           );
         }
@@ -236,14 +250,7 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
                 color: colorScheme.onSurface,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.adFreeHeaderSubtitle,
-              textAlign: TextAlign.center,
-              style: AppTypography.bodyMedium.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
+
 
             const SizedBox(height: AppSpacing.xl),
 
