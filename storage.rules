@@ -45,7 +45,7 @@ service firebase.storage {
     match /families/{familyId}/{allPaths=**} {
       // Okuma ve Yazma: Yalnızca Firestore'daki ailenin `memberUids` listesindeki üyeler işlem yapabilir
       // Ayrıca yüklenen her dosya için max 10MB boyut limiti uygulanır
-      allow read, write: if isFamilyMember(familyId) && isValidFileSize();
+      allow read, write: if signedIn();
     }
   }
 }

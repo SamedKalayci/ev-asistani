@@ -172,7 +172,6 @@ class _PaywallBottomSheetState extends ConsumerState<PaywallBottomSheet> {
         boxShadow: AppShadows.lg,
       ),
       child: SafeArea(
-        top: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,

@@ -172,9 +172,7 @@ class _ExpirationScreenState extends ConsumerState<ExpirationScreen> {
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(title: l10n.appName),
       floatingActionButton: itemsAsync.maybeWhen(
-        data: (allItems) => allItems.isEmpty
-            ? null
-            : FloatingActionButton.extended(
+        data: (allItems) => FloatingActionButton.extended(
                 onPressed: _openAddForm,
                 elevation: 4,
                 highlightElevation: 8,

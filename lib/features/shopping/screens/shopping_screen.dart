@@ -104,6 +104,24 @@ class _ShoppingScreenState extends ConsumerState<ShoppingScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(title: l10n.appName),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _inputFocusNode.requestFocus(),
+        elevation: 4,
+        highlightElevation: 8,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppRadius.borderFull,
+        ),
+        icon: const Icon(Icons.add_rounded),
+        label: Text(
+          l10n.addToListBtn, // Listeye Ekle
+          style: AppTypography.titleSmall.copyWith(
+            color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: itemsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),

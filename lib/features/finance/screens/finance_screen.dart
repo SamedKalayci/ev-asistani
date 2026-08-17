@@ -51,8 +51,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppHeader(title: l10n.appName),
-      floatingActionButton: isPremium
-          ? FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton.extended(
               onPressed: () {
                 final selectedMainTab = ref.read(financeTabProvider);
                 if (selectedMainTab == 0) {
@@ -92,8 +91,7 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
               label: Text(ref.watch(financeTabProvider) == 0 ? l10n.accountScheduleHeader : l10n.quickAddExpense),
               backgroundColor: colorScheme.primary,
               foregroundColor: colorScheme.onPrimary,
-            )
-          : null,
+            ),
       body: ProBlurOverlay(
         isLocked: !isPremium,
         title: l10n.financeManagementPro,
