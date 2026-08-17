@@ -686,8 +686,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ],
 
               // ── Reklamları Kaldır (Ad-Free) Seçeneği ───────────────────────
-              _buildAdFreeCard(context, colorScheme),
-              const SizedBox(height: AppSpacing.lg),
+              Builder(builder: (ctx) {
+                final card = _buildAdFreeCard(context, colorScheme);
+                final isVisible = !(card is SizedBox);
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    card,
+                    if (isVisible) const SizedBox(height: AppSpacing.lg),
+                  ],
+                );
+              }),
 
               // ── Kullanıcı Bilgi Kartı ─────────────────────────────────────
               _buildUserProfileCard(colorScheme, currentUser),
@@ -1047,75 +1056,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _buildAdFreeCard(BuildContext context, ColorScheme colorScheme) {
     final l10n = AppLocalizations.of(context)!;
     final isAdFree = ref.watch(isAdFreeProvider);
+    final hasFamily = ref.watch(hasRealFamilyProvider);
 
-    if (isAdFree) {
-      return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
-        ),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF064E3B), Color(0xFF065F46)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: AppRadius.borderLg,
-          boxShadow: AppShadows.sm,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Text('⚡', style: TextStyle(fontSize: 20)),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.adFreeActiveTitle,
-                    style: AppTypography.titleSmall.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    l10n.adFreeActiveDesc,
-                    style: AppTypography.bodySmall.copyWith(
-                      color: Colors.white.withValues(alpha: 0.85),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: AppRadius.borderSm,
-              ),
-              child: Text(
-                l10n.activeBadge,
-                style: AppTypography.labelSmall.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Ailesi olmayan kullanıcıya satın alma kartını gösterme
+    if (!hasFamily) return const SizedBox.shrink();
+
+    // Satın alım tamamlanmışsa kartı tamamen gizle
+    if (isAdFree) return const SizedBox.shrink();
+
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.cardPadding),
